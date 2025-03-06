@@ -1,0 +1,129 @@
+/* src/App.css */
+.App {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Background styles */
+body {
+  background-image: url("/src/assets/images/DNS app.png");
+  /* background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(71,105,99,1) 46%);  */
+  background-size: cover; /* Cover the entire viewport */
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Glassmorphism card effect */
+.card {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  /* background-color: rgba(17, 25, 40, 0.75); */
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.table-view {
+  margin: 20px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  table-layout: fixed; /* Ensures columns respect specified widths */
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  /* border: 1px solid #ddd; */
+}
+
+/* Define specific widths for each column */
+th:nth-child(1), td:nth-child(1) { /* Subscriber */
+  width: 20%;
+}
+
+th:nth-child(2), td:nth-child(2) { /* Formatted at */
+  width: 25%;
+}
+
+th:nth-child(3), td:nth-child(3) { /* Body */
+  width: 35%;
+}
+
+th:nth-child(4), td:nth-child(4) { /* Format Options */
+  width: 20%;
+}
+
+th {
+  background-color: #1f3137;
+  font-weight: bold;
+  color: white; /* Added for better contrast with dark background */
+}
+
+td pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+button {
+  padding: 6px 12px;
+  background-color: #000000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s; /* Added box-shadow to transition */
+}
+
+button:hover {
+  background-color: #181818;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), /* Outer glow */
+              0 0 20px rgba(255, 255, 255, 0.6), /* Mid glow */
+              0 0 30px rgba(255, 255, 255, 0.4); /* Inner glow */
+}
+
+.table-body-container {
+  max-height: 400px; /* Adjust this value to set the desired height */
+  overflow-y: auto;
+  border-top: none;
+}
+
+.table-body-container table {
+  margin-top: 0;
+  box-shadow: none;
+}
+
+/* Ensure header stays fixed while body scrolls */
+.table-view thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* Optional: Add glassmorphism effect to the table */
+.table-view {
+  /* backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%); */
+  /* background-color: rgba(17, 25, 40, 0.75); */
+  border-radius: 12px;
+  /* border: 1px solid rgba(255, 255, 255, 0.125); */
+}
+
+td {
+  /* background-color: rgba(255, 255, 255, 0.05); */
+  color: white; /* Better visibility on dark background */
+}
