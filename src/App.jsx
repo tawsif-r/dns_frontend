@@ -72,7 +72,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1 className='header'>Formatted Text Formatter</h1>
+      <h1 className='header'>Formatter</h1>
       
       <div className="table-view">
         <table>
