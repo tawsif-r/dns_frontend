@@ -1,129 +1,110 @@
-/* src/App.css */
-.App {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Background styles */
 body {
-  background-image: url("/src/assets/images/DNS app.png");
-  /* background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(71,105,99,1) 46%);  */
-  background-size: cover; /* Cover the entire viewport */
-  background-position: center;
-  background-repeat: no-repeat;
+  font-family: Arial, sans-serif;
+  background-color: #121212;
+  color: #e0e0e0;
+  line-height: 1.6;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
-/* Glassmorphism card effect */
-.card {
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  /* background-color: rgba(17, 25, 40, 0.75); */
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.125);
+.dashboard.dark-theme {
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.header {
-  text-align: center;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
-.table-view {
-  margin: 20px 0;
+header h1 {
+  font-size: 2rem;
+  color: #bb86fc; /* Accent color */
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  table-layout: fixed; /* Ensures columns respect specified widths */
-}
-
-th, td {
-  padding: 12px;
-  text-align: left;
-  /* border: 1px solid #ddd; */
-}
-
-/* Define specific widths for each column */
-th:nth-child(1), td:nth-child(1) { /* Subscriber */
-  width: 20%;
-}
-
-th:nth-child(2), td:nth-child(2) { /* Formatted at */
-  width: 25%;
-}
-
-th:nth-child(3), td:nth-child(3) { /* Body */
-  width: 35%;
-}
-
-th:nth-child(4), td:nth-child(4) { /* Format Options */
-  width: 20%;
-}
-
-th {
-  background-color: #1f3137;
-  font-weight: bold;
-  color: white; /* Added for better contrast with dark background */
-}
-
-td pre {
-  margin: 0;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-.button-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-button {
-  padding: 6px 12px;
-  background-color: #000000;
-  color: white;
+.search-bar {
+  padding: 10px;
   border: none;
+  border-radius: 5px;
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  width: 300px;
+}
+
+.dashboard-container {
+  display: flex; /* Flexbox for side-by-side layout */
+  gap: 20px; /* Space between components */
+  overflow-x: auto; /* Enable horizontal scrolling if necessary */
+  padding-bottom: 20px; /* Add some padding at the bottom */
+}
+
+.dashboard-card {
+  flex: 0 0 auto; /* Prevent cards from shrinking or growing */
+  width: 400px; /* Fixed width for each card */
+  height:600px;
+  background-color: #1e1e1e;
   border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s, box-shadow 0.2s; /* Added box-shadow to transition */
-}
-
-button:hover {
-  background-color: #181818;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), /* Outer glow */
-              0 0 20px rgba(255, 255, 255, 0.6), /* Mid glow */
-              0 0 30px rgba(255, 255, 255, 0.4); /* Inner glow */
-}
-
-.table-body-container {
-  max-height: 750px; /* Adjust this value to set the desired height */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   overflow-y: auto;
-  border-top: none;
+  transition: transform 0.3s ease;
+  
 }
 
-.table-body-container table {
-  margin-top: 0;
-  box-shadow: none;
+.dashboard-card:hover {
+  transform: translateY(-5px);
 }
 
-/* Ensure header stays fixed while body scrolls */
-.table-view thead th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #2a2a2a;
+  cursor: pointer;
 }
 
-/* Optional: Add glassmorphism effect to the table */
-.table-view {
-  /* backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%); */
-  /* background-color: rgba(17, 25, 40, 0.75); */
-  border-radius: 12px;
-  /* border: 1px solid rgba(255, 255, 255, 0.125); */
+.card-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #bb86fc;
 }
 
-td {
-  /* background-color: rgba(255, 255, 255, 0.05); */
-  color: white; /* Better visibility on dark background */
+.search-input {
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #333;
+  color: #e0e0e0;
+  width: 150px;
+}
+
+.dashboard-card ul {
+  list-style: none;
+  padding: 15px;
+}
+
+.dashboard-card li {
+  background-color: #2a2a2a;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.dashboard-card li:hover {
+  background-color: #333;
+}
+
+.dashboard-card li strong {
+  color: #bb86fc;
 }
