@@ -25,9 +25,9 @@ function SubscriptionsList({ subscriptions }) {
                         filteredSubscriptions.map((subscription) => (
                             <li key={subscription.id}>
                                 <strong>ID: </strong>{subscription.id}<br/>
-                                <strong>Name: </strong>{subscription.scheduled_time}<br/>
-                                <strong>Duration: </strong>{subscription.check_time}<br/>
-                                <strong>Price: </strong>{subscription.created_at}<br/>
+                                <strong>Name: </strong>{subscription.name}<br/>
+                                <strong>Duration: </strong>{subscription.duration}<br/>
+                                <strong>Price: </strong>{subscription.price}<br/>
                             </li>
                         ))
                     ) : (
