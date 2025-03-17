@@ -10,14 +10,58 @@ body {
   background-color: #121212;
   color: #e0e0e0;
   line-height: 1.6;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-x: hidden;
 }
 
 .dashboard.dark-theme {
-  padding: 20px;
-  min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Side Navigation */
+.sidenav {
+  height: 100%;
+  width: 10%; /* Hidden by default */
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #1e1e1e;
+  overflow-x: hidden;
+  transition: 0.3s ease; /* Smooth slide effect */
+  padding-top: 60px;
+}
+
+.sidenav:hover {
+  width: 200px; /* Width when hovered */
+}
+
+.sidenav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidenav li {
+  padding: 10px 20px;
+}
+
+.sidenav a {
+  text-decoration: none;
+  color: #e0e0e0;
+  display: block;
+  transition: color 0.3s ease;
+}
+
+.sidenav a:hover {
+  color: #bb86fc;
+}
+
+/* Main Content */
+.main-content {
+  margin-left: 200px;
+  flex: 1;
+  padding: 20px;
+  transition: margin-left 0.3s ease; /* Smooth shift when sidenav opens */
 }
 
 header {
@@ -29,7 +73,7 @@ header {
 
 header h1 {
   font-size: 2rem;
-  color: #bb86fc; /* Accent color */
+  color: #bb86fc;
 }
 
 .search-bar {
@@ -42,22 +86,23 @@ header h1 {
 }
 
 .dashboard-container {
-  display: flex; /* Flexbox for side-by-side layout */
-  gap: 20px; /* Space between components */
-  overflow-x: auto; /* Enable horizontal scrolling if necessary */
-  padding-bottom: 20px; /* Add some padding at the bottom */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding-bottom: 20px;
+  overflow-x: hidden;
 }
 
 .dashboard-card {
-  flex: 0 0 auto; /* Prevent cards from shrinking or growing */
-  width: 400px; /* Fixed width for each card */
-  height:600px;
+  flex: 1 1 300px;
+  min-width: 250px;
+  max-width: 100%;
+  height: 400px;
   background-color: #1e1e1e;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   overflow-y: auto;
   transition: transform 0.3s ease;
-  
 }
 
 .dashboard-card:hover {
@@ -107,4 +152,20 @@ header h1 {
 
 .dashboard-card li strong {
   color: #bb86fc;
+}
+
+.dashboard-graphs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+@media (max-width: 600px) {
+  .dashboard-card {
+    flex: 1 1 100%;
+  }
+  .search-bar {
+    width: 100%;
+  }
 }

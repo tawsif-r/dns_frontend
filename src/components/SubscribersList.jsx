@@ -10,7 +10,7 @@ function SubscribersList({ subscribers }) {
     return (
         <div className='dashboard-card'>
             <div className="card-header" onClick={() => setIsOpen(!isOpen)}>
-                <h2>{isOpen ? '▼' : '▶'} Subscribers</h2>
+                <h2>{isOpen ? '▼' : '▶'} Subs</h2>
                 <input
                     type="text"
                     placeholder="Search Subscribers..."

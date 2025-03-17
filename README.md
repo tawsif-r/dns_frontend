@@ -3,12 +3,9 @@
 like bdjobs
 * Subscribers, Subscriptions, Jobs, Messages are displayed in an orderly manner.
 
-## Install React with vite.
+## React with vite.
+* Install react with vite.
 ```npx create-vite your-project-name --template react```
-* Run your project
+* Run your project.
 ```npm run dev```
 
-# Tech used for the frontend
-Tool | version 
----------------
-react| latest

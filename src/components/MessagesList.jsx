@@ -10,7 +10,7 @@ function MessageList({ messages }) {
     return (
         <div className='dashboard-card'>
             <div className="card-header" onClick={() => setIsOpen(!isOpen)}>
-                <h2>{isOpen ? '▼' : '▶'} Messages</h2>
+                <h2>{isOpen ? '▼' : '▶'} SMS</h2>
                 <input
                     type="text"
                     placeholder="Search Subscribers..."
@@ -30,6 +30,7 @@ function MessageList({ messages }) {
                                 <strong>Created At: </strong>{message.created_at}<br/>
                                 <strong>Subscriber: </strong>{message.subscriber}<br/>
                                 <strong>Job: </strong>{message.job}<br/>
+                                <strong>Charge: </strong>{message.charge}<br/>
                             </li>
                         ))
                     ) : (
