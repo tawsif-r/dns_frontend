@@ -17,9 +17,82 @@ body {
   display: flex;
   min-height: 100vh;
 }
+/* Night Sky container */
+.night-sky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.star {
+  --travel: 100vw;
+  --size: 1;
+  position: absolute;
+  filter: drop-shadow(0 0 6px lightskyblue);
+  opacity: 0;
+  width: calc(var(--size) * 2px);
+  height: calc(var(--size) * 2px);
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #fff, 0 0 15px #fff;
+  animation: shooting-star ease-in-out infinite;
+  animation-duration: calc(var(--speed) * 1s);
+  animation-delay: var(--delay);
+  left: var(--left);
+  top: var(--top);
+  transform-origin: center;
+}
+
+@keyframes shooting-star {
+  0% {
+    opacity: 0;
+    transform: translateX(0) translateY(0) scale(0.5);
+  }
+  
+  10% {
+    opacity: 1;
+  }
+  
+  50% {
+    transform: translateX(calc(var(--travel) * 0.5)) translateY(calc(var(--travel) * 0.1)) scale(1);
+    opacity: 1;
+  }
+  
+  100% {
+    transform: translateX(var(--travel)) translateY(calc(var(--travel) * 0.2)) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* Make static stars that just twinkle */
+.static-star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 4px #fff;
+  animation: twinkle ease-in-out infinite;
+  animation-duration: calc(var(--twinkle-speed) * 1s);
+  animation-delay: var(--delay);
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
 /* Side Navigation */
 .sidenav {
+  backdrop-filter: blur(5px);
   height: 100%;
   width: 10%; /* Hidden by default */
   position: fixed;
@@ -93,7 +166,10 @@ header h1 {
   overflow-x: hidden;
 }
 
+
 .dashboard-card {
+  background-color: rgba(30, 35, 45, 0.7) !important;
+  backdrop-filter: blur(5px);
   flex: 1 1 300px;
   min-width: 250px;
   max-width: 100%;
@@ -159,6 +235,51 @@ header h1 {
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px 0;
+}
+
+
+#night-sky .star {
+  --travel: 100vw;
+  --size: 1;
+}
+
+#night-sky .star {
+  position: relative;
+  filter: drop-shadow(0 0 6px lightskyagreen);
+  opacity: 1;
+  width: calc(var(--size) * 2px);
+  height: calc(var(--size) * 2px);
+  animation: shooting-star ease-in-out infinite;
+  animation-delay: var(--delay);
+  left: var(--left);
+  
+  /* Additional properties needed */
+  top: var(--top);
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #fff, 0 0 15px #fff;
+  transform-origin: center;
+}
+
+@keyframes shooting-star {
+  0% {
+    opacity: 0;
+    transform: translateX(0) translateY(0) scale(0.5);
+  }
+  
+  10% {
+    opacity: 1;
+  }
+  
+  50% {
+    transform: translateX(calc(var(--travel) * 0.5)) translateY(calc(var(--travel) * 0.1)) scale(1);
+    opacity: 1;
+  }
+  
+  100% {
+    transform: translateX(var(--travel)) translateY(calc(var(--travel) * 0.2)) scale(0.5);
+    opacity: 0;
+  }
 }
 
 @media (max-width: 600px) {

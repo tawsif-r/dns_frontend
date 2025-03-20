@@ -47,7 +47,52 @@ function App() {
     };
 
     fetchData();
+    
+    // Generate stars for the night sky
+    generateStars();
   }, []);
+  
+  // Function to generate stars
+  const generateStars = () => {
+    const nightSky = document.createElement('div');
+    nightSky.className = 'night-sky';
+    document.body.appendChild(nightSky);
+    
+    // Create shooting stars
+    const shootingStarCount = 15;
+    for (let i = 0; i < shootingStarCount; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      
+      // Random properties
+      star.style.setProperty('--size', Math.random() * 3 + 0.5);
+      star.style.setProperty('--delay', `${Math.random() * 10}s`);
+      star.style.setProperty('--left', `${Math.random() * 100}vw`);
+      star.style.setProperty('--top', `${Math.random() * 50}vh`);
+      star.style.setProperty('--travel', `${Math.random() * 50 + 50}vw`);
+      star.style.setProperty('--speed', `${Math.random() * 5 + 5}`);
+      
+      nightSky.appendChild(star);
+    }
+    
+    // Create static twinkling stars
+    const staticStarCount = 80;
+    for (let i = 0; i < staticStarCount; i++) {
+      const star = document.createElement('div');
+      star.classList.add('static-star');
+      
+      // Random properties
+      const size = Math.random() * 2 + 1;
+      star.style.width = `${size}px`;
+      star.style.height = `${size}px`;
+      star.style.left = `${Math.random() * 100}vw`;
+      star.style.top = `${Math.random() * 100}vh`;
+      star.style.setProperty('--delay', `${Math.random() * 3}s`);
+      star.style.setProperty('--twinkle-speed', `${Math.random() * 3 + 2}`);
+      
+      nightSky.appendChild(star);
+    }
+  };
 
   //=======================================message chart===============================================
   const messagesOverTimeData = {
@@ -182,7 +227,6 @@ function App() {
             <div style={{ height: '300px', padding: '15px' }}>
               <Line data={messagesOverTimeData} options={chartOptions} />
             </div>
-
           </div>
 
           <div className="dashboard-card">
@@ -192,12 +236,10 @@ function App() {
             <div style={{ height: '300px', padding: '15px' }}>
               <Line data={jobsByRegionData} options={chartOptionsJobs} />
             </div>
-
           </div>
         </div>
       </div>
     </div>
-
   );
 }
 
