@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 import JobsList from './components/JobsList';
+import SportsList from './components/SpotsList';
 import SubscribersList from './components/SubscribersList';
 import MessagesList from './components/MessagesList';
 import SubscriptionsList from './components/SubscriptionsList';
@@ -18,18 +19,21 @@ function App() {
   const [messagesData, setMessagesData] = useState([]);
   const [subscriptionsData, setSubscriptionsData] = useState([]);
   const [reportsData, setReportsData] = useState([]);
+  const [sportsData,setSportsData] = useState([]);
 
-  const jobUrl = 'http://localhost:8000/admin/api/jobs/';
-  const subscriberUrl = 'http://localhost:8000/admin/api/subscribers/';
-  const messageUrl = 'http://localhost:8000/admin/api/messages/';
-  const subscriptionUrl = 'http://localhost:8000/admin/api/subscriptions/';
-  const reportUrl = 'http://localhost:8000/admin/api/reports/';
+  const jobUrl = 'http://localhost:8001/admin/api/jobs/';
+  const sportsUrl = 'http://localhost:8001/admin/api/sports/'
+  const subscriberUrl = 'http://localhost:8001/admin/api/subscribers/';
+  const messageUrl = 'http://localhost:8001/admin/api/messages/';
+  const subscriptionUrl = 'http://localhost:8001/admin/api/subscriptions/';
+  const reportUrl = 'http://localhost:8001/admin/api/reports/';
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [jobsResponse, subscribersResponse, messagesResponse, subscriptionsResponse, reportsResponse] = await Promise.all([
+        const [jobsResponse, sportsResponse,subscribersResponse, messagesResponse, subscriptionsResponse, reportsResponse] = await Promise.all([
           axios.get(jobUrl),
+          axios.get(sportsUrl),
           axios.get(subscriberUrl),
           axios.get(messageUrl),
           axios.get(subscriptionUrl),
@@ -37,6 +41,7 @@ function App() {
         ]);
 
         setJobsData(jobsResponse.data);
+        setSportsData(sportsResponse.data);
         setSubscribersData(subscribersResponse.data);
         setMessagesData(messagesResponse.data);
         setSubscriptionsData(subscriptionsResponse.data);
@@ -47,52 +52,10 @@ function App() {
     };
 
     fetchData();
-    
-    // Generate stars for the night sky
-    generateStars();
   }, []);
   
-  // Function to generate stars
-  const generateStars = () => {
-    const nightSky = document.createElement('div');
-    nightSky.className = 'night-sky';
-    document.body.appendChild(nightSky);
-    
-    // Create shooting stars
-    const shootingStarCount = 15;
-    for (let i = 0; i < shootingStarCount; i++) {
-      const star = document.createElement('div');
-      star.classList.add('star');
-      
-      // Random properties
-      star.style.setProperty('--size', Math.random() * 3 + 0.5);
-      star.style.setProperty('--delay', `${Math.random() * 10}s`);
-      star.style.setProperty('--left', `${Math.random() * 100}vw`);
-      star.style.setProperty('--top', `${Math.random() * 50}vh`);
-      star.style.setProperty('--travel', `${Math.random() * 50 + 50}vw`);
-      star.style.setProperty('--speed', `${Math.random() * 5 + 5}`);
-      
-      nightSky.appendChild(star);
-    }
-    
-    // Create static twinkling stars
-    const staticStarCount = 80;
-    for (let i = 0; i < staticStarCount; i++) {
-      const star = document.createElement('div');
-      star.classList.add('static-star');
-      
-      // Random properties
-      const size = Math.random() * 2 + 1;
-      star.style.width = `${size}px`;
-      star.style.height = `${size}px`;
-      star.style.left = `${Math.random() * 100}vw`;
-      star.style.top = `${Math.random() * 100}vh`;
-      star.style.setProperty('--delay', `${Math.random() * 3}s`);
-      star.style.setProperty('--twinkle-speed', `${Math.random() * 3 + 2}`);
-      
-      nightSky.appendChild(star);
-    }
-  };
+ 
+ 
 
   //=======================================message chart===============================================
   const messagesOverTimeData = {
@@ -214,6 +177,7 @@ function App() {
         </header>
         <div className="dashboard-container">
           <JobsList jobs={jobsData} />
+          <SportsList sports={sportsData} />
           <SubscribersList subscribers={subscribersData} />
           <MessagesList messages={messagesData} />
           <SubscriptionsList subscriptions={subscriptionsData} />
