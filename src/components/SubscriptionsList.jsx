@@ -26,7 +26,7 @@ function SubscriptionsList({ subscriptions }) {
                             <li key={subscription.id}>
                                 <strong>ID: </strong>{subscription.id}<br/>
                                 <strong>Name: </strong>{subscription.name}<br/>
-                                <strong>Duration: </strong>{subscription.duration}<br/>
+                                <strong>Duration: </strong>{subscription.duration_days} day(s)<br/>
                                 <strong>Price: </strong>{subscription.price}<br/>
                             </li>
                         ))
