@@ -195,7 +195,7 @@ function App() {
     ...baseChartOptions,
     plugins: {
       ...baseChartOptions.plugins,
-      title: { ...baseChartOptions.plugins.title},
+      title: { ...baseChartOptions.plugins.title },
     },
     scales: {
       x: { ...baseChartOptions.scales.x, title: { ...baseChartOptions.scales.x.title, text: 'Date' } },
@@ -204,11 +204,9 @@ function App() {
   };
 
   return (
-    
     <div className="min-h-screen bg-gray-900 text-white font-mono flex">
       <div className="w-64 bg-gray-800 p-4 fixed h-screen">
-      <Nav />
-        
+        <Nav />
       </div>
 
       <div className="flex-1 ml-64 p-6">
@@ -222,7 +220,7 @@ function App() {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <JobsList jobs={jobsData} />
+          <JobsList jobs={jobsData} setJobs={setJobsData} />
           <SportsList sports={sportsData} />
           <SubscribersList subscribers={subscribersData} />
           <MessagesQList messages={messagesQData} />
