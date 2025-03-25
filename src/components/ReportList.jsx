@@ -10,7 +10,7 @@ function ReportList({ reports }) {
     return (
         <div className='dashboard-card'>
             <div className="card-header" onClick={() => setIsOpen(!isOpen)}>
-                <h2>{isOpen ? '▼' : '▶'} Reports</h2>
+                <h2>{isOpen ? '' : ''} Reports</h2>
                 <input
                     type="text"
                     placeholder="Search Reports..."

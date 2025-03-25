@@ -22,7 +22,7 @@ function SportsList({ sports }) {
                 </svg></h2>
                 <input
                     type="text"
-                    placeholder="Search Subscribers..."
+                    placeholder="Search Sports..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="search-input"

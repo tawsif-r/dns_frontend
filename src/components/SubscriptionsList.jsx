@@ -22,7 +22,7 @@ function SubscriptionsList({ subscriptions }) {
                 </svg></h2>
                 <input
                     type="text"
-                    placeholder="Search Subscribers..."
+                    placeholder="Search Subscriptions..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="search-input"

@@ -187,7 +187,7 @@ function App() {
           <MessagesQList messages={messagesQData} />
           <SubscriptionsList subscriptions={subscriptionsData} />
           <ReportList reports={reportsData} />
-          <MessagesList messages={messagesData} />
+          <MessagesList messages={messagesData} setMessages={setMessagesData} />
         </div>
         <div className="dashboard-graphs">
           <div className="dashboard-card">

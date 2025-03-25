@@ -23,7 +23,7 @@ function MessagesQList({ messages }) {
                 </h2>
                 <input
                     type="text"
-                    placeholder="Search Subscribers..."
+                    placeholder="Search MessageQ..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="search-input"

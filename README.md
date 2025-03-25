@@ -44,3 +44,4 @@ npm error A complete log of this run can be found in: /home/tawsif/.npm/_logs/20
 - there are ways to solve this, check the log file and see if the dependency version is correct
 - ``` npm install ``` will install the node_modules accourding to your lock files.
 - ``` npm cache clean --force``` will clear the cache of node_modules. 
+
