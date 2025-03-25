@@ -4,11 +4,12 @@ import './App.css';
 import JobsList from './components/JobsList';
 import SportsList from './components/SpotsList';
 import SubscribersList from './components/SubscribersList';
-import MessagesList from './components/MessagesList';
+import MessagesQList from './components/MessagesQList';
 import SubscriptionsList from './components/SubscriptionsList';
 import ReportList from './components/ReportList';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend } from 'chart.js';
+import MessagesList from './components/MessagesList';
 
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend);
@@ -16,36 +17,40 @@ ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, T
 function App() {
   const [jobsData, setJobsData] = useState([]);
   const [subscribersData, setSubscribersData] = useState([]);
-  const [messagesData, setMessagesData] = useState([]);
+  const [messagesQData, setMessagesQData] = useState([]);
   const [subscriptionsData, setSubscriptionsData] = useState([]);
   const [reportsData, setReportsData] = useState([]);
   const [sportsData,setSportsData] = useState([]);
+  const [messagesData,setMessagesData] = useState([]);
 
-  const jobUrl = 'http://localhost:8001/admin/api/jobs/';
-  const sportsUrl = 'http://localhost:8001/admin/api/sports/'
-  const subscriberUrl = 'http://localhost:8001/admin/api/subscribers/';
-  const messageUrl = 'http://localhost:8001/admin/api/messages/';
-  const subscriptionUrl = 'http://localhost:8001/admin/api/subscriptions/';
-  const reportUrl = 'http://localhost:8001/admin/api/reports/';
+  const jobUrl = 'http://192.168.3.37:8001/admin/api/jobs/';
+  const sportsUrl = 'http://192.168.3.37:8001/admin/api/sports/'
+  const subscriberUrl = 'http://192.168.3.37:8001/admin/api/subscribers/';
+  const messagesQUrl = 'http://192.168.3.37:8001/admin/api/messagesQueue/';
+  const subscriptionUrl = 'http://192.168.3.37:8001/admin/api/subscriptions/';
+  const reportUrl = 'http://192.168.3.37:8001/admin/api/reports/';
+  const messageUrl = 'http://192.168.3.37:8001/admin/api/messages/';
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [jobsResponse, sportsResponse,subscribersResponse, messagesResponse, subscriptionsResponse, reportsResponse] = await Promise.all([
+        const [jobsResponse, sportsResponse,subscribersResponse, messagesQResponse, subscriptionsResponse, reportsResponse, messagesResponse] = await Promise.all([
           axios.get(jobUrl),
           axios.get(sportsUrl),
           axios.get(subscriberUrl),
-          axios.get(messageUrl),
+          axios.get(messagesQUrl),
           axios.get(subscriptionUrl),
           axios.get(reportUrl),
+          axios.get(messageUrl),
         ]);
 
         setJobsData(jobsResponse.data);
         setSportsData(sportsResponse.data);
         setSubscribersData(subscribersResponse.data);
-        setMessagesData(messagesResponse.data);
+        setMessagesQData(messagesQResponse.data);
         setSubscriptionsData(subscriptionsResponse.data);
         setReportsData(reportsResponse.data);
+        setMessagesData(messagesResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -179,9 +184,10 @@ function App() {
           <JobsList jobs={jobsData} />
           <SportsList sports={sportsData} />
           <SubscribersList subscribers={subscribersData} />
-          <MessagesList messages={messagesData} />
+          <MessagesQList messages={messagesQData} />
           <SubscriptionsList subscriptions={subscriptionsData} />
           <ReportList reports={reportsData} />
+          <MessagesList messages={messagesData} />
         </div>
         <div className="dashboard-graphs">
           <div className="dashboard-card">

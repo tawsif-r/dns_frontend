@@ -282,6 +282,193 @@ header h1 {
   }
 }
 
+
+/* Global Styles
+.messages-container {
+  background-color: rgba(30, 35, 45, 0.7) !important;
+  width: 100%;
+  max-width: 28rem;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.messages-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f3f4f6;
+  cursor: pointer;
+}
+
+.messages-header-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.search-input {
+  margin-left: 1rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+}
+
+.messages-content {
+  padding: 1rem;
+}
+
+.new-message-form {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+}
+
+.new-message-title {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.new-message-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.new-message-input {
+  border: 1px solid #d1d5db;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.new-message-textarea {
+  grid-column: span 2;
+  border: 1px solid #d1d5db;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.new-message-button {
+  grid-column: span 2;
+  background-color: #10b981;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s;
+}
+
+.new-message-button:hover {
+  background-color: #059669;
+}
+
+.messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.message-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.25rem;
+  padding: 0.75rem;
+  position: relative;
+}
+
+.message-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.message-edit-input {
+  border: 1px solid #d1d5db;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.message-edit-textarea {
+  grid-column: span 2;
+  border: 1px solid #d1d5db;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.message-edit-actions {
+  grid-column: span 2;
+  display: flex;
+  justify-content: space-between;
+}
+
+.message-save-button {
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.message-save-button:hover {
+  background-color: #2563eb;
+}
+
+.message-cancel-button {
+  background-color: #d1d5db;
+  color: #4b5563;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.message-cancel-button:hover {
+  background-color: #9ca3af;
+}
+
+.message-actions {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.message-edit-btn {
+  color: #3b82f6;
+  transition: color 0.2s;
+}
+
+.message-edit-btn:hover {
+  color: #2563eb;
+}
+
+.message-delete-btn {
+  color: #ef4444;
+  transition: color 0.2s;
+}
+
+.message-delete-btn:hover {
+  color: #dc2626;
+}
+
+.no-messages {
+  text-align: center;
+  color: #6b7280;
+} */
+
+
+
 @media (max-width: 600px) {
   .dashboard-card {
     flex: 1 1 100%;
