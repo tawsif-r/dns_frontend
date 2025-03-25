@@ -99,7 +99,7 @@ function MessagesList({ messages, setMessages }) {  // Added setMessages as prop
       </div>
 
       {isOpen && (
-        <div className="p-4 bg-gray-900">
+        <div className="p-4 bg-gray-900 max-h-80 overflow-y-auto">
           {/* New Message Form */}
           <div className="mb-6">
             <h3 className="flex items-center text-purple-400 mb-2">
