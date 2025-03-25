@@ -5,7 +5,7 @@ function ReportList({ reports }) {
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredReports = reports.filter((report) =>
-        report.sent_on.toLowerCase().includes(searchTerm.toLowerCase())
+        report?.sent_on?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (

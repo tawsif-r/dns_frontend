@@ -5,7 +5,7 @@ function SubscriptionsList({ subscriptions }) {
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredSubscriptions = subscriptions.filter((subscription) =>
-        subscription.name.toLowerCase().includes(searchTerm.toLowerCase())
+        subscription?.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (

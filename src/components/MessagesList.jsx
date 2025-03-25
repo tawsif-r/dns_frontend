@@ -16,7 +16,7 @@ function MessagesList({ messages, setMessages }) {  // Added setMessages as prop
 
   // Filtered messages based on search term
   const filteredMessages = messages.filter((message) =>
-    message.to.toLowerCase().includes(searchTerm.toLowerCase())
+    message?.to?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Create a new message

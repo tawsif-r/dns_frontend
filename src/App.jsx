@@ -7,6 +7,7 @@ import MessagesQList from './components/MessagesQList';
 import SubscriptionsList from './components/SubscriptionsList';
 import ReportList from './components/ReportList';
 import MessagesList from './components/MessagesList';
+import ServicesList from './components/ServicesList';
 import Nav from './components/ui/Nav';
 import { Line, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, BarElement, PointElement, Title, Tooltip, Legend } from 'chart.js';
@@ -38,6 +39,7 @@ function App() {
   const [reportsData, setReportsData] = useState([]);
   const [sportsData, setSportsData] = useState([]);
   const [messagesData, setMessagesData] = useState([]);
+  const [servicesData, setServicesData] = useState([]);
 
   const jobUrl = 'http://192.168.3.37:8001/admin/api/jobs/';
   const sportsUrl = 'http://192.168.3.37:8001/admin/api/sports/';
@@ -46,11 +48,12 @@ function App() {
   const subscriptionUrl = 'http://192.168.3.37:8001/admin/api/subscriptions/';
   const reportUrl = 'http://192.168.3.37:8001/admin/api/reports/';
   const messageUrl = 'http://192.168.3.37:8001/admin/api/messages/';
+  const serviceUrl = 'http://192.168.3.37:8001/admin/api/services/';
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [jobsResponse, sportsResponse, subscribersResponse, messagesQResponse, subscriptionsResponse, reportsResponse, messagesResponse] = await Promise.all([
+        const [jobsResponse, sportsResponse, subscribersResponse, messagesQResponse, subscriptionsResponse, reportsResponse, messagesResponse,servicesResponse, ] = await Promise.all([
           axios.get(jobUrl),
           axios.get(sportsUrl),
           axios.get(subscriberUrl),
@@ -58,6 +61,7 @@ function App() {
           axios.get(subscriptionUrl),
           axios.get(reportUrl),
           axios.get(messageUrl),
+          axios.get(serviceUrl)
         ]);
 
         setJobsData(jobsResponse.data);
@@ -67,6 +71,7 @@ function App() {
         setSubscriptionsData(subscriptionsResponse.data);
         setReportsData(reportsResponse.data);
         setMessagesData(messagesResponse.data);
+        setServicesData(servicesResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -212,9 +217,9 @@ function App() {
       <div className="flex-1 ml-64 p-6">
         <header className="mb-8 flex justify-between items-center">
           <h1 className="text-3xl font-bold text-purple-400">Admin Dashboard</h1>
-          <input 
-            type="text" 
-            placeholder="Search..." 
+          <input
+            type="text"
+            placeholder="Search..."
             className="px-4 py-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 w-64"
           />
         </header>
@@ -227,32 +232,33 @@ function App() {
           <SubscriptionsList subscriptions={subscriptionsData} />
           <ReportList reports={reportsData} />
           <MessagesList messages={messagesData} setMessages={setMessagesData} />
+          <ServicesList services={servicesData} setServices={setServicesData} />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <ChartComponent 
+          <ChartComponent
             type="line"
-            data={messagesOverTimeData} 
-            options={messagesOptions} 
-            title="Messages Over Time" 
+            data={messagesOverTimeData}
+            options={messagesOptions}
+            title="Messages Over Time"
           />
-          <ChartComponent 
+          <ChartComponent
             type="bar"
-            data={jobsByRegionData} 
-            options={jobsOptions} 
-            title="Jobs by Region" 
+            data={jobsByRegionData}
+            options={jobsOptions}
+            title="Jobs by Region"
           />
-          <ChartComponent 
+          <ChartComponent
             type="bar"
-            data={subscribersByRegionData} 
-            options={subscribersOptions} 
-            title="Subscribers by Region" 
+            data={subscribersByRegionData}
+            options={subscribersOptions}
+            title="Subscribers by Region"
           />
-          <ChartComponent 
+          <ChartComponent
             type="line"
-            data={reportsChargeData} 
-            options={reportsOptions} 
-            title="Total Charge Over Time" 
+            data={reportsChargeData}
+            options={reportsOptions}
+            title="Total Charge Over Time"
           />
         </div>
       </div>

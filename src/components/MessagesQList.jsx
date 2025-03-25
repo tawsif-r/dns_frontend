@@ -5,7 +5,7 @@ function MessagesQList({ messages }) {
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredMessages = messages.filter((message) =>
-        message.created_at.toLowerCase().includes(searchTerm.toLowerCase())
+        message?.created_at?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (

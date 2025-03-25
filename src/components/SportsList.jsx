@@ -5,7 +5,9 @@ function SportsList({ sports }) {
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredSports = sports.filter((sport) =>
-        sport.slug.toLowerCase().includes(searchTerm.toLowerCase())
+        sport?.tournament_name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        sport?.home_team_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        sport?.away_team_name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
