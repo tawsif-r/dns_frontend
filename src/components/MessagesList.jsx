@@ -72,7 +72,7 @@ function MessagesList({ messages, setMessages }) {  // Added setMessages as prop
   return (
     <div className="dashboar-card bg-gray-900 text-white rounded-lg shadow-lg">
       <div 
-        className="card-header flex justify-between items-center p-4 bg-purple-800 rounded-t-lg cursor-pointer"
+        className="card-header flex justify-between items-center p-4 bg-purple-900 hover:bg-purple-700 rounded-t-lg cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center">
@@ -90,7 +90,7 @@ function MessagesList({ messages, setMessages }) {  // Added setMessages as prop
         </div>
         <input
           type="text"
-          placeholder="Search Subscribers..."
+          placeholder="Search Messages..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="ml-4 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400"

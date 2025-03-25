@@ -11,7 +11,7 @@ function JobsList({ jobs }) {
   return (
     <div className="dashboard-card bg-gray-900 text-white rounded-lg shadow-lg">
       <div 
-        className="card-header flex justify-between items-center p-4 bg-purple-800 rounded-t-lg cursor-pointer"
+        className="card-header flex justify-between items-center p-4 bg-purple-900 hover:bg-purple-700 rounded-t-lg cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center">

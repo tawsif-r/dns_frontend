@@ -119,7 +119,7 @@ function App() {
     ...baseChartOptions,
     plugins: {
       ...baseChartOptions.plugins,
-      title: { ...baseChartOptions.plugins.title, text: 'Messages Over Time' },
+      title: { ...baseChartOptions.plugins.title },
     },
     scales: {
       x: { ...baseChartOptions.scales.x, title: { ...baseChartOptions.scales.x.title, text: 'Date' } },
@@ -144,7 +144,7 @@ function App() {
     ...baseChartOptions,
     plugins: {
       ...baseChartOptions.plugins,
-      title: { ...baseChartOptions.plugins.title, text: 'Jobs by Region' },
+      title: { ...baseChartOptions.plugins.title },
     },
     scales: {
       x: { ...baseChartOptions.scales.x, title: { ...baseChartOptions.scales.x.title, text: 'Region' } },
@@ -169,7 +169,7 @@ function App() {
     ...baseChartOptions,
     plugins: {
       ...baseChartOptions.plugins,
-      title: { ...baseChartOptions.plugins.title, text: 'Subscribers by Region' },
+      title: { ...baseChartOptions.plugins.title },
     },
     scales: {
       x: { ...baseChartOptions.scales.x, title: { ...baseChartOptions.scales.x.title, text: 'Region' } },
@@ -195,7 +195,7 @@ function App() {
     ...baseChartOptions,
     plugins: {
       ...baseChartOptions.plugins,
-      title: { ...baseChartOptions.plugins.title, text: 'Total Charge Over Time' },
+      title: { ...baseChartOptions.plugins.title},
     },
     scales: {
       x: { ...baseChartOptions.scales.x, title: { ...baseChartOptions.scales.x.title, text: 'Date' } },
@@ -205,7 +205,7 @@ function App() {
 
   return (
     
-    <div className="min-h-screen bg-gray-900 text-white flex">
+    <div className="min-h-screen bg-gray-900 text-white font-mono flex">
       <div className="w-64 bg-gray-800 p-4 fixed h-screen">
       <Nav />
         
