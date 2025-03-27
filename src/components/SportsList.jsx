@@ -1,14 +1,94 @@
 import React, { useState } from 'react';
+import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
+import axios from 'axios';
 
-function SportsList({ sports }) {
+function SportsList({ sports, setSports }) {
     const [isOpen, setIsOpen] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [editingSport, setEditingSport] = useState(null);
+    const [newSport, setNewSport] = useState({
+        id: '',
+        home_team_name: '',
+        away_team_name: '',
+        away_score_current: '',
+        away_team_country: '',
+        home_score_current: '',
+        home_score_overs: '',
+        home_score_wickets: '',
+        home_team_country: '',
+        last_period: '',
+        status_description: ''
+    });
+
+    const baseUrl = 'http://192.168.3.37:8001/admin/api/sports/'; // Adjust this URL as needed
 
     const filteredSports = sports.filter((sport) =>
         sport?.tournament_name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
         sport?.home_team_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         sport?.away_team_name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    // Create a new sport
+    const handleCreateSport = async () => {
+        if (!newSport.home_team_name || !newSport.away_team_name) {
+            alert('Please fill in required fields (Home Team Name and Away Team Name)');
+            return;
+        }
+
+        try {
+            const response = await axios.post(baseUrl, newSport);
+            setSports([...sports, response.data]);
+            setNewSport({
+                id: '',
+                home_team_name: '',
+                away_team_name: '',
+                away_score_current: '',
+                away_team_country: '',
+                home_score_current: '',
+                home_score_overs: '',
+                home_score_wickets: '',
+                home_team_country: '',
+                last_period: '',
+                status_description: ''
+            });
+        } catch (error) {
+            console.error('Error creating sport:', error);
+            alert('Failed to create sport');
+        }
+    };
+
+    // Update an existing sport
+    const handleUpdateSport = async () => {
+        if (!editingSport.home_team_name || !editingSport.away_team_name) {
+            alert('Please fill in required fields (Home Team Name and Away Team Name)');
+            return;
+        }
+
+        try {
+            const response = await axios.put(`${baseUrl}${editingSport.id}/`, editingSport);
+            setSports(sports.map(sport =>
+                sport.id === editingSport.id ? response.data : sport
+            ));
+            setEditingSport(null);
+        } catch (error) {
+            console.error('Error updating sport:', error);
+            alert('Failed to update sport');
+        }
+    };
+
+    // Delete a sport
+    const handleDeleteSport = async (id) => {
+        try {
+            await axios.delete(`${baseUrl}${id}/`);
+            setSports(sports.filter(sport => sport.id !== id));
+            if (editingSport?.id === id) {
+                setEditingSport(null);
+            }
+        } catch (error) {
+            console.error('Error deleting sport:', error);
+            alert('Failed to delete sport');
+        }
+    };
 
     return (
         <div className="dashboard-card bg-gray-900 text-white rounded-lg shadow-lg">
@@ -41,26 +121,212 @@ function SportsList({ sports }) {
 
             {isOpen && (
                 <div className="p-4 bg-gray-900 max-h-96 overflow-y-auto">
+                    {/* New Sport Form */}
+                    <div className="mb-6">
+                        <h3 className="flex items-center text-purple-400 mb-2">
+                            <PlusIcon className="mr-2" />
+                            Create New Sport Event
+                        </h3>
+                        <div className="space-y-2">
+                            <input
+                                type="text"
+                                placeholder="Home Team Name"
+                                value={newSport.home_team_name}
+                                onChange={(e) => setNewSport({ ...newSport, home_team_name: e.target.value })}
+                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Away Team Name"
+                                value={newSport.away_team_name}
+                                onChange={(e) => setNewSport({ ...newSport, away_team_name: e.target.value })}
+                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Away Score Current"
+                                value={newSport.away_score_current}
+                                onChange={(e) => setNewSport({ ...newSport, away_score_current: e.target.value })}
+                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Away Team Country"
+                                value={newSport.away_team_country}
+                                onChange={(e) => setNewSport({ ...newSport, away_team_country: e.target.value })}
+                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Home Score Current"
+                                value={newSport.home_score_current}
+                                onChange={(e) => setNewSport({ ...newSport, home_score_current: e.target.value })}
+                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Home Score Overs"
+                                value={newSport.home_score_overs}
+                                onChange={(e) => setNewSport({ ...newSport, home_score_overs: e.target.value })}
+                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Home Score Wickets"
+                                value={newSport.home_score_wickets}
+                                onChange={(e) => setNewSport({ ...newSport, home_score_wickets: e.target.value })}
+                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Home Team Country"
+                                value={newSport.home_team_country}
+                                onChange={(e) => setNewSport({ ...newSport, home_team_country: e.target.value })}
+                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Last Period"
+                                value={newSport.last_period}
+                                onChange={(e) => setNewSport({ ...newSport, last_period: e.target.value })}
+                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Status Description"
+                                value={newSport.status_description}
+                                onChange={(e) => setNewSport({ ...newSport, status_description: e.target.value })}
+                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                            />
+                            <button
+                                onClick={handleCreateSport}
+                                className="w-full bg-purple-600 text-white p-2 rounded hover:bg-purple-700 transition duration-200"
+                            >
+                                Add Sport Event
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Sports List */}
                     {filteredSports.length > 0 ? (
                         <ul className="space-y-4">
                             {filteredSports.map((sport) => (
                                 <li 
-Irish35                                    key={sport.id}
+                                    key={sport.id}
                                     className="bg-gray-800 p-4 rounded-lg border border-gray-700"
                                 >
-                                    <div className="space-y-2">
-                                        <p><strong>ID:</strong> {sport.id}</p>
-                                        <p><strong>Home Team:</strong> {sport.home_team_name}</p>
-                                        <p><strong>Away Team:</strong> {sport.away_team_name}</p>
-                                        <p><strong>Away Score Current:</strong> {sport.away_score_current}</p>
-                                        <p><strong>Away Team Country:</strong> {sport.away_team_country}</p>
-                                        <p><strong>Home Score Current:</strong> {sport.home_score_current}</p>
-                                        <p><strong>Home Score Overs:</strong> {sport.home_score_overs}</p>
-                                        <p><strong>Home Score Wickets:</strong> {sport.home_score_wickets}</p>
-                                        <p><strong>Home Team Country:</strong> {sport.home_team_country}</p>
-                                        <p><strong>Last Period:</strong> {sport.last_period}</p>
-                                        <p><strong>Status Description:</strong> {sport.status_description}</p>
-                                    </div>
+                                    {editingSport?.id === sport.id ? (
+                                        // Edit Mode
+                                        <div className="space-y-2">
+                                            <input
+                                                type="text"
+                                                value={editingSport.home_team_name}
+                                                onChange={(e) => setEditingSport({ ...editingSport, home_team_name: e.target.value })}
+                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                                            />
+                                            <input
+                                                type="text"
+                                                value={editingSport.away_team_name}
+                                                onChange={(e) => setEditingSport({ ...editingSport, away_team_name: e.target.value })}
+                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                                            />
+                                            <input
+                                                type="number"
+                                                value={editingSport.away_score_current}
+                                                onChange={(e) => setEditingSport({ ...editingSport, away_score_current: e.target.value })}
+                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                                            />
+                                            <input
+                                                type="text"
+                                                value={editingSport.away_team_country}
+                                                onChange={(e) => setEditingSport({ ...editingSport, away_team_country: e.target.value })}
+                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                                            />
+                                            <input
+                                                type="number"
+                                                value={editingSport.home_score_current}
+                                                onChange={(e) => setEditingSport({ ...editingSport, home_score_current: e.target.value })}
+                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                                            />
+                                            <input
+                                                type="number"
+                                                value={editingSport.home_score_overs}
+                                                onChange={(e) => setEditingSport({ ...editingSport, home_score_overs: e.target.value })}
+                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                                            />
+                                            <input
+                                                type="number"
+                                                value={editingSport.home_score_wickets}
+                                                onChange={(e) => setEditingSport({ ...editingSport, home_score_wickets: e.target.value })}
+                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                                            />
+                                            <input
+                                                type="text"
+                                                value={editingSport.home_team_country}
+                                                onChange={(e) => setEditingSport({ ...editingSport, home_team_country: e.target.value })}
+                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                                            />
+                                            <input
+                                                type="text"
+                                                value={editingSport.last_period}
+                                                onChange={(e) => setEditingSport({ ...editingSport, last_period: e.target.value })}
+                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                                            />
+                                            <input
+                                                type="text"
+                                                value={editingSport.status_description}
+                                                onChange={(e) => setEditingSport({ ...editingSport, status_description: e.target.value })}
+                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                                            />
+                                            <div className="flex space-x-2">
+                                                <button
+                                                    onClick={handleUpdateSport}
+                                                    className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200"
+                                                >
+                                                    <SaveIcon className="mr-2" /> Save
+                                                </button>
+                                                <button
+                                                    onClick={() => setEditingSport(null)}
+                                                    className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
+                                                >
+                                                    <XIcon className="mr-2" /> Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        // View Mode
+                                        <>
+                                            <div className="flex justify-between items-center">
+                                                <div className="flex space-x-2">
+                                                    <button
+                                                        onClick={() => setEditingSport(sport)}
+                                                        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-200"
+                                                    >
+                                                        <EditIcon />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDeleteSport(sport.id)}
+                                                        className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
+                                                    >
+                                                        <TrashIcon />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="mt-2 space-y-2">
+                                                <p><strong>ID:</strong> {sport.id}</p>
+                                                <p><strong>Home Team:</strong> {sport.home_team_name}</p>
+                                                <p><strong>Away Team:</strong> {sport.away_team_name}</p>
+                                                <p><strong>Away Score Current:</strong> {sport.away_score_current}</p>
+                                                <p><strong>Away Team Country:</strong> {sport.away_team_country}</p>
+                                                <p><strong>Home Score Current:</strong> {sport.home_score_current}</p>
+                                                <p><strong>Home Score Overs:</strong> {sport.home_score_overs}</p>
+                                                <p><strong>Home Score Wickets:</strong> {sport.home_score_wickets}</p>
+                                                <p><strong>Home Team Country:</strong> {sport.home_team_country}</p>
+                                                <p><strong>Last Period:</strong> {sport.last_period}</p>
+                                                <p><strong>Status Description:</strong> {sport.status_description}</p>
+                                            </div>
+                                        </>
+                                    )}
                                 </li>
                             ))}
                         </ul>

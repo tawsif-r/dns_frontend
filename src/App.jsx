@@ -8,6 +8,12 @@ import SubscriptionsList from './components/SubscriptionsList';
 import ReportList from './components/ReportList';
 import MessagesList from './components/MessagesList';
 import ServicesList from './components/ServicesList';
+import BdjobsList from './components/BdjobsList';
+import JobCategoryList from './components/JobCategoryList';
+import SportCategoryList from './components/SportCategoryList';
+import ChannelList from './components/ChannelList';
+import FormatList from './components/FormatList';
+import KeywordList from './components/KeywordList';
 import Nav from './components/ui/Nav';
 import { Line, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, BarElement, PointElement, Title, Tooltip, Legend } from 'chart.js';
@@ -40,6 +46,15 @@ function App() {
   const [sportsData, setSportsData] = useState([]);
   const [messagesData, setMessagesData] = useState([]);
   const [servicesData, setServicesData] = useState([]);
+  const [bdjobsData,setBdjobsData] = useState([]);
+  const [jobCategoriesData,setJobCategoriesData] = useState([]);
+  const [sportCategoriesData,setSportCategoriesData] = useState([]);
+  const [channelsData, setChannelsData] = useState([]);
+  const [formatsData, setFormatsData] = useState([]);
+  const [keywordsData, setKeywordsData] =useState([]);
+  
+
+
 
   const jobUrl = 'http://192.168.3.37:8001/admin/api/jobs/';
   const sportsUrl = 'http://192.168.3.37:8001/admin/api/sports/';
@@ -49,11 +64,17 @@ function App() {
   const reportUrl = 'http://192.168.3.37:8001/admin/api/reports/';
   const messageUrl = 'http://192.168.3.37:8001/admin/api/messages/';
   const serviceUrl = 'http://192.168.3.37:8001/admin/api/services/';
+  const bdjobsUrl = "http://192.168.3.37:8001/admin/api/bdjobs/";
+  const jobCatUrl = "http://192.168.3.37:8001/admin/api/jobCats/";
+  const sportCatUrl = "http://192.168.3.37:8001/admin/api/sportCats/";
+  const channelUrl = "http://192.168.3.37:8001/admin/api/channels/";
+  const formatUrl = "http://192.168.3.37:8001/admin/api/formats/";
+  const keywordUrl = "http://192.168.3.37:8001/admin/api/keywords/"
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [jobsResponse, sportsResponse, subscribersResponse, messagesQResponse, subscriptionsResponse, reportsResponse, messagesResponse,servicesResponse, ] = await Promise.all([
+        const [jobsResponse, sportsResponse, subscribersResponse, messagesQResponse, subscriptionsResponse, reportsResponse, messagesResponse,servicesResponse,bdjobsResponse,jobCategoriesResponse,sportCategoriesResponse,channelsResponse,formatsResponse,keywordResponse ] = await Promise.all([
           axios.get(jobUrl),
           axios.get(sportsUrl),
           axios.get(subscriberUrl),
@@ -61,7 +82,13 @@ function App() {
           axios.get(subscriptionUrl),
           axios.get(reportUrl),
           axios.get(messageUrl),
-          axios.get(serviceUrl)
+          axios.get(serviceUrl),
+          axios.get(bdjobsUrl),
+          axios.get(jobCatUrl),
+          axios.get(sportCatUrl),
+          axios.get(channelUrl),
+          axios.get(formatUrl),
+          axios.get(keywordUrl),
         ]);
 
         setJobsData(jobsResponse.data);
@@ -72,6 +99,13 @@ function App() {
         setReportsData(reportsResponse.data);
         setMessagesData(messagesResponse.data);
         setServicesData(servicesResponse.data);
+        setBdjobsData(bdjobsResponse.data);
+        setJobCategoriesData(jobCategoriesResponse.data);
+        setSportCategoriesData(sportCategoriesResponse.data);
+        setChannelsData(channelsResponse.data);
+        setFormatsData(formatsResponse.data);
+        setKeywordsData(keywordResponse.data);
+
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -226,13 +260,19 @@ function App() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <JobsList jobs={jobsData} setJobs={setJobsData} />
-          <SportsList sports={sportsData} />
-          <SubscribersList subscribers={subscribersData} />
+          <SportsList sports={sportsData} setSports={setSportsData}/>
+          <SubscribersList subscribers={subscribersData} setSubscribers={setSubscribersData} />
           <MessagesQList messages={messagesQData} />
-          <SubscriptionsList subscriptions={subscriptionsData} />
-          <ReportList reports={reportsData} />
+          <SubscriptionsList subscriptions={subscriptionsData} setSubscriptions={setSubscriptionsData} />
+          <ReportList reports={reportsData} setReports={setReportsData} />
           <MessagesList messages={messagesData} setMessages={setMessagesData} />
           <ServicesList services={servicesData} setServices={setServicesData} />
+          <BdjobsList bdjobs={bdjobsData} setBdjobs={setBdjobsData} />
+          <JobCategoryList jobCategories={jobCategoriesData} setJobCategories={setJobCategoriesData} />
+          <SportCategoryList sportCategories={sportCategoriesData} setSportCategories={setSportCategoriesData} />
+          <ChannelList channels={channelsData} setChannels={setChannelsData} />
+          <FormatList formats={formatsData} setFormats={setFormatsData} />
+          <KeywordList keywords={keywordsData} setKeywords={setKeywordsData} />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

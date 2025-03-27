@@ -2,75 +2,81 @@ import React, { useState } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
 import axios from 'axios';
 
-function SubscriptionsList({ subscriptions, setSubscriptions }) {
+function BdjobsList({ bdjobs, setBdjobs }) {
     const [isOpen, setIsOpen] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [editingSubscription, setEditingSubscription] = useState(null);
-    const [newSubscription, setNewSubscription] = useState({
-        id: '',
-        name: '',
-        duration_days: '',
-        price: ''
+    const [editingBdjob, setEditingBdjob] = useState(null);
+    const [newBdjob, setNewBdjob] = useState({
+        fcatid: '',
+        icatid: '',
+        name: ''
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/subscriptions/'; // Adjust this URL as needed
+    const baseUrl = 'http://192.168.3.37:8001/admin/api/bdjobs/';
 
-    const filteredSubscriptions = subscriptions.filter((subscription) =>
-        subscription?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredBdjobs = bdjobs.filter((bdjob) =>
+        bdjob?.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Create a new subscription
-    const handleCreateSubscription = async () => {
-        if (!newSubscription.name || !newSubscription.duration_days || !newSubscription.price) {
-            alert('Please fill in all required fields');
+    // Create a new bdjob
+    const handleCreateBdjob = async () => {
+        if (!newBdjob.fcatid || !newBdjob.icatid || !newBdjob.name) {
+            alert('Please fill in all required fields (FCatID, ICatID, and Name)');
             return;
         }
 
         try {
-            const response = await axios.post(baseUrl, newSubscription);
-            setSubscriptions([...subscriptions, response.data]);
-            setNewSubscription({
-                id: '',
-                name: '',
-                duration_days: '',
-                price: ''
+            const response = await axios.post(baseUrl, {
+                fcatid: parseInt(newBdjob.fcatid),
+                icatid: parseInt(newBdjob.icatid),
+                name: newBdjob.name
+            });
+            setBdjobs([...bdjobs, response.data]);
+            setNewBdjob({
+                fcatid: '',
+                icatid: '',
+                name: ''
             });
         } catch (error) {
-            console.error('Error creating subscription:', error);
-            alert('Failed to create subscription');
+            console.error('Error creating bdjob:', error);
+            alert('Failed to create bdjob');
         }
     };
 
-    // Update an existing subscription
-    const handleUpdateSubscription = async () => {
-        if (!editingSubscription.name || !editingSubscription.duration_days || !editingSubscription.price) {
-            alert('Please fill in all required fields');
+    // Update an existing bdjob
+    const handleUpdateBdjob = async () => {
+        if (!editingBdjob.fcatid || !editingBdjob.icatid || !editingBdjob.name) {
+            alert('Please fill in all required fields (FCatID, ICatID, and Name)');
             return;
         }
 
         try {
-            const response = await axios.put(`${baseUrl}${editingSubscription.id}/`, editingSubscription);
-            setSubscriptions(subscriptions.map(subscription =>
-                subscription.id === editingSubscription.id ? response.data : subscription
+            const response = await axios.put(`${baseUrl}${editingBdjob.id}/`, {
+                fcatid: parseInt(editingBdjob.fcatid),
+                icatid: parseInt(editingBdjob.icatid),
+                name: editingBdjob.name
+            });
+            setBdjobs(bdjobs.map(bdjob =>
+                bdjob.id === editingBdjob.id ? response.data : bdjob
             ));
-            setEditingSubscription(null);
+            setEditingBdjob(null);
         } catch (error) {
-            console.error('Error updating subscription:', error);
-            alert('Failed to update subscription');
+            console.error('Error updating bdjob:', error);
+            alert('Failed to update bdjob');
         }
     };
 
-    // Delete a subscription
-    const handleDeleteSubscription = async (id) => {
+    // Delete a bdjob
+    const handleDeleteBdjob = async (id) => {
         try {
             await axios.delete(`${baseUrl}${id}/`);
-            setSubscriptions(subscriptions.filter(subscription => subscription.id !== id));
-            if (editingSubscription?.id === id) {
-                setEditingSubscription(null);
+            setBdjobs(bdjobs.filter(bdjob => bdjob.id !== id));
+            if (editingBdjob?.id === id) {
+                setEditingBdjob(null);
             }
         } catch (error) {
-            console.error('Error deleting subscription:', error);
-            alert('Failed to delete subscription');
+            console.error('Error deleting bdjob:', error);
+            alert('Failed to delete bdjob');
         }
     };
 
@@ -89,13 +95,13 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
                         className="mr-2 text-white"
                         fill="currentColor"
                     >
-                        <path d="M20 8H4V6h16v2zm-2-6H6v2h12V2zm4 10v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-8c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2zm-6 4l-6-3.27v6.53L16 16z" />
+                        <path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 17H5V5h14v14zm-7-2c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z" />
                     </svg>
-                    <h2 className="text-lg font-semibold">Subscriptions</h2>
+                    <h2 className="text-lg font-semibold">BD Jobs</h2>
                 </div>
                 <input
                     type="text"
-                    placeholder="Search Subscriptions..."
+                    placeholder="Search BD Jobs..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="ml-4 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:border-purple-400"
@@ -105,81 +111,83 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
 
             {isOpen && (
                 <div className="p-4 bg-gray-900 max-h-96 overflow-y-auto">
-                    {/* New Subscription Form */}
+                    {/* New Bdjob Form */}
                     <div className="mb-6">
                         <h3 className="flex items-center text-purple-400 mb-2">
                             <PlusIcon className="mr-2" />
-                            Create New Subscription
+                            Create New BD Job
                         </h3>
                         <div className="space-y-2">
                             <input
+                                type="number"
+                                placeholder="FCatID"
+                                value={newBdjob.fcatid}
+                                onChange={(e) => setNewBdjob({ ...newBdjob, fcatid: e.target.value })}
+                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                            />
+                            <input
+                                type="number"
+                                placeholder="ICatID"
+                                value={newBdjob.icatid}
+                                onChange={(e) => setNewBdjob({ ...newBdjob, icatid: e.target.value })}
+                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                            />
+                            <input
                                 type="text"
                                 placeholder="Name"
-                                value={newSubscription.name}
-                                onChange={(e) => setNewSubscription({ ...newSubscription, name: e.target.value })}
-                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                            />
-                            <input
-                                type="number"
-                                placeholder="Duration (days)"
-                                value={newSubscription.duration_days}
-                                onChange={(e) => setNewSubscription({ ...newSubscription, duration_days: e.target.value })}
-                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                            />
-                            <input
-                                type="number"
-                                placeholder="Price"
-                                value={newSubscription.price}
-                                onChange={(e) => setNewSubscription({ ...newSubscription, price: e.target.value })}
+                                value={newBdjob.name}
+                                maxLength={100}
+                                onChange={(e) => setNewBdjob({ ...newBdjob, name: e.target.value })}
                                 className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
                             />
                             <button
-                                onClick={handleCreateSubscription}
+                                onClick={handleCreateBdjob}
                                 className="w-full bg-purple-600 text-white p-2 rounded hover:bg-purple-700 transition duration-200"
                             >
-                                Add Subscription
+                                Add BD Job
                             </button>
                         </div>
                     </div>
 
-                    {/* Subscriptions List */}
-                    {filteredSubscriptions.length > 0 ? (
+                    {/* Bdjobs List */}
+                    {filteredBdjobs.length > 0 ? (
                         <ul className="space-y-4">
-                            {filteredSubscriptions.map((subscription) => (
+                            {filteredBdjobs.map((bdjob) => (
                                 <li 
-                                    key={subscription.id}
+                                    key={bdjob.id}
                                     className="bg-gray-800 p-4 rounded-lg border border-gray-700"
                                 >
-                                    {editingSubscription?.id === subscription.id ? (
+                                    {editingBdjob?.id === bdjob.id ? (
                                         // Edit Mode
                                         <div className="space-y-2">
                                             <input
+                                                type="number"
+                                                value={editingBdjob.fcatid}
+                                                onChange={(e) => setEditingBdjob({ ...editingBdjob, fcatid: e.target.value })}
+                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                                            />
+                                            <input
+                                                type="number"
+                                                value={editingBdjob.icatid}
+                                                onChange={(e) => setEditingBdjob({ ...editingBdjob, icatid: e.target.value })}
+                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                                            />
+                                            <input
                                                 type="text"
-                                                value={editingSubscription.name}
-                                                onChange={(e) => setEditingSubscription({ ...editingSubscription, name: e.target.value })}
-                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                                            />
-                                            <input
-                                                type="number"
-                                                value={editingSubscription.duration_days}
-                                                onChange={(e) => setEditingSubscription({ ...editingSubscription, duration_days: e.target.value })}
-                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                                            />
-                                            <input
-                                                type="number"
-                                                value={editingSubscription.price}
-                                                onChange={(e) => setEditingSubscription({ ...editingSubscription, price: e.target.value })}
+                                                value={editingBdjob.name}
+                                                maxLength={100}
+                                                onChange={(e) => setEditingBdjob({ ...editingBdjob, name: e.target.value })}
                                                 className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
                                             />
                                             <div className="flex space-x-2">
                                                 <button
-                                                    onClick={handleUpdateSubscription}
+                                                    onClick={handleUpdateBdjob}
                                                     className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200"
                                                 >
                                                     <SaveIcon className="mr-2" /> Save
                                                 </button>
                                                 <button
-                                                    onClick={() => setEditingSubscription(null)}
+                                                    onClick={() => setEditingBdjob(null)}
                                                     className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
                                                 >
                                                     <XIcon className="mr-2" /> Cancel
@@ -192,13 +200,13 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
                                             <div className="flex justify-between items-center">
                                                 <div className="flex space-x-2">
                                                     <button
-                                                        onClick={() => setEditingSubscription(subscription)}
+                                                        onClick={() => setEditingBdjob(bdjob)}
                                                         className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-200"
                                                     >
                                                         <EditIcon />
                                                     </button>
                                                     <button
-                                                        onClick={() => handleDeleteSubscription(subscription.id)}
+                                                        onClick={() => handleDeleteBdjob(bdjob.id)}
                                                         className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
                                                     >
                                                         <TrashIcon />
@@ -206,10 +214,10 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
                                                 </div>
                                             </div>
                                             <div className="mt-2 space-y-2">
-                                                <p><strong>ID:</strong> {subscription.id}</p>
-                                                <p><strong>Name:</strong> {subscription.name}</p>
-                                                <p><strong>Duration:</strong> {subscription.duration_days} day(s)</p>
-                                                <p><strong>Price:</strong> {subscription.price}</p>
+                                                <p><strong>ID:</strong> {bdjob.id}</p>
+                                                <p><strong>FCatID:</strong> {bdjob.fcatid}</p>
+                                                <p><strong>ICatID:</strong> {bdjob.icatid}</p>
+                                                <p><strong>Name:</strong> {bdjob.name}</p>
                                             </div>
                                         </>
                                     )}
@@ -217,7 +225,7 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
                             ))}
                         </ul>
                     ) : (
-                        <p className="text-gray-400">No subscriptions found</p>
+                        <p className="text-gray-400">No BD jobs found</p>
                     )}
                 </div>
             )}
@@ -225,4 +233,4 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
     );
 }
 
-export default SubscriptionsList;
+export default BdjobsList;

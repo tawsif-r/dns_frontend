@@ -2,75 +2,81 @@ import React, { useState } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
 import axios from 'axios';
 
-function SubscriptionsList({ subscriptions, setSubscriptions }) {
+function FormatList({ formats, setFormats }) {
     const [isOpen, setIsOpen] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [editingSubscription, setEditingSubscription] = useState(null);
-    const [newSubscription, setNewSubscription] = useState({
-        id: '',
+    const [editingFormat, setEditingFormat] = useState(null);
+    const [newFormat, setNewFormat] = useState({
         name: '',
-        duration_days: '',
-        price: ''
+        char_limit: '',
+        job_limit: ''
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/subscriptions/'; // Adjust this URL as needed
+    const baseUrl = 'http://192.168.3.37:8001/admin/api/formats/';
 
-    const filteredSubscriptions = subscriptions.filter((subscription) =>
-        subscription?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredFormats = formats.filter((format) =>
+        format?.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Create a new subscription
-    const handleCreateSubscription = async () => {
-        if (!newSubscription.name || !newSubscription.duration_days || !newSubscription.price) {
-            alert('Please fill in all required fields');
+    // Create a new format
+    const handleCreateFormat = async () => {
+        if (!newFormat.name || !newFormat.char_limit || !newFormat.job_limit) {
+            alert('Please fill in all required fields (Name, Char Limit, and Job Limit)');
             return;
         }
 
         try {
-            const response = await axios.post(baseUrl, newSubscription);
-            setSubscriptions([...subscriptions, response.data]);
-            setNewSubscription({
-                id: '',
+            const response = await axios.post(baseUrl, {
+                name: newFormat.name,
+                char_limit: parseInt(newFormat.char_limit),
+                job_limit: parseInt(newFormat.job_limit)
+            });
+            setFormats([...formats, response.data]);
+            setNewFormat({
                 name: '',
-                duration_days: '',
-                price: ''
+                char_limit: '',
+                job_limit: ''
             });
         } catch (error) {
-            console.error('Error creating subscription:', error);
-            alert('Failed to create subscription');
+            console.error('Error creating format:', error);
+            alert('Failed to create format');
         }
     };
 
-    // Update an existing subscription
-    const handleUpdateSubscription = async () => {
-        if (!editingSubscription.name || !editingSubscription.duration_days || !editingSubscription.price) {
-            alert('Please fill in all required fields');
+    // Update an existing format
+    const handleUpdateFormat = async () => {
+        if (!editingFormat.name || !editingFormat.char_limit || !editingFormat.job_limit) {
+            alert('Please fill in all required fields (Name, Char Limit, and Job Limit)');
             return;
         }
 
         try {
-            const response = await axios.put(`${baseUrl}${editingSubscription.id}/`, editingSubscription);
-            setSubscriptions(subscriptions.map(subscription =>
-                subscription.id === editingSubscription.id ? response.data : subscription
+            const response = await axios.put(`${baseUrl}${editingFormat.id}/`, {
+                name: editingFormat.name,
+                char_limit: parseInt(editingFormat.char_limit),
+                job_limit: parseInt(editingFormat.job_limit)
+            });
+            setFormats(formats.map(format =>
+                format.id === editingFormat.id ? response.data : format
             ));
-            setEditingSubscription(null);
+            setEditingFormat(null);
         } catch (error) {
-            console.error('Error updating subscription:', error);
-            alert('Failed to update subscription');
+            console.error('Error updating format:', error);
+            alert('Failed to update format');
         }
     };
 
-    // Delete a subscription
-    const handleDeleteSubscription = async (id) => {
+    // Delete a format
+    const handleDeleteFormat = async (id) => {
         try {
             await axios.delete(`${baseUrl}${id}/`);
-            setSubscriptions(subscriptions.filter(subscription => subscription.id !== id));
-            if (editingSubscription?.id === id) {
-                setEditingSubscription(null);
+            setFormats(formats.filter(format => format.id !== id));
+            if (editingFormat?.id === id) {
+                setEditingFormat(null);
             }
         } catch (error) {
-            console.error('Error deleting subscription:', error);
-            alert('Failed to delete subscription');
+            console.error('Error deleting format:', error);
+            alert('Failed to delete format');
         }
     };
 
@@ -89,13 +95,13 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
                         className="mr-2 text-white"
                         fill="currentColor"
                     >
-                        <path d="M20 8H4V6h16v2zm-2-6H6v2h12V2zm4 10v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-8c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2zm-6 4l-6-3.27v6.53L16 16z" />
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H7v-1h10v1zm0-3H7v-1h10v1zm0-3H7v-1h10v1zm0-3H7V9h10v1zm0-3H7V6h10v1z" />
                     </svg>
-                    <h2 className="text-lg font-semibold">Subscriptions</h2>
+                    <h2 className="text-lg font-semibold">Formats</h2>
                 </div>
                 <input
                     type="text"
-                    placeholder="Search Subscriptions..."
+                    placeholder="Search Formats..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="ml-4 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:border-purple-400"
@@ -105,81 +111,81 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
 
             {isOpen && (
                 <div className="p-4 bg-gray-900 max-h-96 overflow-y-auto">
-                    {/* New Subscription Form */}
+                    {/* New Format Form */}
                     <div className="mb-6">
                         <h3 className="flex items-center text-purple-400 mb-2">
                             <PlusIcon className="mr-2" />
-                            Create New Subscription
+                            Create New Format
                         </h3>
                         <div className="space-y-2">
                             <input
                                 type="text"
                                 placeholder="Name"
-                                value={newSubscription.name}
-                                onChange={(e) => setNewSubscription({ ...newSubscription, name: e.target.value })}
+                                value={newFormat.name}
+                                onChange={(e) => setNewFormat({ ...newFormat, name: e.target.value })}
                                 className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
                             />
                             <input
                                 type="number"
-                                placeholder="Duration (days)"
-                                value={newSubscription.duration_days}
-                                onChange={(e) => setNewSubscription({ ...newSubscription, duration_days: e.target.value })}
+                                placeholder="Character Limit"
+                                value={newFormat.char_limit}
+                                onChange={(e) => setNewFormat({ ...newFormat, char_limit: e.target.value })}
                                 className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
                             />
                             <input
                                 type="number"
-                                placeholder="Price"
-                                value={newSubscription.price}
-                                onChange={(e) => setNewSubscription({ ...newSubscription, price: e.target.value })}
+                                placeholder="Job Limit"
+                                value={newFormat.job_limit}
+                                onChange={(e) => setNewFormat({ ...newFormat, job_limit: e.target.value })}
                                 className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
                             />
                             <button
-                                onClick={handleCreateSubscription}
+                                onClick={handleCreateFormat}
                                 className="w-full bg-purple-600 text-white p-2 rounded hover:bg-purple-700 transition duration-200"
                             >
-                                Add Subscription
+                                Add Format
                             </button>
                         </div>
                     </div>
 
-                    {/* Subscriptions List */}
-                    {filteredSubscriptions.length > 0 ? (
+                    {/* Formats List */}
+                    {filteredFormats.length > 0 ? (
                         <ul className="space-y-4">
-                            {filteredSubscriptions.map((subscription) => (
+                            {filteredFormats.map((format) => (
                                 <li 
-                                    key={subscription.id}
+                                    key={format.id}
                                     className="bg-gray-800 p-4 rounded-lg border border-gray-700"
                                 >
-                                    {editingSubscription?.id === subscription.id ? (
+                                    {editingFormat?.id === format.id ? (
                                         // Edit Mode
                                         <div className="space-y-2">
                                             <input
                                                 type="text"
-                                                value={editingSubscription.name}
-                                                onChange={(e) => setEditingSubscription({ ...editingSubscription, name: e.target.value })}
+                                                value={editingFormat.name}
+                                                onChange={(e) => setEditingFormat({ ...editingFormat, name: e.target.value })}
                                                 className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
                                             />
                                             <input
                                                 type="number"
-                                                value={editingSubscription.duration_days}
-                                                onChange={(e) => setEditingSubscription({ ...editingSubscription, duration_days: e.target.value })}
+                                                value={editingFormat.char_limit}
+                                                onChange={(e) => setEditingFormat({ ...editingFormat, char_limit: e.target.value })}
                                                 className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
                                             />
                                             <input
                                                 type="number"
-                                                value={editingSubscription.price}
-                                                onChange={(e) => setEditingSubscription({ ...editingSubscription, price: e.target.value })}
+                                                value={editingFormat.job_limit}
+                                                onChange={(e) => setEditingFormat({ ...editingFormat, job_limit: e.target.value })}
                                                 className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
                                             />
                                             <div className="flex space-x-2">
                                                 <button
-                                                    onClick={handleUpdateSubscription}
+                                                    onClick={handleUpdateFormat}
                                                     className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200"
                                                 >
                                                     <SaveIcon className="mr-2" /> Save
                                                 </button>
                                                 <button
-                                                    onClick={() => setEditingSubscription(null)}
+                                                    onClick={() => setEditingFormat(null)}
                                                     className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
                                                 >
                                                     <XIcon className="mr-2" /> Cancel
@@ -192,13 +198,13 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
                                             <div className="flex justify-between items-center">
                                                 <div className="flex space-x-2">
                                                     <button
-                                                        onClick={() => setEditingSubscription(subscription)}
+                                                        onClick={() => setEditingFormat(format)}
                                                         className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-200"
                                                     >
                                                         <EditIcon />
                                                     </button>
                                                     <button
-                                                        onClick={() => handleDeleteSubscription(subscription.id)}
+                                                        onClick={() => handleDeleteFormat(format.id)}
                                                         className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
                                                     >
                                                         <TrashIcon />
@@ -206,10 +212,10 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
                                                 </div>
                                             </div>
                                             <div className="mt-2 space-y-2">
-                                                <p><strong>ID:</strong> {subscription.id}</p>
-                                                <p><strong>Name:</strong> {subscription.name}</p>
-                                                <p><strong>Duration:</strong> {subscription.duration_days} day(s)</p>
-                                                <p><strong>Price:</strong> {subscription.price}</p>
+                                                <p><strong>ID:</strong> {format.id}</p>
+                                                <p><strong>Name:</strong> {format.name}</p>
+                                                <p><strong>Character Limit:</strong> {format.char_limit}</p>
+                                                <p><strong>Job Limit:</strong> {format.job_limit}</p>
                                             </div>
                                         </>
                                     )}
@@ -217,7 +223,7 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
                             ))}
                         </ul>
                     ) : (
-                        <p className="text-gray-400">No subscriptions found</p>
+                        <p className="text-gray-400">No formats found</p>
                     )}
                 </div>
             )}
@@ -225,4 +231,4 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
     );
 }
 
-export default SubscriptionsList;
+export default FormatList;

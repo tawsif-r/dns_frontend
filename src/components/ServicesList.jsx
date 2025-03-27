@@ -22,7 +22,7 @@ function ServicesList({ services, setServices }) {
 
     // Create a new service
     const handleCreateService = async () => {
-        if (!newService.service_id || !newService.name || !newService.category) {
+        if (!newService.name) {
             alert('Please fill in required fields');
             return;
         }
@@ -44,7 +44,7 @@ function ServicesList({ services, setServices }) {
 
     // Update an existing service
     const handleUpdateService = async () => {
-        if (!editingService.service_id || !editingService.name || !editingService.category) {
+        if (!editingService.name) {
             alert('Please fill in required fields');
             return;
         }
@@ -115,23 +115,9 @@ function ServicesList({ services, setServices }) {
                         <div className="space-y-2">
                             <input
                                 type="text"
-                                placeholder="Service ID"
-                                value={newService.service_id}
-                                onChange={(e) => setNewService({ ...newService, service_id: e.target.value })}
-                                className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
-                            />
-                            <input
-                                type="text"
                                 placeholder="Name"
                                 value={newService.name}
                                 onChange={(e) => setNewService({ ...newService, name: e.target.value })}
-                                className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
-                            />
-                            <input
-                                type="text"
-                                placeholder="Category"
-                                value={newService.category}
-                                onChange={(e) => setNewService({ ...newService, category: e.target.value })}
                                 className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
                             />
                             <textarea
@@ -140,34 +126,15 @@ function ServicesList({ services, setServices }) {
                                 onChange={(e) => setNewService({ ...newService, description: e.target.value })}
                                 className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
                             />
-                            <input
-                                type="text"
-                                placeholder="Price"
-                                value={newService.price}
-                                onChange={(e) => setNewService({ ...newService, price: e.target.value })}
-                                className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
-                            />
-                            <input
-                                type="text"
-                                placeholder="Duration"
-                                value={newService.duration}
-                                onChange={(e) => setNewService({ ...newService, duration: e.target.value })}
-                                className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
-                            />
-                            <input
-                                type="text"
-                                placeholder="Availability"
-                                value={newService.availability}
-                                onChange={(e) => setNewService({ ...newService, availability: e.target.value })}
-                                className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
-                            />
-                            <input
-                                type="text"
-                                placeholder="URL"
-                                value={newService.url}
-                                onChange={(e) => setNewService({ ...newService, url: e.target.value })}
-                                className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
-                            />
+                            <div className="flex items-center space-x-2">
+                                <input
+                                    type="checkbox"
+                                    checked={newService.active}
+                                    onChange={(e) => setNewService({ ...newService, active: e.target.checked })}
+                                    className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
+                                />
+                                <label className="text-white">Active</label>
+                            </div>
                             <button
                                 onClick={handleCreateService}
                                 className="w-full bg-emerald-600 text-white p-2 rounded hover:bg-emerald-700 transition duration-200"
@@ -175,6 +142,7 @@ function ServicesList({ services, setServices }) {
                                 Add Service
                             </button>
                         </div>
+
                     </div>
 
                     {/* Services List */}
@@ -190,20 +158,8 @@ function ServicesList({ services, setServices }) {
                                         <div className="space-y-2">
                                             <input
                                                 type="text"
-                                                value={editingService.service_id}
-                                                onChange={(e) => setEditingService({ ...editingService, service_id: e.target.value })}
-                                                className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
-                                            />
-                                            <input
-                                                type="text"
                                                 value={editingService.name}
                                                 onChange={(e) => setEditingService({ ...editingService, name: e.target.value })}
-                                                className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={editingService.category}
-                                                onChange={(e) => setEditingService({ ...editingService, category: e.target.value })}
                                                 className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
                                             />
                                             <textarea
@@ -211,30 +167,15 @@ function ServicesList({ services, setServices }) {
                                                 onChange={(e) => setEditingService({ ...editingService, description: e.target.value })}
                                                 className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
                                             />
-                                            <input
-                                                type="text"
-                                                value={editingService.price}
-                                                onChange={(e) => setEditingService({ ...editingService, price: e.target.value })}
-                                                className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={editingService.duration}
-                                                onChange={(e) => setEditingService({ ...editingService, duration: e.target.value })}
-                                                className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={editingService.availability}
-                                                onChange={(e) => setEditingService({ ...editingService, availability: e.target.value })}
-                                                className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={editingService.url}
-                                                onChange={(e) => setEditingService({ ...editingService, url: e.target.value })}
-                                                className="w-full border border-emerald-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-emerald-400"
-                                            />
+                                            <div className="flex items-center space-x-2">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={editingService.active}
+                                                    onChange={(e) => setEditingService({ ...editingService, active: e.target.checked })}
+                                                    className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
+                                                />
+                                                <label className="text-white">Active</label>
+                                            </div>
                                             <div className="flex space-x-2">
                                                 <button
                                                     onClick={handleUpdateService}
@@ -270,24 +211,10 @@ function ServicesList({ services, setServices }) {
                                                 </div>
                                             </div>
                                             <div className="mt-2 space-y-2">
-                                                <p><strong>Service ID:</strong> {service.service_id}</p>
+                                                <p><strong>Service ID:</strong> {service.id}</p>
                                                 <p><strong>Name:</strong> {service.name}</p>
-                                                <p><strong>Category:</strong> {service.category}</p>
                                                 <p><strong>Description:</strong> {service.description}</p>
-                                                <p><strong>Price:</strong> {service.price}</p>
-                                                <p><strong>Duration:</strong> {service.duration}</p>
-                                                <p><strong>Availability:</strong> {service.availability}</p>
-                                                <p>
-                                                    <strong>URL:</strong>{' '}
-                                                    <a
-                                                        href={service.url}
-                                                        className="text-emerald-400 hover:text-emerald-300 transition duration-200"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                    >
-                                                        Check Site
-                                                    </a>
-                                                </p>
+                                                <p><strong>Active:</strong> {service.active ? 'Yes' : 'No'}</p>
                                             </div>
                                         </>
                                     )}

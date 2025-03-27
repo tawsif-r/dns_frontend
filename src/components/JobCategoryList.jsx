@@ -2,75 +2,74 @@ import React, { useState } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
 import axios from 'axios';
 
-function SubscriptionsList({ subscriptions, setSubscriptions }) {
+function JobCategoryList({ jobCategories, setJobCategories }) {
     const [isOpen, setIsOpen] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [editingSubscription, setEditingSubscription] = useState(null);
-    const [newSubscription, setNewSubscription] = useState({
-        id: '',
+    const [editingJobCategory, setEditingJobCategory] = useState(null);
+    const [newJobCategory, setNewJobCategory] = useState({
         name: '',
-        duration_days: '',
-        price: ''
+        description: '',
+        keyword: ''
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/subscriptions/'; // Adjust this URL as needed
+    const baseUrl = 'http://192.168.3.37:8001/admin/api/jobCats/';
 
-    const filteredSubscriptions = subscriptions.filter((subscription) =>
-        subscription?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredJobCategories = jobCategories.filter((jobCategory) =>
+        jobCategory?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        jobCategory?.keyword?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Create a new subscription
-    const handleCreateSubscription = async () => {
-        if (!newSubscription.name || !newSubscription.duration_days || !newSubscription.price) {
-            alert('Please fill in all required fields');
+    // Create a new job category
+    const handleCreateJobCategory = async () => {
+        if (!newJobCategory.name || !newJobCategory.keyword) {
+            alert('Please fill in required fields (Name and Keyword)');
             return;
         }
 
         try {
-            const response = await axios.post(baseUrl, newSubscription);
-            setSubscriptions([...subscriptions, response.data]);
-            setNewSubscription({
-                id: '',
+            const response = await axios.post(baseUrl, newJobCategory);
+            setJobCategories([...jobCategories, response.data]);
+            setNewJobCategory({
                 name: '',
-                duration_days: '',
-                price: ''
+                description: '',
+                keyword: ''
             });
         } catch (error) {
-            console.error('Error creating subscription:', error);
-            alert('Failed to create subscription');
+            console.error('Error creating job category:', error);
+            alert('Failed to create job category');
         }
     };
 
-    // Update an existing subscription
-    const handleUpdateSubscription = async () => {
-        if (!editingSubscription.name || !editingSubscription.duration_days || !editingSubscription.price) {
-            alert('Please fill in all required fields');
+    // Update an existing job category
+    const handleUpdateJobCategory = async () => {
+        if (!editingJobCategory.name || !editingJobCategory.keyword) {
+            alert('Please fill in required fields (Name and Keyword)');
             return;
         }
 
         try {
-            const response = await axios.put(`${baseUrl}${editingSubscription.id}/`, editingSubscription);
-            setSubscriptions(subscriptions.map(subscription =>
-                subscription.id === editingSubscription.id ? response.data : subscription
+            const response = await axios.put(`${baseUrl}${editingJobCategory.id}/`, editingJobCategory);
+            setJobCategories(jobCategories.map(jobCategory =>
+                jobCategory.id === editingJobCategory.id ? response.data : jobCategory
             ));
-            setEditingSubscription(null);
+            setEditingJobCategory(null);
         } catch (error) {
-            console.error('Error updating subscription:', error);
-            alert('Failed to update subscription');
+            console.error('Error updating job category:', error);
+            alert('Failed to update job category');
         }
     };
 
-    // Delete a subscription
-    const handleDeleteSubscription = async (id) => {
+    // Delete a job category
+    const handleDeleteJobCategory = async (id) => {
         try {
             await axios.delete(`${baseUrl}${id}/`);
-            setSubscriptions(subscriptions.filter(subscription => subscription.id !== id));
-            if (editingSubscription?.id === id) {
-                setEditingSubscription(null);
+            setJobCategories(jobCategories.filter(jobCategory => jobCategory.id !== id));
+            if (editingJobCategory?.id === id) {
+                setEditingJobCategory(null);
             }
         } catch (error) {
-            console.error('Error deleting subscription:', error);
-            alert('Failed to delete subscription');
+            console.error('Error deleting job category:', error);
+            alert('Failed to delete job category');
         }
     };
 
@@ -89,13 +88,13 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
                         className="mr-2 text-white"
                         fill="currentColor"
                     >
-                        <path d="M20 8H4V6h16v2zm-2-6H6v2h12V2zm4 10v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-8c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2zm-6 4l-6-3.27v6.53L16 16z" />
+                        <path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 17H5V5h14v14zm-7-2c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z" />
                     </svg>
-                    <h2 className="text-lg font-semibold">Subscriptions</h2>
+                    <h2 className="text-lg font-semibold">Job Categories</h2>
                 </div>
                 <input
                     type="text"
-                    placeholder="Search Subscriptions..."
+                    placeholder="Search Job Categories..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="ml-4 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:border-purple-400"
@@ -105,81 +104,81 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
 
             {isOpen && (
                 <div className="p-4 bg-gray-900 max-h-96 overflow-y-auto">
-                    {/* New Subscription Form */}
+                    {/* New Job Category Form */}
                     <div className="mb-6">
                         <h3 className="flex items-center text-purple-400 mb-2">
                             <PlusIcon className="mr-2" />
-                            Create New Subscription
+                            Create New Job Category
                         </h3>
                         <div className="space-y-2">
                             <input
                                 type="text"
                                 placeholder="Name"
-                                value={newSubscription.name}
-                                onChange={(e) => setNewSubscription({ ...newSubscription, name: e.target.value })}
+                                value={newJobCategory.name}
+                                maxLength={200}
+                                onChange={(e) => setNewJobCategory({ ...newJobCategory, name: e.target.value })}
+                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                            />
+                            <textarea
+                                placeholder="Description"
+                                value={newJobCategory.description}
+                                onChange={(e) => setNewJobCategory({ ...newJobCategory, description: e.target.value })}
                                 className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
                             />
                             <input
-                                type="number"
-                                placeholder="Duration (days)"
-                                value={newSubscription.duration_days}
-                                onChange={(e) => setNewSubscription({ ...newSubscription, duration_days: e.target.value })}
-                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                            />
-                            <input
-                                type="number"
-                                placeholder="Price"
-                                value={newSubscription.price}
-                                onChange={(e) => setNewSubscription({ ...newSubscription, price: e.target.value })}
+                                type="text"
+                                placeholder="Keyword"
+                                value={newJobCategory.keyword}
+                                onChange={(e) => setNewJobCategory({ ...newJobCategory, keyword: e.target.value })}
                                 className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
                             />
                             <button
-                                onClick={handleCreateSubscription}
+                                onClick={handleCreateJobCategory}
                                 className="w-full bg-purple-600 text-white p-2 rounded hover:bg-purple-700 transition duration-200"
                             >
-                                Add Subscription
+                                Add Job Category
                             </button>
                         </div>
                     </div>
 
-                    {/* Subscriptions List */}
-                    {filteredSubscriptions.length > 0 ? (
+                    {/* Job Categories List */}
+                    {filteredJobCategories.length > 0 ? (
                         <ul className="space-y-4">
-                            {filteredSubscriptions.map((subscription) => (
+                            {filteredJobCategories.map((jobCategory) => (
                                 <li 
-                                    key={subscription.id}
+                                    key={jobCategory.id}
                                     className="bg-gray-800 p-4 rounded-lg border border-gray-700"
                                 >
-                                    {editingSubscription?.id === subscription.id ? (
+                                    {editingJobCategory?.id === jobCategory.id ? (
                                         // Edit Mode
                                         <div className="space-y-2">
                                             <input
                                                 type="text"
-                                                value={editingSubscription.name}
-                                                onChange={(e) => setEditingSubscription({ ...editingSubscription, name: e.target.value })}
+                                                value={editingJobCategory.name}
+                                                maxLength={200}
+                                                onChange={(e) => setEditingJobCategory({ ...editingJobCategory, name: e.target.value })}
                                                 className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
                                             />
-                                            <input
-                                                type="number"
-                                                value={editingSubscription.duration_days}
-                                                onChange={(e) => setEditingSubscription({ ...editingSubscription, duration_days: e.target.value })}
-                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
+                                            <textarea
+                                                value={editingJobCategory.description}
+                                                onChange={(e) => setEditingJobCategory({ ...editingJobCategory, description: e.target.value })}
+                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2Enumerator rounded focus:outline-none focus:border-purple-400"
                                             />
                                             <input
-                                                type="number"
-                                                value={editingSubscription.price}
-                                                onChange={(e) => setEditingSubscription({ ...editingSubscription, price: e.target.value })}
+                                                type="text"
+                                                value={editingJobCategory.keyword}
+                                                onChange={(e) => setEditingJobCategory({ ...editingJobCategory, keyword: e.target.value })}
                                                 className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
                                             />
                                             <div className="flex space-x-2">
                                                 <button
-                                                    onClick={handleUpdateSubscription}
+                                                    onClick={handleUpdateJobCategory}
                                                     className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200"
                                                 >
                                                     <SaveIcon className="mr-2" /> Save
                                                 </button>
                                                 <button
-                                                    onClick={() => setEditingSubscription(null)}
+                                                    onClick={() => setEditingJobCategory(null)}
                                                     className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
                                                 >
                                                     <XIcon className="mr-2" /> Cancel
@@ -192,13 +191,13 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
                                             <div className="flex justify-between items-center">
                                                 <div className="flex space-x-2">
                                                     <button
-                                                        onClick={() => setEditingSubscription(subscription)}
+                                                        onClick={() => setEditingJobCategory(jobCategory)}
                                                         className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-200"
                                                     >
                                                         <EditIcon />
                                                     </button>
                                                     <button
-                                                        onClick={() => handleDeleteSubscription(subscription.id)}
+                                                        onClick={() => handleDeleteJobCategory(jobCategory.id)}
                                                         className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
                                                     >
                                                         <TrashIcon />
@@ -206,10 +205,10 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
                                                 </div>
                                             </div>
                                             <div className="mt-2 space-y-2">
-                                                <p><strong>ID:</strong> {subscription.id}</p>
-                                                <p><strong>Name:</strong> {subscription.name}</p>
-                                                <p><strong>Duration:</strong> {subscription.duration_days} day(s)</p>
-                                                <p><strong>Price:</strong> {subscription.price}</p>
+                                                <p><strong>ID:</strong> {jobCategory.id}</p>
+                                                <p><strong>Name:</strong> {jobCategory.name}</p>
+                                                <p><strong>Description:</strong> {jobCategory.description}</p>
+                                                <p><strong>Keyword:</strong> {jobCategory.keyword}</p>
                                             </div>
                                         </>
                                     )}
@@ -217,7 +216,7 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
                             ))}
                         </ul>
                     ) : (
-                        <p className="text-gray-400">No subscriptions found</p>
+                        <p className="text-gray-400">No job categories found</p>
                     )}
                 </div>
             )}
@@ -225,4 +224,4 @@ function SubscriptionsList({ subscriptions, setSubscriptions }) {
     );
 }
 
-export default SubscriptionsList;
+export default JobCategoryList;
