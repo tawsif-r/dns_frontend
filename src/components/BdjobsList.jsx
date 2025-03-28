@@ -12,7 +12,7 @@ function BdjobsList({ bdjobs, setBdjobs }) {
         name: ''
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/bdjobs/';
+    const baseUrl = 'http://localhost:8000/admin/api/bdjobs/';
 
     const filteredBdjobs = bdjobs.filter((bdjob) =>
         bdjob?.name?.toLowerCase().includes(searchTerm.toLowerCase())

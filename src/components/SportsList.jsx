@@ -20,7 +20,7 @@ function SportsList({ sports, setSports }) {
         status_description: ''
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/sports/'; // Adjust this URL as needed
+    const baseUrl = 'http://localhost:8000/admin/api/sports/'; // Adjust this URL as needed
 
     const filteredSports = sports.filter((sport) =>
         sport?.tournament_name?.toLowerCase().includes(searchTerm.toLowerCase()) || 

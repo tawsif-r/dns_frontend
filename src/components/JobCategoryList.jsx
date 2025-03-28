@@ -12,7 +12,7 @@ function JobCategoryList({ jobCategories, setJobCategories }) {
         keyword: ''
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/jobCats/';
+    const baseUrl = 'http://localhost:8000/admin/api/jobCats/';
 
     const filteredJobCategories = jobCategories.filter((jobCategory) =>
         jobCategory?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||

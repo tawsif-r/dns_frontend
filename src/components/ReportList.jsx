@@ -14,7 +14,7 @@ function ReportList({ reports, setReports }) {
         sent_messages: ''
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/reports/'; // Adjust this URL as needed
+    const baseUrl = 'http://localhost:8000/admin/api/reports/'; // Adjust this URL as needed
 
     const filteredReports = reports.filter((report) =>
         report?.sent_on?.toLowerCase().includes(searchTerm.toLowerCase())

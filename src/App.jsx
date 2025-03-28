@@ -55,21 +55,22 @@ function App() {
   
 
 
+  const base = 'http://localhost:8000/admin/api'
 
-  const jobUrl = 'http://192.168.3.37:8001/admin/api/jobs/';
-  const sportsUrl = 'http://192.168.3.37:8001/admin/api/sports/';
-  const subscriberUrl = 'http://192.168.3.37:8001/admin/api/subscribers/';
-  const messagesQUrl = 'http://192.168.3.37:8001/admin/api/messagesQueue/';
-  const subscriptionUrl = 'http://192.168.3.37:8001/admin/api/subscriptions/';
-  const reportUrl = 'http://192.168.3.37:8001/admin/api/reports/';
-  const messageUrl = 'http://192.168.3.37:8001/admin/api/messages/';
-  const serviceUrl = 'http://192.168.3.37:8001/admin/api/services/';
-  const bdjobsUrl = "http://192.168.3.37:8001/admin/api/bdjobs/";
-  const jobCatUrl = "http://192.168.3.37:8001/admin/api/jobCats/";
-  const sportCatUrl = "http://192.168.3.37:8001/admin/api/sportCats/";
-  const channelUrl = "http://192.168.3.37:8001/admin/api/channels/";
-  const formatUrl = "http://192.168.3.37:8001/admin/api/formats/";
-  const keywordUrl = "http://192.168.3.37:8001/admin/api/keywords/"
+  const jobUrl = `${base}/jobs/`;
+  const sportsUrl = `${base}/sports/`;
+  const subscriberUrl = `${base}/subscribers/`;
+  const messagesQUrl = `${base}/messagesQueue/`;
+  const subscriptionUrl = `${base}/subscriptions/`;
+  const reportUrl = `${base}/reports/`;
+  const messageUrl = `${base}/messages/`;
+  const serviceUrl = `${base}/services/`;
+  const bdjobsUrl = `${base}/bdjobs/`;
+  const jobCatUrl = `${base}/jobCats/`;
+  const sportCatUrl = `${base}/sportCats/`;
+  const channelUrl = `${base}/channels/`;
+  const formatUrl = `${base}/formats/`;
+  const keywordUrl = `${base}/keywords/`;
 
   useEffect(() => {
     const fetchData = async () => {

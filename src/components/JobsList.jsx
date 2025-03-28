@@ -17,7 +17,7 @@ function JobsList({ jobs, setJobs }) {  // Added setJobs as prop
     url: ''
   });
 
-  const baseUrl = 'http://192.168.3.37:8001/admin/api/jobs/';  // Adjust this URL as needed
+  const baseUrl = 'http://localhost:8000/admin/api/jobs/';  // Adjust this URL as needed
 
   // Filtered jobs based on search term
   const filteredJobs = jobs.filter((job) =>

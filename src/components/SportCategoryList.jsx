@@ -12,7 +12,7 @@ function SportCategoryList({ sportCategories, setSportCategories }) {
         keyword: ''
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/sportCats/';
+    const baseUrl = 'http://localhost:8000/admin/api/sportCats/';
 
     const filteredSportCategories = sportCategories.filter((sportCategory) =>
         sportCategory?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||

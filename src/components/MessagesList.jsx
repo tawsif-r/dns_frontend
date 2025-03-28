@@ -12,7 +12,7 @@ function MessagesList({ messages, setMessages }) {  // Added setMessages as prop
     sender: ''
   });
 
-  const baseUrl = 'http://192.168.3.37:8001/admin/api/messages/';
+  const baseUrl = 'http://localhost:8000/admin/api/messages/';
 
   // Filtered messages based on search term
   const filteredMessages = messages.filter((message) =>
