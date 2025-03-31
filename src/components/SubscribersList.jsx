@@ -22,7 +22,7 @@ function SubscribersList({ subscribers, setSubscribers }) {
         category: ''
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/subscribers/'; // Adjust this URL as needed
+    const baseUrl = 'http://localhost:8000/admin/api/subscribers/'; // Adjust this URL as needed
 
     const filteredSubscribers = subscribers.filter((subscriber) =>
         subscriber?.name?.toLowerCase().includes(searchTerm.toLowerCase())

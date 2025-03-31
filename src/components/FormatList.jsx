@@ -12,7 +12,7 @@ function FormatList({ formats, setFormats }) {
         job_limit: ''
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/formats/';
+    const baseUrl = 'http://localhost:8000/admin/api/formats/';
 
     const filteredFormats = formats.filter((format) =>
         format?.name?.toLowerCase().includes(searchTerm.toLowerCase())

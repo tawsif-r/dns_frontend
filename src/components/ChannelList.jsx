@@ -11,7 +11,7 @@ function ChannelList({ channels, setChannels }) {
         format: ''
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/channels/';
+    const baseUrl = 'http://localhost:8000/admin/api/channels/';
 
     const filteredChannels = channels.filter((channel) =>
         channel?.name?.toLowerCase().includes(searchTerm.toLowerCase())

@@ -3,6 +3,11 @@
 like bdjobs
 * Subscribers, Subscriptions, Jobs, Messages are displayed in an orderly manner.
 
+## React with Vite but after pull from git.
+* First install all the dependencies in package.json
+```npm install```
+
+
 ## React with vite.
 * Install react with vite.
 ```npx create-vite your-project-name --template react```

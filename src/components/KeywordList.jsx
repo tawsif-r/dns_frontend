@@ -12,7 +12,7 @@ function KeywordList({ keywords, setKeywords }) {
         service_id: ''
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/keywords/';
+    const baseUrl = 'http://localhost:8000/admin/api/keywords/';
 
     const filteredKeywords = keywords.filter((keyword) =>
         keyword?.key?.toLowerCase().includes(searchTerm.toLowerCase())
