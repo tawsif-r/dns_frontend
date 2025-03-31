@@ -39,6 +39,9 @@ export default {
 ```
 
 
+## git shananigans
+* home branch is for home and the job branch is for job. i have merged the two on March 31 8:48 PM.
+
 ## Issue with npm 
 ```shell
 npx tailwindcss init -p
