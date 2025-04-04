@@ -7,12 +7,12 @@ const Nav = () => {
     <div>
       <ul className="space-y-4">
         {/* Jobs */}
-        {/* <li>
-          <Link to="/" className="flex items-center p-2 hover:bg-purple-700 rounded transition duration-200 text-white">
+        <li>
+          <Link to="/test" className="flex items-center p-2 hover:bg-purple-700 rounded transition duration-200 text-white">
             <BriefcaseIcon className="mr-2 h-5 w-5 text-purple-400" />
             Test
           </Link>
-        </li> */}
+        </li>
 
         {/* Subscribers */}
         <li>
