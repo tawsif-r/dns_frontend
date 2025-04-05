@@ -47,6 +47,7 @@ npm error A complete log of this run can be found in: /home/tawsif/.npm/_logs/20
 
 
 # TODO List
-- [ ] make a component for navigation bar
-- [ ] integrate the states with store in redux
-- [ ] add animations to the navbar
+- [x] make a component for navigation bar
+- [x] integrate the states with store in redux for nav
+- [x] add animations to the navbar.
+- [ ] make a subscriber page that you can link from the nav.

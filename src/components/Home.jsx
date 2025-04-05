@@ -1,19 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import JobsList from './JobsList';
-import SportsList from './SportsList';
-import SubscribersList from './SubscribersList';
-import MessagesQList from './MessagesQList';
-import SubscriptionsList from './SubscriptionsList';
-import ReportList from './ReportList';
-import MessagesList from './MessagesList';
-import ServicesList from './ServicesList';
-import BdjobsList from './BdjobsList';
-import JobCategoryList from './JobCategoryList';
-import SportCategoryList from './SportCategoryList';
-import ChannelList from './ChannelList';
-import FormatList from './FormatList';
-import KeywordList from './KeywordList';
 import Nav from './ui/Nav';
 
 function Home() {
@@ -96,37 +82,19 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white font-mono flex">
-      <div className="w-64 bg-gray-800 p-4 fixed h-screen">
+      <div className="bg-gray-800 fixed h-screen">
         <Nav />
       </div>
 
-      <div className="flex-1 ml-64 p-6">
+      <div className="flex-1 ml-20 p-6">
         <header className="mb-8 flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-purple-400">Admin Dashboard</h1>
+          <h1 className="text-3xl text-gray-300">Dashboard</h1>
           <input
             type="text"
             placeholder="Search..."
-            className="px-4 py-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 w-64"
+            className="py-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 w-64"
           />
         </header>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <JobsList jobs={jobsData} setJobs={setJobsData} />
-          <SportsList sports={sportsData} setSports={setSportsData}/>
-          <SubscribersList subscribers={subscribersData} setSubscribers={setSubscribersData} />
-          <MessagesQList messages={messagesQData} />
-          <SubscriptionsList subscriptions={subscriptionsData} setSubscriptions={setSubscriptionsData} />
-          <ReportList reports={reportsData} setReports={setReportsData} />
-          <MessagesList messages={messagesData} setMessages={setMessagesData} />
-          <ServicesList services={servicesData} setServices={setServicesData} />
-          <BdjobsList bdjobs={bdjobsData} setBdjobs={setBdjobsData} />
-          <JobCategoryList jobCategories={jobCategoriesData} setJobCategories={setJobCategoriesData} />
-          <SportCategoryList sportCategories={sportCategoriesData} setSportCategories={setSportCategoriesData} />
-          <ChannelList channels={channelsData} setChannels={setChannelsData} />
-          <FormatList formats={formatsData} setFormats={setFormatsData} />
-          <KeywordList keywords={keywordsData} setKeywords={setKeywordsData} />
-        </div>
-
         
       </div>
     </div>
