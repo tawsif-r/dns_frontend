@@ -30,6 +30,11 @@ const Nav = () => {
         } overflow-hidden transition-all duration-300 ease-in-out mx-5 flex-grow mt-4 flex-col text-gray-200 space-y-4`}
       >
         <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
+        <Link to="/">
+            Home
+          </Link>
+        </button>
+        <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
         <Link to="/jobs">
             Jobs
           </Link>

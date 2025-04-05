@@ -1,5 +1,5 @@
 import React from 'react';
-import Home from './components/Home';
+import HomePage from './pages/HomePage';
 import Test from './components/Test';
 import SubscribersPage from './pages/SubscribersPage'
 import JobsPage from './pages/JobsPage';
@@ -13,7 +13,7 @@ function App() {
     <Router>
       <div>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/test" element={<Test />} />
           <Route path="/jobs" element={<JobsPage />} />
           <Route path="/sports" element={<SportsPage />} />

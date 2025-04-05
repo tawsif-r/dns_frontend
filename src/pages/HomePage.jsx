@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Nav from './ui/Nav';
+import Nav from '../components/ui/Nav';
 
-function Home() {
+function HomePage() {
   const [jobsData, setJobsData] = useState([]);
   const [subscribersData, setSubscribersData] = useState([]);
   const [messagesQData, setMessagesQData] = useState([]);
@@ -102,4 +102,4 @@ function Home() {
 }
 
 
-export default Home;
+export default HomePage;
