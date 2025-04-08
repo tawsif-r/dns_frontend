@@ -41,10 +41,10 @@ function MessagesQList({ messages }) {
                             <tr className="bg-gray-700">
                                 <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">ID</th>
                                 <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">Schedule</th>
-                                <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">Check</th>
                                 <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">Created At</th>
                                 <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">Subscriber</th>
-                                <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">Job</th>
+                                <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">Content</th>
+                                <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">Channel</th>
                                 <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">Charge</th>
                             </tr>
                         </thead>
@@ -53,10 +53,10 @@ function MessagesQList({ messages }) {
                                 <tr key={message.id} className="hover:bg-gray-700">
                                     <td className="px-4 py-3 text-gray-300">{message.id || 'N/A'}</td>
                                     <td className="px-4 py-3 text-gray-300">{message.scheduled_time || 'N/A'}</td>
-                                    <td className="px-4 py-3 text-gray-300">{message.check_time || 'N/A'}</td>
                                     <td className="px-4 py-3 text-gray-300">{message.created_at || 'N/A'}</td>
                                     <td className="px-4 py-3 text-gray-300">{message.subscriber || 'N/A'}</td>
-                                    <td className="px-4 py-3 text-gray-300">{message.job || 'N/A'}</td>
+                                    <td className="px-4 py-3 text-gray-300">{message.content || 'N/A'}</td>
+                                    <td className="px-4 py-3 text-gray-300">{message.channel || 'N/A'}</td>
                                     <td className="px-4 py-3 text-gray-300">{message.charge || 'N/A'}</td>
                                 </tr>
                             ))}

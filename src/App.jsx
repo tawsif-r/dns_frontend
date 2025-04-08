@@ -2,9 +2,10 @@ import React from 'react';
 import HomePage from './pages/HomePage';
 import Test from './components/Test';
 import SubscribersPage from './pages/SubscribersPage'
-import JobsPage from './pages/JobsPage';
-import SportsPage from './pages/SportsPage';
+import ContentPage from './pages/ContentPage';
+import CategoryPage from './pages/CategoryPage';
 import MessagesPage from './pages/MessagesPage';
+import SubscriptionPlanPage from './pages/SubscriptionPlanPage'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 
@@ -15,9 +16,10 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/test" element={<Test />} />
-          <Route path="/jobs" element={<JobsPage />} />
-          <Route path="/sports" element={<SportsPage />} />
+          <Route path="/contents" element={<ContentPage />} />
+          <Route path="/categories" element={<CategoryPage />} />
           <Route path="/subscribers" element={<SubscribersPage />} />
+          <Route path="/subscriptionPlans" element={<SubscriptionPlanPage />} />
           <Route path="/messages" element={<MessagesPage />} />
         </Routes>
       </div>

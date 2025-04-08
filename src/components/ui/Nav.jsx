@@ -35,8 +35,8 @@ const Nav = () => {
           </Link>
         </button>
         <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
-        <Link to="/jobs">
-            Jobs
+        <Link to="/contents">
+            Contents
           </Link>
         </button>
         <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
@@ -45,8 +45,13 @@ const Nav = () => {
           </Link>
         </button>
         <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
-        <Link to="/sports">
-            Sports
+        <Link to="/subscriptionPlans">
+            Subscription
+          </Link>
+        </button>
+        <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
+        <Link to="/categories">
+            Categories
           </Link>
         </button>
         <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
