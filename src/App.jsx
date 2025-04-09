@@ -6,6 +6,7 @@ import ContentPage from './pages/ContentPage';
 import CategoryPage from './pages/CategoryPage';
 import MessagesPage from './pages/MessagesPage';
 import SubscriptionPlanPage from './pages/SubscriptionPlanPage'
+import TesterPage from './pages/TesterPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/subscribers" element={<SubscribersPage />} />
           <Route path="/subscriptionPlans" element={<SubscriptionPlanPage />} />
           <Route path="/messages" element={<MessagesPage />} />
+          <Route path="/tester" element={<TesterPage />} />
         </Routes>
       </div>
     </Router>
