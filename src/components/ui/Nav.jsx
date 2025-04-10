@@ -10,7 +10,7 @@ const Nav = () => {
   const menu = useSelector((state) => state.nav.menuOpen);
   const dispatch = useDispatch()
   return (
-    <div className="font-mono bottom-0 border-r-2 border-slate-300 min-h-screen flex-shrink-0  flex-col sm:flex z-50 transition-all duration-300 ease-in-out">
+    <div className="font-mono bottom-0 border-r-2 border-slate-300 min-h-screen flex-shrink-0 flex-col sm:flex z-50 transition-all duration-300 ease-in-out">
       <div className="h-16 flex mx-4 items-center justify-center">
         <button 
           onClick={() => dispatch(toggleMenu())}

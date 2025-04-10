@@ -18,7 +18,7 @@ const TesterPage = () => {
             </div>
             {/* header end */}
 
-            <div className='flex justify-start'>
+            <div className='flex justify-start sm:flex-row'>
                 {/* NAV bar */}
                 <div className='bg-slate-400 boder-2 border-red-950'>
                     <div className='border-2 border-green-200 p-2'>Home</div>

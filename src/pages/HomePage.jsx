@@ -18,7 +18,7 @@ function HomePage() {
   const contentUrl = `${base}/contents/`
   const subscriberUrl = `${base}/subscribers/`;
   const messagesQUrl = `${base}/messagesQueue/`;
-  const subscriptionUrl = `${base}/subscriptions/`;
+  const subscriptionUrl = `${base}/subscriptionplans/`;
   const reportUrl = `${base}/reports/`;
   const messageUrl = `${base}/messages/`;
 
@@ -55,7 +55,47 @@ function HomePage() {
 
 
   return (
-    <div><h1 className='border-2'>Dashboard</h1></div>
+    <div className='border-2 grid grid-cols-3 p-4'>
+      <div className='border-2 p-4'>
+        {categoriesData?
+        (<ul>
+        {categoriesData.map((category)=>(
+          <li className="border-2 p-3 m-2" key={category.id}>
+            <p className='bold'>Name: {category.name}</p>
+            <p className='bold'>Slug:{category.slug}</p>
+            <p className='bold'>Service: {category.service}</p>
+            <p className='bold'>Keyword: {category.keyword}</p>
+            <p className='bold'>Fcatid:{category.fcatid}</p>
+            <p className='bold'>icatid:{category.icatid}</p>
+            <p className='bold'>Desc: {category.description}</p>
+            <p className='bold'>is active: {category.is_active ? "yes":"No"}</p>
+          </li>
+        ))}
+        </ul>
+        ):(
+          <>
+          <p>No data found</p>
+          </>
+        )}
+      
+      </div>
+
+      <div className='border-2 p-4'>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut dicta doloremque similique sunt sint labore nulla molestias laudantium praesentium eius deserunt eveniet molestiae rerum, magni officia ut! Corrupti, error incidunt.</p>
+      </div>
+
+      <div className='border-2 p-4 row-span-3'>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae laboriosam deleniti esse quaerat. Iure autem voluptate quis ipsam est minima veritatis ullam eveniet quibusdam illo, deserunt, praesentium, dolorem quia quisquam?</p>
+      </div>
+
+      <div className='border-2 p-4'>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde autem velit illum, distinctio maxime aperiam consequuntur eos cupiditate? Facere maiores accusamus perspiciatis quae eaque tempore doloremque quis dolor, quod sed.</p>
+      </div>
+
+      <div className='border-2 p-4'>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis excepturi nemo molestiae pariatur nostrum voluptates omnis perspiciatis dolore delectus fugit, mollitia nulla, rerum laudantium animi, deleniti voluptatem! Aliquid, pariatur numquam?
+      </div>
+    </div>
   );
 }
 
