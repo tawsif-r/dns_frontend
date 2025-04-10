@@ -60,6 +60,11 @@ const Nav = () => {
           </Link>
         </button>
         <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
+        <Link to="/reports">
+            Report
+          </Link>
+        </button>
+        <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
         <Link to="/tester">
             Tester
           </Link>
