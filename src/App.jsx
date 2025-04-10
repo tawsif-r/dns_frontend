@@ -7,6 +7,7 @@ import CategoryPage from './pages/CategoryPage';
 import MessagesPage from './pages/MessagesPage';
 import SubscriptionPlanPage from './pages/SubscriptionPlanPage'
 import TesterPage from './pages/TesterPage';
+import Layout from './components/ui/Layout';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 
@@ -15,13 +16,15 @@ function App() {
     <Router>
       <div>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/test" element={<Test />} />
-          <Route path="/contents" element={<ContentPage />} />
-          <Route path="/categories" element={<CategoryPage />} />
-          <Route path="/subscribers" element={<SubscribersPage />} />
-          <Route path="/subscriptionPlans" element={<SubscriptionPlanPage />} />
-          <Route path="/messages" element={<MessagesPage />} />
+          <Route path="/" element={<Layout>
+            <HomePage />
+            </Layout>} />
+          <Route path="/test" element={<Layout><Test /></Layout>} />
+          <Route path="/contents" element={<Layout><ContentPage /></Layout>} />
+          <Route path="/categories" element={<Layout><CategoryPage /></Layout>} />
+          <Route path="/subscribers" element={<Layout><SubscribersPage /></Layout>} />
+          <Route path="/subscriptionPlans" element={<Layout><SubscriptionPlanPage /></Layout>} />
+          <Route path="/messages" element={<Layout><MessagesPage /></Layout>} />
           <Route path="/tester" element={<TesterPage />} />
         </Routes>
       </div>

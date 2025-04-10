@@ -108,9 +108,9 @@ function SubscribersPage() {
     const columns = Object.keys(newSubscriber).filter(key => key !== 'id');
 
     return (
-        <div className="min-h-screen bg-gray-900 text-white">
-            <Nav />
-            <div className="container mx-auto px-4 py-8 ml-16">
+   
+        
+            <div className="px-4 py-8">
                 <div className="border-2 rounded-lg shadow-lg">
                     <div 
                         className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-t-lg"
@@ -250,7 +250,7 @@ function SubscribersPage() {
                         </div>
                     
                 </div>
-            </div>
+     
         </div>
     );
 }

@@ -81,23 +81,7 @@ function HomePage() {
 
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white font-mono flex">
-      <div className="bg-gray-800 fixed h-screen">
-        <Nav />
-      </div>
-
-      <div className="flex-1 ml-20 p-6">
-        <header className="mb-8 flex justify-between items-center">
-          <h1 className="text-3xl text-gray-300">Dashboard</h1>
-          <input
-            type="text"
-            placeholder="Search..."
-            className="py-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 w-64"
-          />
-        </header>
-        
-      </div>
-    </div>
+    <div><h1 className='border-2'>Dashboard</h1></div>
   );
 }
 
