@@ -28,6 +28,7 @@ const Layout = ({ children }) => {
                 </div>
             </div>
             {/**content end */}
+            <div className='border-2 p-10'>Footer</div>
         </div>
   )
 }

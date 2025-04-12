@@ -56,7 +56,7 @@ function HomePage() {
 
   return (
     <div className='border-2 grid grid-cols-3 p-4'>
-      <div className='border-2 p-4'>
+      <div className='border-2 p-4 max-h-96 overflow-x-auto'>
         {categoriesData?
         (<ul>
         {categoriesData.map((category)=>(
@@ -65,8 +65,8 @@ function HomePage() {
             <p className='bold'>Slug:{category.slug}</p>
             <p className='bold'>Service: {category.service}</p>
             <p className='bold'>Keyword: {category.keyword}</p>
-            <p className='bold'>Fcatid:{category.fcatid}</p>
-            <p className='bold'>icatid:{category.icatid}</p>
+            <p className='bold'>Fcatid: {category.fcatid ? category.fcatid : "Not Functional"}</p>
+            <p className='bold'>icatid: {category.icatid ? category.icatid : "Not industrial"}</p>
             <p className='bold'>Desc: {category.description}</p>
             <p className='bold'>is active: {category.is_active ? "yes":"No"}</p>
           </li>
