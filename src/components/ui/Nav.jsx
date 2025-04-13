@@ -1,76 +1,77 @@
 import React from 'react';
-
-import { Menu, ChevronLeft } from 'lucide-react';
+import { Menu, ChevronLeft, Home, FileText, Users, CreditCard, Tag, MessageSquare, BarChart2, TestTube } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleMenu } from '../../redux/Nav';
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom';
 
 const Nav = () => {
-
   const menu = useSelector((state) => state.nav.menuOpen);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  // Navigation items with their icons
+  const navItems = [
+    { path: '/', label: 'Home', icon: <Home size={18} /> },
+    { path: '/contents', label: 'Contents', icon: <FileText size={18} /> },
+    { path: '/subscribers', label: 'Subscribers', icon: <Users size={18} /> },
+    { path: '/subscriptionPlans', label: 'Subscription', icon: <CreditCard size={18} /> },
+    { path: '/categories', label: 'Categories', icon: <Tag size={18} /> },
+    { path: '/messages', label: 'Messages', icon: <MessageSquare size={18} /> },
+    { path: '/reports', label: 'Report', icon: <BarChart2 size={18} /> },
+    { path: '/tester', label: 'Tester', icon: <TestTube size={18} /> },
+  ];
+
   return (
-    <div className="font-mono bottom-0 border-r-2 border-slate-300 min-h-screen flex-shrink-0 flex-col sm:flex z-50 transition-all duration-300 ease-in-out">
-      <div className="h-16 flex mx-4 items-center justify-center">
+    <aside className="bg-gray-800 border-r-2 border-gray-700 h-full flex flex-col flex-shrink-0 transition-all duration-300 ease-in-out">
+      <div className="h-16 flex mx-2 items-center justify-center">
         <button 
           onClick={() => dispatch(toggleMenu())}
-          className="p-2 rounded-md transition-colors duration-200"
+          className="p-2 rounded-md hover:bg-gray-700 transition-colors duration-200"
+          aria-label={menu ? "Collapse sidebar" : "Expand sidebar"}
         >
           {menu ? (
-            <ChevronLeft className="w-6 h-6 transition-transform duration-300" />
+            <ChevronLeft className="w-6 h-6 text-cyan-400 transition-transform duration-300" />
           ) : (
-            <Menu className="w-6 h-6 transition-transform duration-300" />
+            <Menu className="w-6 h-6 text-cyan-400 transition-transform duration-300" />
           )}
         </button>
       </div>
 
-      <div 
-        className={`${
-          menu ? 'opacity-100 w-48' : 'opacity-0 w-0'
-        } overflow-hidden transition-all duration-300 ease-in-out mx-5 flex-grow mt-4 flex-col text-gray-200 space-y-4`}
+      <nav 
+        className={`
+          ${menu ? 'w-48' : 'w-16'} 
+          transition-all duration-300 ease-in-out 
+          flex-grow overflow-y-auto
+          py-4 px-2
+        `}
       >
-        <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
-        <Link to="/">
-            Home
-          </Link>
-        </button>
-        <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
-        <Link to="/contents">
-            Contents
-          </Link>
-        </button>
-        <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
-        <Link to="/subscribers">
-            Subscribers
-          </Link>
-        </button>
-        <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
-        <Link to="/subscriptionPlans">
-            Subscription
-          </Link>
-        </button>
-        <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
-        <Link to="/categories">
-            Categories
-          </Link>
-        </button>
-        <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
-        <Link to="/messages">
-            Messages
-          </Link>
-        </button>
-        <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
-        <Link to="/reports">
-            Report
-          </Link>
-        </button>
-        <button className="h-10 px-4 rounded-md flex items-center justify-center hover:text-cyan-500 transition-all duration-200">
-        <Link to="/tester">
-            Tester
-          </Link>
-        </button>
-      </div>
-    </div>
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <Link 
+              key={item.path}
+              to={item.path}
+              className={`
+                flex items-center rounded-md my-1 px-3 py-2 
+                transition-all duration-200
+                ${isActive ? 'bg-gray-700 text-cyan-400' : 'hover:bg-gray-700 hover:text-cyan-400 text-gray-300'}
+              `}
+            >
+              <div className="flex-shrink-0">{item.icon}</div>
+              <span 
+                className={`
+                  ml-3 whitespace-nowrap
+                  ${menu ? 'opacity-100 visible' : 'opacity-0 invisible absolute'}
+                  transition-opacity duration-200
+                `}
+              >
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
+      </nav>
+    </aside>
   );
 };
 
