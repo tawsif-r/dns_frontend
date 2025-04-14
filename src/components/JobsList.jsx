@@ -84,7 +84,7 @@ function JobsList({ jobs, setJobs }) {  // Added setJobs as prop
   };
 
   return (
-    <div className="dashboard-card bg-gray-900 text-white rounded-lg shadow-lg">
+    <div className="dashboard-card bg-gray-900 text-white rounded-lg shadow-lg scrollbar-thumb-red-400 ">
       <div 
         className="card-header flex justify-between items-center p-4 bg-purple-900 hover:bg-purple-700 rounded-t-lg cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}

@@ -1,6 +1,14 @@
 import React from 'react';
-import Home from './components/Home';
+import HomePage from './pages/HomePage';
 import Test from './components/Test';
+import SubscribersPage from './pages/SubscribersPage'
+import ContentPage from './pages/ContentPage';
+import CategoryPage from './pages/CategoryPage';
+import MessagesPage from './pages/MessagesPage';
+import SubscriptionPlanPage from './pages/SubscriptionPlanPage'
+import TesterPage from './pages/TesterPage';
+import ReportsPage from './pages/ReportPage';
+import Layout from './components/ui/Layout';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 
@@ -9,8 +17,17 @@ function App() {
     <Router>
       <div>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/test" element={<Test />} />
+          <Route path="/" element={<Layout>
+            <HomePage />
+            </Layout>} />
+          <Route path="/test" element={<Layout><Test /></Layout>} />
+          <Route path="/contents" element={<Layout><ContentPage /></Layout>} />
+          <Route path="/categories" element={<Layout><CategoryPage /></Layout>} />
+          <Route path="/subscribers" element={<Layout><SubscribersPage /></Layout>} />
+          <Route path="/subscriptionPlans" element={<Layout><SubscriptionPlanPage /></Layout>} />
+          <Route path="/messages" element={<Layout><MessagesPage /></Layout>} />
+          <Route path="/reports" element={<Layout><ReportsPage/></Layout>} />
+          <Route path="/tester" element={<TesterPage />} />
         </Routes>
       </div>
     </Router>

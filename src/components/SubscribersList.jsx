@@ -232,127 +232,16 @@ function SubscribersList({ subscribers, setSubscribers }) {
                                     className="bg-gray-800 p-4 rounded-lg border border-gray-700"
                                 >
                                     {editingSubscriber?.id === subscriber.id ? (
-                                        // Edit Mode
-                                        <div className="space-y-2">
-                                            <input
-                                                type="text"
-                                                value={editingSubscriber.name}
-                                                onChange={(e) => setEditingSubscriber({ ...editingSubscriber, name: e.target.value })}
-                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={editingSubscriber.phone_number}
-                                                onChange={(e) => setEditingSubscriber({ ...editingSubscriber, phone_number: e.target.value })}
-                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={editingSubscriber.shortcode}
-                                                onChange={(e) => setEditingSubscriber({ ...editingSubscriber, shortcode: e.target.value })}
-                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                                            />
-                                            <input
-                                                type="datetime-local"
-                                                value={editingSubscriber.subscription_end}
-                                                onChange={(e) => setEditingSubscriber({ ...editingSubscriber, subscription_end: e.target.value })}
-                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={editingSubscriber.schedule}
-                                                onChange={(e) => setEditingSubscriber({ ...editingSubscriber, schedule: e.target.value })}
-                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={editingSubscriber.gender}
-                                                onChange={(e) => setEditingSubscriber({ ...editingSubscriber, gender: e.target.value })}
-                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={editingSubscriber.employment_type}
-                                                onChange={(e) => setEditingSubscriber({ ...editingSubscriber, employment_type: e.target.value })}
-                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={editingSubscriber.location}
-                                                onChange={(e) => setEditingSubscriber({ ...editingSubscriber, location: e.target.value })}
-                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={editingSubscriber.region}
-                                                onChange={(e) => setEditingSubscriber({ ...editingSubscriber, region: e.target.value })}
-                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={editingSubscriber.subscription}
-                                                onChange={(e) => setEditingSubscriber({ ...editingSubscriber, subscription: e.target.value })}
-                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={editingSubscriber.operator}
-                                                onChange={(e) => setEditingSubscriber({ ...editingSubscriber, operator: e.target.value })}
-                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={editingSubscriber.category}
-                                                onChange={(e) => setEditingSubscriber({ ...editingSubscriber, category: e.target.value })}
-                                                className="w-full border border-purple-600 bg-gray-800 text-white p-2 rounded focus:outline-none focus:border-purple-400"
-                                            />
-                                            <div className="flex space-x-2">
-                                                <button
-                                                    onClick={handleUpdateSubscriber}
-                                                    className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200"
-                                                >
-                                                    <SaveIcon className="mr-2" /> Save
-                                                </button>
-                                                <button
-                                                    onClick={() => setEditingSubscriber(null)}
-                                                    className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
-                                                >
-                                                    <XIcon className="mr-2" /> Cancel
-                                                </button>
-                                            </div>
-                                        </div>
+                                        <></>
                                     ) : (
-                                        // View Mode
                                         <>
-                                            <div className="flex justify-between items-center">
-                                                <div className="flex space-x-2">
-                                                    <button
-                                                        onClick={() => setEditingSubscriber(subscriber)}
-                                                        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-200"
-                                                    >
-                                                        <EditIcon />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDeleteSubscriber(subscriber.id)}
-                                                        className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
-                                                    >
-                                                        <TrashIcon />
-                                                    </button>
-                                                </div>
-                                            </div>
+                                            
                                             <div className="mt-2 space-y-2">
                                                 <p><strong>Name:</strong> {subscriber.name}</p>
                                                 <p><strong>Phone:</strong> {subscriber.phone_number}</p>
-                                                <p><strong>Short code:</strong> {subscriber.shortcode}</p>
-                                                <p><strong>End:</strong> {subscriber.subscription_end}</p>
-                                                <p><strong>Schedule:</strong> {subscriber.schedule}</p>
-                                                <p><strong>Gender:</strong> {subscriber.gender}</p>
-                                                <p><strong>Employment:</strong> {subscriber.employment_type}</p>
-                                                <p><strong>Location:</strong> {subscriber.location}</p>
-                                                <p><strong>Region:</strong> {subscriber.region}</p>
-                                                <p><strong>Subscription:</strong> {subscriber.subscription}</p>
+                                                <p><strong>Subscription:</strong> {subscriber.subscription_plan}</p>
                                                 <p><strong>Operator:</strong> {subscriber.operator}</p>
-                                                <p><strong>Category:</strong> {subscriber.category}</p>
+                                                <p><strong>Category:</strong> {subscriber.categories}</p>
                                             </div>
                                         </>
                                     )}

@@ -53,3 +53,9 @@ npm error A complete log of this run can be found in: /home/tawsif/.npm/_logs/20
 - ``` npm install ``` will install the node_modules accourding to your lock files.
 - ``` npm cache clean --force``` will clear the cache of node_modules. 
 
+
+# TODO List
+- [x] make a component for navigation bar
+- [x] integrate the states with store in redux for nav
+- [x] add animations to the navbar.
+- [ ] make a subscriber page that you can link from the nav.
