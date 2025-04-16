@@ -26,7 +26,7 @@ const Layout = ({ children }) => {
         <main className="flex-1 overflow-y-auto">
           <div className="px-4 py-8">
             <p className="mb-6 text-gray-300">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur illum omnis nam autem voluptatibus tempore provident esse inventore expedita quidem alias culpa, quibusdam, nesciunt incidunt rem architecto, eius impedit doloribus?
+            DnsApp bridges the gap by acting as a smart intermediary between telecommunication companies, content providers, and subscribers, delivering tailored job alerts and curated content straight to your fingertips.
             </p>
             {children}
           </div>

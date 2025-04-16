@@ -90,7 +90,7 @@ function ContentsPage() {
     const handleDeleteContent = async (id) => {
         try {
             await axios.delete(`${baseUrl}${id}/`);
-            setContents(contents.filter(Content => Content.id !== id));
+            setContents(contents.filter(content => content.id !== id));
             if (editingContent?.id === id) {
                 setEditingContent(null);
             }
