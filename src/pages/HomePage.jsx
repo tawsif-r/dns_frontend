@@ -12,7 +12,7 @@ function HomePage() {
   const [messagesData, setMessagesData] = useState([]);
 
 
-  const base = "http://192.168.3.37:8001/admin/api";
+  const base = "http://10.0.0.27:8000/admin/api";
 
   const categoryUrl = `${base}/categories/`
   const contentUrl = `${base}/contents/`

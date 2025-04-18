@@ -15,8 +15,8 @@ function MessagesPage() {
     });
     const [queueMessages, setQueueMessages] = useState([]); // New state for message queue
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/messages/';
-    const queueBaseUrl = 'http://192.168.3.37:8001/admin/api/messagesQueue/'; // Adjust this URL as needed
+    const baseUrl = 'http://10.0.0.27:8000/admin/api/messages/';
+    const queueBaseUrl = 'http://10.0.0.27:8000/admin/api/messagesQueue/'; // Adjust this URL as needed
 
     // Fetch messages on page load
     useEffect(() => {

@@ -22,7 +22,7 @@ function ContentsPage() {
         
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/contents/';
+    const baseUrl = 'http://10.0.0.27:8000/admin/api/contents/';
 
     // Fetch Contents on page load
     useEffect(() => {

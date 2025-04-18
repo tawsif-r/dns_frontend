@@ -15,7 +15,7 @@ function ReportsPage() {
         total_charge: '0.00'
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/reports/'; // Adjust the API endpoint as needed
+    const baseUrl = 'http://10.0.0.27:8000/admin/api/reports/'; // Adjust the API endpoint as needed
 
     // Fetch reports on page load
     useEffect(() => {
