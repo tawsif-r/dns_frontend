@@ -3,15 +3,15 @@ import { useState } from 'react'
 import axios from 'axios'
 
 const TesterPage = () => {
-    const [message,setMessage] = useState([])
+    const [messages,setMessages] = useState([])
 
     const baseUrl = 'http://192.168.3.37:8001/admin/api/messages/';
     useEffect(()=>{
         const fetchMessage = async () =>{
             try {
                 const response = await axios.get(baseUrl);
-                setMessage(response.data)
-                console.log(`The message: ${message}`)
+                setMessages(response.data)
+                console.log(`The message: ${response.data}`)
             }catch (error){
                 console.error("Error fetching message",error)
             }
@@ -27,6 +27,15 @@ const TesterPage = () => {
                 2. useEffect for fetching the data
                 3. add handle and update the state
             </h3>
+
+            <div>
+                <ul>
+                    {/* return jsx after an arrow function */}
+                    {messages.map(message => (
+                        <p key={message.id}>{message.body}</p>
+                    ))}
+                </ul>
+            </div>
 
         </div>
 

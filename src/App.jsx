@@ -9,6 +9,8 @@ import SubscriptionPlanPage from './pages/SubscriptionPlanPage'
 import TesterPage from './pages/TesterPage';
 import ReportsPage from './pages/ReportPage';
 import Layout from './components/ui/Layout';
+import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 
@@ -21,6 +23,8 @@ function App() {
             <HomePage />
             </Layout>} />
           <Route path="/test" element={<Layout><Test /></Layout>} />
+          <Route path="/login" element={<LoginPage/>} />
+          <Route path="/signup" element={<SignUpPage/>} />
           <Route path="/contents" element={<Layout><ContentPage /></Layout>} />
           <Route path="/categories" element={<Layout><CategoryPage /></Layout>} />
           <Route path="/subscribers" element={<Layout><SubscribersPage /></Layout>} />
