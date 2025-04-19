@@ -34,7 +34,7 @@ function MessagesQList({ messages }) {
                     onClick={(e) => e.stopPropagation()}
                 />
             </div>
-            <div className="p-6 bg-gray-800 rounded-b-lg">
+            <div className="overflow-x-auto p-6 bg-gray-800 rounded-b-lg">
                 {filteredMessages.length > 0 ? (
                     <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
                         <thead>

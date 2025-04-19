@@ -171,7 +171,7 @@ function ReportsPage() {
                     </div>
 
                     {/* Reports Table */}
-                    <div className="border-2 rounded-lg">
+                    <div className="overflow-x-auto border-2 rounded-lg">
                         {filteredReports.length > 0 ? (
                             <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
                                 <thead>
