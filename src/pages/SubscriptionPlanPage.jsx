@@ -21,7 +21,7 @@ function SubscriptionPlanPage() {
     useEffect(() => {
         const fetchPlans = async () => {
             try {
-                const response = await axios.get(baseUrl);
+                const response = await axios.get(baseUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
                 setPlans(response.data);
             } catch (error) {
                 console.error('Error fetching subscription plans:', error);
@@ -46,7 +46,7 @@ function SubscriptionPlanPage() {
                 ...newPlan,
                 duration_days: parseInt(newPlan.duration_days),
                 price: parseFloat(newPlan.price)
-            });
+            },{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
             setPlans([...plans, response.data]);
             setNewPlan({
                 name: '',
@@ -72,7 +72,7 @@ function SubscriptionPlanPage() {
                 ...editingPlan,
                 duration_days: parseInt(editingPlan.duration_days),
                 price: parseFloat(editingPlan.price)
-            });
+            },{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
             setPlans(plans.map(plan =>
                 plan.id === editingPlan.id ? response.data : plan
             ));
@@ -85,7 +85,7 @@ function SubscriptionPlanPage() {
 
     const handleDeletePlan = async (id) => {
         try {
-            await axios.delete(`${baseUrl}${id}/`);
+            await axios.delete(`${baseUrl}${id}/`,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
             setPlans(plans.filter(plan => plan.id !== id));
             if (editingPlan?.id === id) {
                 setEditingPlan(null);

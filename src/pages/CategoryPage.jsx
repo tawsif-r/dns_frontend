@@ -19,12 +19,14 @@ function CategoriesPage() {
     });
 
     const baseUrl = 'http://192.168.3.37:8001/admin/api/categories/';
-
+    const accessToken = localStorage.getItem('accessToken')
     // Fetch categories on page load
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get(baseUrl);
+                const response = await axios.get(baseUrl,{
+                    headers: {Authorization: `Bearer ${accessToken}`}
+                });
                 setCategories(response.data);
             } catch (error) {
                 console.error('Error fetching categories:', error);

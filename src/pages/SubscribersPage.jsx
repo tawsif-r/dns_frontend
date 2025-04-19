@@ -28,7 +28,7 @@ function SubscribersPage() {
     useEffect(() => {
         const fetchSubscribers = async () => {
             try {
-                const response = await axios.get(baseUrl);
+                const response = await axios.get(baseUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
                 setSubscribers(response.data);
             } catch (error) {
                 console.error('Error fetching subscribers:', error);
@@ -49,7 +49,7 @@ function SubscribersPage() {
         }
 
         try {
-            const response = await axios.post(baseUrl, newSubscriber);
+            const response = await axios.post(baseUrl, newSubscriber,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
             setSubscribers([...subscribers, response.data]);
             setNewSubscriber({
                 id: '',
@@ -79,7 +79,7 @@ function SubscribersPage() {
         }
 
         try {
-            const response = await axios.put(`${baseUrl}${editingSubscriber.id}/`, editingSubscriber);
+            const response = await axios.put(`${baseUrl}${editingSubscriber.id}/`, editingSubscriber,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
             setSubscribers(subscribers.map(sub =>
                 sub.id === editingSubscriber.id ? response.data : sub
             ));
@@ -92,7 +92,7 @@ function SubscribersPage() {
 
     const handleDeleteSubscriber = async (id) => {
         try {
-            await axios.delete(`${baseUrl}${id}/`);
+            await axios.delete(`${baseUrl}${id}/`,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
             setSubscribers(subscribers.filter(sub => sub.id !== id));
             if (editingSubscriber?.id === id) {
                 setEditingSubscriber(null);

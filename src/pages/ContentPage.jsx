@@ -23,12 +23,14 @@ function ContentsPage() {
     });
 
     const baseUrl = 'http://192.168.3.37:8001/admin/api/contents/';
-
+    const accessToken = localStorage.getItem('accessToken')
     // Fetch Contents on page load
     useEffect(() => {
         const fetchContents = async () => {
             try {
-                const response = await axios.get(baseUrl);
+                const response = await axios.get(baseUrl,{
+                    headers: {Authorization: `Bearer ${accessToken}`}
+                });
                 setContents(response.data);
             } catch (error) {
                 console.error('Error fetching Contents:', error);
@@ -76,7 +78,9 @@ function ContentsPage() {
         }
 
         try {
-            const response = await axios.put(`${baseUrl}${editingContent.id}/`, editingContent);
+            const response = await axios.put(`${baseUrl}${editingContent.id}/`, editingContent,{
+                headers: { Authorization: `Bearer ${accessToken}`}
+            });
             setContents(contents.map(content =>
                 content.id === editingContent.id ? response.data : content
             ));
@@ -89,7 +93,9 @@ function ContentsPage() {
 
     const handleDeleteContent = async (id) => {
         try {
-            await axios.delete(`${baseUrl}${id}/`);
+            await axios.delete(`${baseUrl}${id}/`, {
+                headers: {Authorization: `Bearer ${accessToken}`}
+            });
             setContents(contents.filter(content => content.id !== id));
             if (editingContent?.id === id) {
                 setEditingContent(null);

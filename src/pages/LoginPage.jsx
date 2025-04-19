@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [username, SetUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -14,14 +14,14 @@ function LoginPage() {
 
     try {
       // Make API call to DRF JWT endpoint
-      const response = await axios.post('http://10.0.0.27:8000/api/token/', {
-        email,
+      const response = await axios.post('http://192.168.3.37:8001/auth/api/token/', {
+        username,
         password,
       });
 
       // Assuming JWT response contains access and refresh tokens
       const { access, refresh } = response.data;
-
+      console.log(access,refresh)
       // Store tokens in localStorage
       localStorage.setItem('accessToken', access);
       localStorage.setItem('refreshToken', refresh);
@@ -43,21 +43,21 @@ function LoginPage() {
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
       <div className="border-2 border-gray-700 rounded-lg p-8 m-4 max-w-md w-full bg-gray-800">
         <h2 className="text-2xl font-semibold text-white mb-6 text-center">Login</h2>
-        <div>
+        <form onSubmit={handleSubmit}>
           {error && (
             <p className="text-red-500 text-center mb-4">{error}</p>
           )}
           <div className="mb-4">
-            <label className="block text-white font-semibold mb-2" htmlFor="email">
-              Email
+            <label className="block text-white font-semibold mb-2" htmlFor="username">
+              Username
             </label>
             <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => SetUsername(e.target.value)}
               className="w-full p-3 rounded-md bg-gray-700 text-white border-2 border-gray-600 focus:outline-none focus:border-gray-500"
-              placeholder="Enter your email"
+              placeholder="Enter your username"
               required
             />
           </div>
@@ -76,12 +76,12 @@ function LoginPage() {
             />
           </div>
           <button
-            onClick={handleSubmit}
+            type="submit" // Use type="submit" for form submission
             className="w-full p-3 bg-gray-600 text-white font-semibold rounded-md border-2 border-gray-500 hover:bg-gray-500 transition-colors"
           >
             Sign In
           </button>
-        </div>
+        </form>
         <p className="text-gray-400 text-center mt-4">
           Don't have an account?{' '}
           <a href="/signup" className="text-gray-300 hover:underline">

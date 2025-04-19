@@ -21,7 +21,7 @@ function ReportsPage() {
     useEffect(() => {
         const fetchReports = async () => {
             try {
-                const response = await axios.get(baseUrl);
+                const response = await axios.get(baseUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
                 setReports(response.data);
             } catch (error) {
                 console.error('Error fetching reports:', error);
@@ -42,7 +42,7 @@ function ReportsPage() {
         }
 
         try {
-            const response = await axios.post(baseUrl, newReport);
+            const response = await axios.post(baseUrl, newReport,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
             setReports([...reports, response.data]);
             setNewReport({
                 subscriber: '',
@@ -64,7 +64,7 @@ function ReportsPage() {
         }
 
         try {
-            const response = await axios.put(`${baseUrl}${editingReport.id}/`, editingReport);
+            const response = await axios.put(`${baseUrl}${editingReport.id}/`, editingReport,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
             setReports(reports.map(rep =>
                 rep.id === editingReport.id ? response.data : rep
             ));
@@ -77,7 +77,7 @@ function ReportsPage() {
 
     const handleDeleteReport = async (id) => {
         try {
-            await axios.delete(`${baseUrl}${id}/`);
+            await axios.delete(`${baseUrl}${id}/`,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
             setReports(reports.filter(rep => rep.id !== id));
             if (editingReport?.id === id) {
                 setEditingReport(null);

@@ -22,7 +22,7 @@ function MessagesPage() {
     useEffect(() => {
         const fetchMessages = async () => {
             try {
-                const response = await axios.get(baseUrl);
+                const response = await axios.get(baseUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
                 setMessages(response.data);
             } catch (error) {
                 console.error('Error fetching messages:', error);
@@ -31,7 +31,7 @@ function MessagesPage() {
 
         const fetchQueueMessages = async () => {
             try {
-                const response = await axios.get(queueBaseUrl);
+                const response = await axios.get(queueBaseUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
                 setQueueMessages(response.data);
             } catch (error) {
                 console.error('Error fetching queue messages:', error);
@@ -69,7 +69,7 @@ function MessagesPage() {
         }
 
         try {
-            const response = await axios.put(`${baseUrl}${editingMessage.id}/`, editingMessage);
+            const response = await axios.put(`${baseUrl}${editingMessage.id}/`, editingMessage,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
             setMessages(messages.map(msg =>
                 msg.id === editingMessage.id ? response.data : msg
             ));
@@ -82,7 +82,7 @@ function MessagesPage() {
 
     const handleDeleteMessage = async (id) => {
         try {
-            await axios.delete(`${baseUrl}${id}/`);
+            await axios.delete(`${baseUrl}${id}/`,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
             setMessages(messages.filter(msg => msg.id !== id));
             if (editingMessage?.id === id) {
                 setEditingMessage(null);

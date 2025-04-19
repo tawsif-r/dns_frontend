@@ -45,13 +45,13 @@ function HomePage() {
     const fetchData = async () => {
       try {
         const [categoriesResponse, contentsResponse, subscribersResponse, messagesQResponse, subscriptionsResponse, reportsResponse, messagesResponse] = await Promise.all([
-          axios.get(categoryUrl),
-          axios.get(contentUrl),
-          axios.get(subscriberUrl),
-          axios.get(messagesQUrl),
-          axios.get(subscriptionUrl),
-          axios.get(reportUrl),
-          axios.get(messageUrl),
+          axios.get(categoryUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}}),
+          axios.get(contentUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}}),
+          axios.get(subscriberUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}}),
+          axios.get(messagesQUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}}),
+          axios.get(subscriptionUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}}),
+          axios.get(reportUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}}),
+          axios.get(messageUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}}),
         ]);
 
         setCategoriesData(categoriesResponse.data);
