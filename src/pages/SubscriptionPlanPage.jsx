@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
-import Nav from '../components/ui/Nav'; // Assuming you have a Nav component
-import axios from 'axios';
+import apiClient from '../api/axiosInstance';
 
 function SubscriptionPlanPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -15,13 +14,13 @@ function SubscriptionPlanPage() {
         description: ''
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/subscriptionplans/';
+    const baseUrl = '/admin/api/subscriptionplans/';
 
     // Fetch subscription plans on page load
     useEffect(() => {
         const fetchPlans = async () => {
             try {
-                const response = await axios.get(baseUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
+                const response = await apiClient.get(baseUrl);
                 setPlans(response.data);
             } catch (error) {
                 console.error('Error fetching subscription plans:', error);
@@ -42,11 +41,11 @@ function SubscriptionPlanPage() {
         }
 
         try {
-            const response = await axios.post(baseUrl, {
+            const response = await apiClient.post(baseUrl, {
                 ...newPlan,
                 duration_days: parseInt(newPlan.duration_days),
                 price: parseFloat(newPlan.price)
-            },{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
+            });
             setPlans([...plans, response.data]);
             setNewPlan({
                 name: '',
@@ -68,11 +67,11 @@ function SubscriptionPlanPage() {
         }
 
         try {
-            const response = await axios.put(`${baseUrl}${editingPlan.id}/`, {
+            const response = await apiClient.put(`${baseUrl}${editingPlan.id}/`, {
                 ...editingPlan,
                 duration_days: parseInt(editingPlan.duration_days),
                 price: parseFloat(editingPlan.price)
-            },{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
+            });
             setPlans(plans.map(plan =>
                 plan.id === editingPlan.id ? response.data : plan
             ));
@@ -85,7 +84,7 @@ function SubscriptionPlanPage() {
 
     const handleDeletePlan = async (id) => {
         try {
-            await axios.delete(`${baseUrl}${id}/`,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
+            await apiClient.delete(`${baseUrl}${id}/`);
             setPlans(plans.filter(plan => plan.id !== id));
             if (editingPlan?.id === id) {
                 setEditingPlan(null);

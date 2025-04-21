@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
-import axios from 'axios';
+import apiClient from '../api/axiosInstance';
 
 function SubscribersPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -22,13 +22,13 @@ function SubscribersPage() {
         category: ''
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/subscribers/'; // Adjust the API endpoint as needed
+    const baseUrl = '/admin/api/subscribers/'; // Adjust the API endpoint as needed
 
     // Fetch subscribers on page load
     useEffect(() => {
         const fetchSubscribers = async () => {
             try {
-                const response = await axios.get(baseUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
+                const response = await apiClient.get(baseUrl);
                 setSubscribers(response.data);
             } catch (error) {
                 console.error('Error fetching subscribers:', error);
@@ -49,7 +49,7 @@ function SubscribersPage() {
         }
 
         try {
-            const response = await axios.post(baseUrl, newSubscriber,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
+            const response = await apiClient.post(baseUrl, newSubscriber);
             setSubscribers([...subscribers, response.data]);
             setNewSubscriber({
                 id: '',
@@ -79,7 +79,7 @@ function SubscribersPage() {
         }
 
         try {
-            const response = await axios.put(`${baseUrl}${editingSubscriber.id}/`, editingSubscriber,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
+            const response = await apiClient.put(`${baseUrl}${editingSubscriber.id}/`, editingSubscriber);
             setSubscribers(subscribers.map(sub =>
                 sub.id === editingSubscriber.id ? response.data : sub
             ));
@@ -92,7 +92,7 @@ function SubscribersPage() {
 
     const handleDeleteSubscriber = async (id) => {
         try {
-            await axios.delete(`${baseUrl}${id}/`,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
+            await apiClient.delete(`${baseUrl}${id}/`);
             setSubscribers(subscribers.filter(sub => sub.id !== id));
             if (editingSubscriber?.id === id) {
                 setEditingSubscriber(null);

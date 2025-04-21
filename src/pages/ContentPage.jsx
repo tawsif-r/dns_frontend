@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
-import Nav from '../components/ui/Nav'; // Assuming you have a Nav component
-import axios from 'axios';
+import apiClient from '../api/axiosInstance';
 
 function ContentsPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -22,15 +21,13 @@ function ContentsPage() {
         
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/contents/';
-    const accessToken = localStorage.getItem('accessToken')
+    const baseUrl = '/admin/api/contents/';
+
     // Fetch Contents on page load
     useEffect(() => {
         const fetchContents = async () => {
             try {
-                const response = await axios.get(baseUrl,{
-                    headers: {Authorization: `Bearer ${accessToken}`}
-                });
+                const response = await apiClient.get(baseUrl);
                 setContents(response.data);
             } catch (error) {
                 console.error('Error fetching Contents:', error);
@@ -50,7 +47,7 @@ function ContentsPage() {
         }
 
         try {
-            const response = await axios.post(baseUrl, newContent);
+            const response = await apiClient.post(baseUrl, newContent);
             setContents([...contents, response.data]);
             setNewContent({
                 title: '',
@@ -78,9 +75,7 @@ function ContentsPage() {
         }
 
         try {
-            const response = await axios.put(`${baseUrl}${editingContent.id}/`, editingContent,{
-                headers: { Authorization: `Bearer ${accessToken}`}
-            });
+            const response = await apiClient.put(`${baseUrl}${editingContent.id}/`, editingContent);
             setContents(contents.map(content =>
                 content.id === editingContent.id ? response.data : content
             ));
@@ -93,9 +88,7 @@ function ContentsPage() {
 
     const handleDeleteContent = async (id) => {
         try {
-            await axios.delete(`${baseUrl}${id}/`, {
-                headers: {Authorization: `Bearer ${accessToken}`}
-            });
+            await apiClient.delete(`${baseUrl}${id}/`);
             setContents(contents.filter(content => content.id !== id));
             if (editingContent?.id === id) {
                 setEditingContent(null);

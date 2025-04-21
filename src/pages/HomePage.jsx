@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import LineChart from '../components/LineChart'
+import apiClient from '../api/axiosInstance';
 
 function HomePage() {
   const [categoriesData, setCategoriesData] = useState([])
@@ -12,7 +13,7 @@ function HomePage() {
   const [messagesData, setMessagesData] = useState([]);
 
 
-  const base = "http://192.168.3.37:8001/admin/api";
+  const base = "/admin/api";
 
   const categoryUrl = `${base}/categories/`
   const contentUrl = `${base}/contents/`
@@ -45,13 +46,13 @@ function HomePage() {
     const fetchData = async () => {
       try {
         const [categoriesResponse, contentsResponse, subscribersResponse, messagesQResponse, subscriptionsResponse, reportsResponse, messagesResponse] = await Promise.all([
-          axios.get(categoryUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}}),
-          axios.get(contentUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}}),
-          axios.get(subscriberUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}}),
-          axios.get(messagesQUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}}),
-          axios.get(subscriptionUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}}),
-          axios.get(reportUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}}),
-          axios.get(messageUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}}),
+          apiClient.get(categoryUrl),
+          apiClient.get(contentUrl),
+          apiClient.get(subscriberUrl),
+          apiClient.get(messagesQUrl),
+          apiClient.get(subscriptionUrl),
+          apiClient.get(reportUrl),
+          apiClient.get(messageUrl),
         ]);
 
         setCategoriesData(categoriesResponse.data);

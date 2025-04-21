@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios'; // Remove this
+import apiClient from '../api/axiosInstance'; // Import your instance
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
@@ -10,35 +11,36 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Clear previous errors
+    setError(null);
 
     try {
-      // Make API call to DRF JWT endpoint
-      const response = await axios.post('http://192.168.3.37:8001/auth/api/token/', {
+      // Use apiClient instead of axios
+      const response = await apiClient.post('/auth/api/token/', { // Use relative path
         username,
         password,
       });
 
-      // Assuming JWT response contains access and refresh tokens
       const { access, refresh } = response.data;
-      console.log(access,refresh)
-      // Store tokens in localStorage
+      console.log(access, refresh)
       localStorage.setItem('accessToken', access);
       localStorage.setItem('refreshToken', refresh);
 
-      // Redirect to homepage
       navigate('/');
     } catch (err) {
-      // Handle errors (e.g., invalid credentials)
       if (err.response?.status === 401) {
-        setError('Invalid email or password');
-      } else {
-        setError('An error occurred. Please try again.');
+        // Interceptor handles refresh, but login specific 401 means invalid creds
+        setError('Invalid username or password');
+      } else if (err.message.includes('Network Error')) {
+        setError('Network Error: Could not connect to the server.');
+      }
+      else {
+        setError('An error occurred during login. Please try again.');
       }
       console.error('Login error:', err);
     }
   };
 
+  // ... rest of your component remains the same
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
       <div className="border-2 border-gray-700 rounded-lg p-8 m-4 max-w-md w-full bg-gray-800">
@@ -82,12 +84,7 @@ function LoginPage() {
             Sign In
           </button>
         </form>
-        <p className="text-gray-400 text-center mt-4">
-          Don't have an account?{' '}
-          <a href="/signup" className="text-gray-300 hover:underline">
-            Sign up
-          </a>
-        </p>
+        {/* ... rest of JSX ... */}
       </div>
     </div>
   );

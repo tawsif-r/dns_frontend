@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
-import Nav from '../components/ui/Nav'; // Assuming you have a Nav component
-import axios from 'axios';
+import apiClient from '../api/axiosInstance';
 import MessagesQList from '../components/MessagesQList'; // Import the new component
 
 function MessagesPage() {
@@ -15,14 +14,14 @@ function MessagesPage() {
     });
     const [queueMessages, setQueueMessages] = useState([]); // New state for message queue
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/messages/';
-    const queueBaseUrl = 'http://192.168.3.37:8001/admin/api/messagesQueue/'; // Adjust this URL as needed
+    const baseUrl = '/admin/api/messages/';
+    const queueBaseUrl = '/admin/api/messagesQueue/'; // Adjust this URL as needed
 
     // Fetch messages on page load
     useEffect(() => {
         const fetchMessages = async () => {
             try {
-                const response = await axios.get(baseUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
+                const response = await apiClient.get(baseUrl);
                 setMessages(response.data);
             } catch (error) {
                 console.error('Error fetching messages:', error);
@@ -31,7 +30,7 @@ function MessagesPage() {
 
         const fetchQueueMessages = async () => {
             try {
-                const response = await axios.get(queueBaseUrl,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
+                const response = await apiClient.get(queueBaseUrl);
                 setQueueMessages(response.data);
             } catch (error) {
                 console.error('Error fetching queue messages:', error);
@@ -53,7 +52,7 @@ function MessagesPage() {
         }
 
         try {
-            const response = await axios.post(baseUrl, newMessage);
+            const response = await apiClient.post(baseUrl, newMessage);
             setMessages([...messages, response.data]);
             setNewMessage({ to: '', body: '', sender: '' });
         } catch (error) {
@@ -69,7 +68,7 @@ function MessagesPage() {
         }
 
         try {
-            const response = await axios.put(`${baseUrl}${editingMessage.id}/`, editingMessage,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
+            const response = await apiClient.put(`${baseUrl}${editingMessage.id}/`, editingMessage);
             setMessages(messages.map(msg =>
                 msg.id === editingMessage.id ? response.data : msg
             ));
@@ -82,7 +81,7 @@ function MessagesPage() {
 
     const handleDeleteMessage = async (id) => {
         try {
-            await axios.delete(`${baseUrl}${id}/`,{headers:{Authorization: `Bearer ${localStorage.getItem('accessToken')}`}});
+            await apiClient.delete(`${baseUrl}${id}/`);
             setMessages(messages.filter(msg => msg.id !== id));
             if (editingMessage?.id === id) {
                 setEditingMessage(null);

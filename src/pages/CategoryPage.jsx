@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
-import Nav from '../components/ui/Nav'; // Assuming you have a Nav component
 import axios from 'axios';
+import apiClient from '../api/axiosInstance';
 
 function CategoriesPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -18,15 +18,12 @@ function CategoriesPage() {
         is_active: ''
     });
 
-    const baseUrl = 'http://192.168.3.37:8001/admin/api/categories/';
-    const accessToken = localStorage.getItem('accessToken')
+    const baseUrl = '/admin/api/categories/';
     // Fetch categories on page load
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get(baseUrl,{
-                    headers: {Authorization: `Bearer ${accessToken}`}
-                });
+                const response = await apiClient.get(baseUrl);
                 setCategories(response.data);
             } catch (error) {
                 console.error('Error fetching categories:', error);
@@ -47,7 +44,7 @@ function CategoriesPage() {
         }
 
         try {
-            const response = await axios.post(baseUrl, newCategory);
+            const response = await apiClient.post(baseUrl, newCategory);
             setCategories([...categories, response.data]);
             setNewCategory({
                 name: '',
@@ -72,7 +69,7 @@ function CategoriesPage() {
         }
 
         try {
-            const response = await axios.put(`${baseUrl}${editingCategory.id}/`, editingCategory);
+            const response = await apiClient.put(`${baseUrl}${editingCategory.id}/`, editingCategory);
             setCategories(categories.map(cat =>
                 cat.id === editingCategory.id ? response.data : cat
             ));
@@ -85,7 +82,7 @@ function CategoriesPage() {
 
     const handleDeleteCategory = async (id) => {
         try {
-            await axios.delete(`${baseUrl}${id}/`);
+            await apiClient.delete(`${baseUrl}${id}/`);
             setCategories(categories.filter(cat => cat.id !== id));
             if (editingCategory?.id === id) {
                 setEditingCategory(null);
