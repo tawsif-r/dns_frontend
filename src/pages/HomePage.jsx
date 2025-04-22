@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import LineChart from '../components/LineChart'
 import apiClient from '../api/axiosInstance';
+import BarChart from '../components/BarChart';
 
 function HomePage() {
   const [categoriesData, setCategoriesData] = useState([])
@@ -40,7 +41,11 @@ function HomePage() {
       }
     ]
   };
-
+  
+  const chartData = categoriesData.forEach(category => {
+    console.log(category.id)
+    // TODO: filter all the subscribers with categories === category.id
+  })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,10 +69,14 @@ function HomePage() {
         setMessagesData(messagesResponse.data);
 
 
+        
+
+
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
+    chartData();
     fetchData();
   }, []);
 
@@ -147,6 +156,17 @@ function HomePage() {
             height="650px"
           />
         </div>
+        <div>
+      {/* <h1>Bar Chart Example</h1>
+      <BarChart
+        data={chartData}
+        title="Monthly Sales and Expenses"
+        xAxisLabel="Months"
+        yAxisLabel="Amount ($)"
+        width="80%"
+        height="400px"
+      /> */}
+    </div>
       </div>
 
 
