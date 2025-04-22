@@ -22,6 +22,17 @@ function HomePage() {
   const reportUrl = `${base}/reports/`;
   const messageUrl = `${base}/messages/`;
 
+  
+
+  const chartData = categoriesData.forEach(category => {
+    const category_subs = subscribersData.filter(subscriber =>{
+      return (subscriber.categories == category.id)})
+    console.log(category_subs) // y axis
+  })
+ 
+  
+  
+  
 
   const sampleData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Nov', 'Dec'],
