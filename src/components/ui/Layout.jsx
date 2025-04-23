@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Nav from './Nav';
 import Notifications from '../Notifications';
-import { Bell } from 'lucide-react';
+import { Bell,CircleUser } from 'lucide-react';
 
 const Layout = ({ children }) => {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -41,11 +41,9 @@ const Layout = ({ children }) => {
                 <Notifications onClose={() => setIsNotificationsOpen(false)} />
               </div>
             )}
+            
             <div className="p-3 hover:bg-gray-700 transition-colors cursor-pointer">
-              Quick Actions
-            </div>
-            <div className="p-3 hover:bg-gray-700 transition-colors cursor-pointer">
-              Profile
+            <CircleUser className="m-2" size={18} />
             </div>
           </div>
         </div>

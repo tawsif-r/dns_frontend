@@ -150,18 +150,20 @@ function HomePage() {
 
       <div className='border-2 m-2 p-4 col-span-3'>
         <div style={{ padding: '20px' }}>
-          <h1>Sales Report</h1>
+          <h1>Subscriber per category</h1>
           <LineChart
             data={sampleData}
-            title="Monthly Sales Comparison"
+            title="Subscribers for Different categories"
             xAxisLabel="Month"
             yAxisLabel="Sales ($)"
             height="650px"
           />
         </div>
+        
         <div>
         </div>
       </div>
+      
 
 
     </div>
