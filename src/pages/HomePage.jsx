@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import LineChart from '../components/LineChart'
 import apiClient from '../api/axiosInstance';
-import BarChart from '../components/BarChart';
+
 
 function HomePage() {
   const [categoriesData, setCategoriesData] = useState([])
@@ -25,27 +25,35 @@ function HomePage() {
   const messageUrl = `${base}/messages/`;
 
 
+
+  const chart = []
+  const chartData = categoriesData.forEach(category => {
+    const category_subscribers = subscribersData.filter(subscriber =>
+      subscriber.categories == category.id
+
+    );
+    chart.push({
+      category: category.name,
+      subscribers: category_subscribers.length
+    });
+  }
+  )
+  // console.log(chart);
+  // chart.forEach(item => console.log(item.category))
   const sampleData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Nov', 'Dec'],
+
+    labels: chart.map(item => item.category),
     datasets: [
       {
-        label: 'Sales 2023',
-        data: [65, 59, 80, 81, 56, 55,44,33,55,40,66],
+        label: 'subscribers',
+        data: chart.map(item => item.subscribers),
         // You can override any default styling here
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
-      {
-        label: 'Sales 2022',
-        data: [28, 48, 40, 19, 86, 27,44,21,61,23,66],
       }
     ]
   };
-  
-  const chartData = categoriesData.forEach(category => {
-    console.log(category.id)
-    // TODO: filter all the subscribers with categories === category.id
-  })
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,15 +76,10 @@ function HomePage() {
         setReportsData(reportsResponse.data);
         setMessagesData(messagesResponse.data);
 
-
-        
-
-
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-    chartData();
     fetchData();
   }, []);
 
@@ -157,16 +160,7 @@ function HomePage() {
           />
         </div>
         <div>
-      {/* <h1>Bar Chart Example</h1>
-      <BarChart
-        data={chartData}
-        title="Monthly Sales and Expenses"
-        xAxisLabel="Months"
-        yAxisLabel="Amount ($)"
-        width="80%"
-        height="400px"
-      /> */}
-    </div>
+        </div>
       </div>
 
 
