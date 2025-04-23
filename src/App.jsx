@@ -10,6 +10,7 @@ import TesterPage from './pages/TesterPage';
 import ReportsPage from './pages/ReportPage';
 import Layout from './components/ui/Layout';
 import LoginPage from './pages/LoginPage';
+import OperatorsPage from './pages/OperatorsPage';
 import SignUpPage from './pages/SignUpPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -27,6 +28,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage/>} />
           <Route path="/contents" element={<Layout><ContentPage /></Layout>} />
           <Route path="/categories" element={<Layout><CategoryPage /></Layout>} />
+          <Route path="/operators" element={<Layout><OperatorsPage /></Layout>} />
           <Route path="/subscribers" element={<Layout><SubscribersPage /></Layout>} />
           <Route path="/subscriptionPlans" element={<Layout><SubscriptionPlanPage /></Layout>} />
           <Route path="/messages" element={<Layout><MessagesPage /></Layout>} />
