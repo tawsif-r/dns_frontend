@@ -15,7 +15,7 @@ function LoginPage() {
 
     try {
       // Use apiClient instead of axios
-      const response = await apiClient.post('/auth/api/token/', { // Use relative path
+      const response = await apiClient.post('/auth/api/token/', {
         username,
         password,
       });
@@ -40,7 +40,7 @@ function LoginPage() {
     }
   };
 
-  // ... rest of your component remains the same
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
       <div className="border-2 border-gray-700 rounded-lg p-8 m-4 max-w-md w-full bg-gray-800">
