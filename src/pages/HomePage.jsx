@@ -154,8 +154,8 @@ function HomePage() {
           <LineChart
             data={sampleData}
             title="Subscribers for Different categories"
-            xAxisLabel="Month"
-            yAxisLabel="Sales ($)"
+            xAxisLabel="Categories"
+            yAxisLabel="Subscribers"
             height="650px"
           />
         </div>
