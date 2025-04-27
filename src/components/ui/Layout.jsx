@@ -65,7 +65,7 @@ const Layout = ({ children }) => {
         </main>
         
         {/* Right Sidebar - Fixed */}
-        <aside className="w-64 border-l-2 border-gray-700 bg-gray-800 hidden lg:block overflow-y-auto">
+        {/* <aside className="w-64 border-l-2 border-gray-700 bg-gray-800 hidden lg:block overflow-y-auto">
           <div className="p-6">
             <div className="border-2 border-gray-600 p-3 mb-4 rounded-md hover:border-cyan-600 transition-colors">
               Recent
@@ -74,7 +74,7 @@ const Layout = ({ children }) => {
               News
             </div>
           </div>
-        </aside>
+        </aside> */}
       </div>
 
       {/* Footer */}

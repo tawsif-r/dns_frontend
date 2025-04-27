@@ -8,6 +8,7 @@ import {
   Title,
   Tooltip,
   Legend,
+
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
@@ -36,7 +37,7 @@ const LineChart = ({
   pointHoverRadius = 6,
   maintainAspectRatio = true,
   width = '100%',
-  height = '400px'
+  height = '400px',
 }) => {
   // Default options
   const options = {
