@@ -15,6 +15,7 @@ import SignUpPage from './pages/SignUpPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './components/context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import TestSubscribersPage from './pages/TestSubscribersPage';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="/messages" element={<ProtectedRoute><Layout><MessagesPage /></Layout></ProtectedRoute>} />
             <Route path="/reports" element={<ProtectedRoute><Layout><ReportsPage /></Layout></ProtectedRoute>} />
             <Route path="/tester" element={<TesterPage />} />
+            <Route path="/subscriber_tester" element={<Layout><TestSubscribersPage /></Layout>} />
           </Routes>
         </AuthProvider>
       </div>
