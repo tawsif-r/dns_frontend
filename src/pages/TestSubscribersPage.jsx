@@ -107,6 +107,13 @@ function TestSubscribersPage() {
                                 onChange={(e) => setNewTestSubscriber({ ...newTestSubscriber, keyword: e.target.value })}
                                 className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                             />
+                            <input
+                                type="text"
+                                placeholder="Email *"
+                                value={newTestSubscriber.email}
+                                onChange={(e) => setNewTestSubscriber({ ...newTestSubscriber, email: e.target.value })}
+                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                            />
                             <button
                                 onClick={handleCreateTestSubscriber}
                                 className="font-bold bg-black text-white px-4 py-2 rounded border-2 border-cyan-600 hover:bg-gray-300 hover:text-black transition duration-500"
