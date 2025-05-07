@@ -132,6 +132,7 @@ function TestSubscribersPage() {
                                         <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">ID</th>
                                         <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">Phone Number</th>
                                         <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">Keyword</th>
+                                        <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">Email</th>
                                         <th className="px-4 py-3 text-right">Actions</th>
                                     </tr>
                                 </thead>
@@ -141,6 +142,7 @@ function TestSubscribersPage() {
                                             <td className="px-4 py-3 text-gray-300">{subscriber.id || 'N/A'}</td>
                                             <td className="px-4 py-3 text-gray-300">{subscriber.phone_number || 'N/A'}</td>
                                             <td className="px-4 py-3 text-gray-300">{subscriber.keyword || 'N/A'}</td>
+                                            <td className="px-4 py-3 text-gray-300">{subscriber.email || 'N/A'}</td>
                                             <td className="px-4 py-3 text-right whitespace-nowrap">
                                                 <button
                                                     onClick={() => handleDeleteTestSubscriber(subscriber.id)}
