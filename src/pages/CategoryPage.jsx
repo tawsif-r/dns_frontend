@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
-import Nav from '../components/ui/Nav'; // Assuming you have a Nav component
-import axios from 'axios';
+import apiClient from '../api/axiosInstance';
 
 function CategoriesPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -15,16 +14,15 @@ function CategoriesPage() {
         fcatid: '',
         icatid: '',
         description: '',
-        is_active: ''
+        is_active: 'true'
     });
 
-    const baseUrl = 'http://10.0.0.27:8000/admin/api/categories/';
-
+    const baseUrl = '/admin/api/categories/';
     // Fetch categories on page load
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get(baseUrl);
+                const response = await apiClient.get(baseUrl);
                 setCategories(response.data);
             } catch (error) {
                 console.error('Error fetching categories:', error);
@@ -34,9 +32,29 @@ function CategoriesPage() {
         fetchCategories();
     }, []);
 
+
     const filteredCategories = categories.filter((category) =>
         category?.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    // --- Data Preprocessing ---
+    const payload = {
+        ...newCategory,
+        fcatid: newCategory.fcatid === '' ? null : parseInt(newCategory.fcatid, 10),
+        icatid: newCategory.icatid === '' ? null : parseInt(newCategory.icatid, 10),
+        is_active: newCategory.is_active === 'true' ? true : (newCategory.is_active === 'false' ? false : null),
+
+    };
+    // --- Handle potential NaN from parseInt if input is not a number ---
+    if (isNaN(payload.fcatid) && newCategory.fcatid !== '') {
+        alert('FCat ID must be a number.');
+        return;
+    }
+    if (isNaN(payload.icatid) && newCategory.icatid !== '') {
+        alert('ICat ID must be a number.');
+        return;
+    }
+    // console.log("Sending payload:", payload);
+
 
     const handleCreateCategory = async () => {
         if (!newCategory.name || !newCategory.slug) {
@@ -45,7 +63,7 @@ function CategoriesPage() {
         }
 
         try {
-            const response = await axios.post(baseUrl, newCategory);
+            const response = await apiClient.post(baseUrl, payload);
             setCategories([...categories, response.data]);
             setNewCategory({
                 name: '',
@@ -55,7 +73,7 @@ function CategoriesPage() {
                 fcatid: '',
                 icatid: '',
                 description: '',
-                is_active: ''
+                is_active: 'true'
             });
         } catch (error) {
             console.error('Error creating category:', error);
@@ -70,7 +88,7 @@ function CategoriesPage() {
         }
 
         try {
-            const response = await axios.put(`${baseUrl}${editingCategory.id}/`, editingCategory);
+            const response = await apiClient.put(`${baseUrl}${editingCategory.id}/`, editingCategory);
             setCategories(categories.map(cat =>
                 cat.id === editingCategory.id ? response.data : cat
             ));
@@ -83,7 +101,7 @@ function CategoriesPage() {
 
     const handleDeleteCategory = async (id) => {
         try {
-            await axios.delete(`${baseUrl}${id}/`);
+            await apiClient.delete(`${baseUrl}${id}/`);
             setCategories(categories.filter(cat => cat.id !== id));
             if (editingCategory?.id === id) {
                 setEditingCategory(null);
@@ -97,7 +115,7 @@ function CategoriesPage() {
     const columns = Object.keys(newCategory);
 
     return (
-        < div className = "px-4 py-8" >
+        < div className="px-4 py-8" >
             <div className="border-2 rounded-lg shadow-lg">
                 <div className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-t-lg">
                     <div className="flex items-center">
@@ -220,7 +238,7 @@ function CategoriesPage() {
                                                     column === 'description' ? (
                                                         <td key={column} className="px-4 py-2">
                                                             <textarea
-                                                                value={editingCategory[column]}
+                                                                value={editingCategory[column] ?? ""}
                                                                 onChange={(e) => setEditingCategory({ ...editingCategory, [column]: e.target.value })}
                                                                 className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
                                                                 rows="2"
@@ -241,7 +259,7 @@ function CategoriesPage() {
                                                         <td key={column} className="px-4 py-2">
                                                             <input
                                                                 type="text"
-                                                                value={editingCategory[column]}
+                                                                value={editingCategory[column] ?? ""}
                                                                 onChange={(e) => setEditingCategory({ ...editingCategory, [column]: e.target.value })}
                                                                 className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
                                                             />
@@ -298,12 +316,12 @@ function CategoriesPage() {
                     </div>
                 </div>
             </div>
-             
 
 
-        {/**content end */ }
+
+            {/**content end */}
         </div>
-        
+
     );
 }
 

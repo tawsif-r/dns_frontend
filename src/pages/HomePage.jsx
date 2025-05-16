@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import LineChart from '../components/LineChart'
+import apiClient from '../api/axiosInstance';
+
 
 function HomePage() {
   const [categoriesData, setCategoriesData] = useState([])
@@ -13,6 +15,7 @@ function HomePage() {
 
 
   const base = "http://10.0.0.27:8000/admin/api";
+  const base = "/admin/api";
 
   const categoryUrl = `${base}/categories/`
   const contentUrl = `${base}/contents/`
@@ -22,31 +25,32 @@ function HomePage() {
   const reportUrl = `${base}/reports/`;
   const messageUrl = `${base}/messages/`;
 
-  
 
+
+  const chart = []
   const chartData = categoriesData.forEach(category => {
-    const category_subs = subscribersData.filter(subscriber =>{
-      return (subscriber.categories == category.id)})
-    console.log(category_subs) // y axis
-  })
- 
-  
-  
-  
+    const category_subscribers = subscribersData.filter(subscriber =>
+      subscriber.categories == category.id
 
+    );
+    chart.push({
+      category: category.name,
+      subscribers: category_subscribers.length
+    });
+  }
+  )
+  // console.log(chart);
+  // chart.forEach(item => console.log(item.category))
   const sampleData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Nov', 'Dec'],
+
+    labels: chart.map(item => item.category),
     datasets: [
       {
-        label: 'Sales 2023',
-        data: [65, 59, 80, 81, 56, 55,44,33,55,40,66],
+        label: 'subscribers',
+        data: chart.map(item => item.subscribers),
         // You can override any default styling here
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
-      {
-        label: 'Sales 2022',
-        data: [28, 48, 40, 19, 86, 27,44,21,61,23,66],
       }
     ]
   };
@@ -56,13 +60,13 @@ function HomePage() {
     const fetchData = async () => {
       try {
         const [categoriesResponse, contentsResponse, subscribersResponse, messagesQResponse, subscriptionsResponse, reportsResponse, messagesResponse] = await Promise.all([
-          axios.get(categoryUrl),
-          axios.get(contentUrl),
-          axios.get(subscriberUrl),
-          axios.get(messagesQUrl),
-          axios.get(subscriptionUrl),
-          axios.get(reportUrl),
-          axios.get(messageUrl),
+          apiClient.get(categoryUrl),
+          apiClient.get(contentUrl),
+          apiClient.get(subscriberUrl),
+          apiClient.get(messagesQUrl),
+          apiClient.get(subscriptionUrl),
+          apiClient.get(reportUrl),
+          apiClient.get(messageUrl),
         ]);
 
         setCategoriesData(categoriesResponse.data);
@@ -72,7 +76,6 @@ function HomePage() {
         setSubscriptionsData(subscriptionsResponse.data);
         setReportsData(reportsResponse.data);
         setMessagesData(messagesResponse.data);
-
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -148,21 +151,24 @@ function HomePage() {
 
       <div className='border-2 m-2 p-4 col-span-3'>
         <div style={{ padding: '20px' }}>
-          <h1>Sales Report</h1>
+          <h1>Subscriber per category</h1>
           <LineChart
             data={sampleData}
-            title="Monthly Sales Comparison"
-            xAxisLabel="Month"
-            yAxisLabel="Sales ($)"
+            title="Subscribers for Different categories"
+            xAxisLabel="Categories"
+            yAxisLabel="Subscribers"
             height="650px"
           />
         </div>
+        
+        <div>
+        </div>
       </div>
+      
 
 
     </div>
   );
 }
-
 
 export default HomePage;

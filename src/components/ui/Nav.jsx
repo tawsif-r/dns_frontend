@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, ChevronLeft, Home, FileText, Users, CreditCard, Tag, MessageSquare, BarChart2, TestTube } from 'lucide-react';
+import { Menu, ChevronLeft, Phone, Home, FileText, Users, CreditCard, Tag, MessageSquare, BarChart2, TestTube } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleMenu } from '../../redux/Nav';
 import { Link, useLocation } from 'react-router-dom';
@@ -16,6 +16,7 @@ const Nav = () => {
     { path: '/subscribers', label: 'Subscribers', icon: <Users size={18} /> },
     { path: '/subscriptionPlans', label: 'Subscription', icon: <CreditCard size={18} /> },
     { path: '/categories', label: 'Categories', icon: <Tag size={18} /> },
+    { path: '/operators', label: 'Operators', icon: <Phone size={18} /> },
     { path: '/messages', label: 'Messages', icon: <MessageSquare size={18} /> },
     { path: '/reports', label: 'Report', icon: <BarChart2 size={18} /> },
     { path: '/tester', label: 'Tester', icon: <TestTube size={18} /> },

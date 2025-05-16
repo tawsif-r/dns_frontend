@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
-import Nav from '../components/ui/Nav'; // Assuming you have a Nav component
+import apiClient from '../api/axiosInstance';
 import axios from 'axios';
 
 function ReportsPage() {
@@ -21,7 +21,7 @@ function ReportsPage() {
     useEffect(() => {
         const fetchReports = async () => {
             try {
-                const response = await axios.get(baseUrl);
+                const response = await apiClient.get(baseUrl);
                 setReports(response.data);
             } catch (error) {
                 console.error('Error fetching reports:', error);
@@ -42,7 +42,7 @@ function ReportsPage() {
         }
 
         try {
-            const response = await axios.post(baseUrl, newReport);
+            const response = await apiClient.post(baseUrl, newReport);
             setReports([...reports, response.data]);
             setNewReport({
                 subscriber: '',
@@ -64,7 +64,7 @@ function ReportsPage() {
         }
 
         try {
-            const response = await axios.put(`${baseUrl}${editingReport.id}/`, editingReport);
+            const response = await apiClient.put(`${baseUrl}${editingReport.id}/`, editingReport);
             setReports(reports.map(rep =>
                 rep.id === editingReport.id ? response.data : rep
             ));
@@ -171,7 +171,7 @@ function ReportsPage() {
                     </div>
 
                     {/* Reports Table */}
-                    <div className="border-2 rounded-lg">
+                    <div className="overflow-x-auto border-2 rounded-lg">
                         {filteredReports.length > 0 ? (
                             <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
                                 <thead>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
-import Nav from '../components/ui/Nav'; // Assuming you have a Nav component
-import axios from 'axios';
+import apiClient from '../api/axiosInstance';
 import MessagesQList from '../components/MessagesQList'; // Import the new component
 
 function MessagesPage() {
@@ -22,7 +21,7 @@ function MessagesPage() {
     useEffect(() => {
         const fetchMessages = async () => {
             try {
-                const response = await axios.get(baseUrl);
+                const response = await apiClient.get(baseUrl);
                 setMessages(response.data);
             } catch (error) {
                 console.error('Error fetching messages:', error);
@@ -31,7 +30,7 @@ function MessagesPage() {
 
         const fetchQueueMessages = async () => {
             try {
-                const response = await axios.get(queueBaseUrl);
+                const response = await apiClient.get(queueBaseUrl);
                 setQueueMessages(response.data);
             } catch (error) {
                 console.error('Error fetching queue messages:', error);
@@ -53,7 +52,7 @@ function MessagesPage() {
         }
 
         try {
-            const response = await axios.post(baseUrl, newMessage);
+            const response = await apiClient.post(baseUrl, newMessage);
             setMessages([...messages, response.data]);
             setNewMessage({ to: '', body: '', sender: '' });
         } catch (error) {
@@ -69,7 +68,7 @@ function MessagesPage() {
         }
 
         try {
-            const response = await axios.put(`${baseUrl}${editingMessage.id}/`, editingMessage);
+            const response = await apiClient.put(`${baseUrl}${editingMessage.id}/`, editingMessage);
             setMessages(messages.map(msg =>
                 msg.id === editingMessage.id ? response.data : msg
             ));
@@ -82,7 +81,7 @@ function MessagesPage() {
 
     const handleDeleteMessage = async (id) => {
         try {
-            await axios.delete(`${baseUrl}${id}/`);
+            await apiClient.delete(`${baseUrl}${id}/`);
             setMessages(messages.filter(msg => msg.id !== id));
             if (editingMessage?.id === id) {
                 setEditingMessage(null);
