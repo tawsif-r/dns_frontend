@@ -37,7 +37,7 @@ function TesterPage() {
         const fetchContents = async () => {
             try {
                 const response = await apiClient.get(baseUrl);
-                console.log('Contents API Response:', response.data); // Debug response
+                console.log('Contents API Response:', response.data);
                 const data = Array.isArray(response.data) ? response.data : response.data.data || [];
                 setContents(data);
             } catch (error) {
@@ -53,7 +53,7 @@ function TesterPage() {
         const fetchCategories = async () => {
             try {
                 const response = await axios.get(categoriesUrl);
-                console.log('Categories API Response:', response.data); // Debug response
+                console.log('Categories API Response:', response.data);
                 const data = Array.isArray(response.data) ? response.data : response.data.data || [];
                 setCategories(data);
             } catch (error) {
@@ -95,33 +95,91 @@ function TesterPage() {
         setJobs(jobs.filter((_, i) => i !== index));
     };
 
+    // Fixed handleJobChange function that properly handles nested objects
     const handleJobChange = (index, field, value, nestedField = null, subField = null) => {
+        console.log('handleJobChange:', { index, field, value, nestedField, subField }); // Debug
         const newJobs = [...jobs];
-        if (subField && nestedField) {
-            newJobs[index].job_details[nestedField][subField] = value;
-        } else if (nestedField) {
-            newJobs[index].job_details[nestedField] = value;
-        } else {
-            newJobs[index][field] = value;
+        
+        try {
+            if (nestedField && subField) {
+                // Handle double nested field (like job_details.skillRequired.otherSkill)
+                newJobs[index].job_details = {
+                    ...newJobs[index].job_details,
+                    [nestedField]: {
+                        ...newJobs[index].job_details[nestedField],
+                        [subField]: value
+                    }
+                };
+            } else if (nestedField) {
+                // Handle nested field (like job_details.jobUrl)
+                newJobs[index].job_details = {
+                    ...newJobs[index].job_details,
+                    [nestedField]: value
+                };
+            } else {
+                // Handle top level field (like company_name)
+                newJobs[index][field] = value;
+            }
+            
+            setJobs(newJobs);
+        } catch (error) {
+            console.error('Error in handleJobChange:', error);
         }
-        setJobs(newJobs);
+    };
+
+    // Function to validate job data before submission
+    const validateJobData = (jobsData) => {
+        for (let i = 0; i < jobsData.length; i++) {
+            const job = jobsData[i];
+            
+            // Validate required fields
+            if (!job.company_name || !job.job_title || !job.category || !job.deadline) {
+                alert(`Job ${i + 1}: Please fill in all required fields (Company Name, Job Title, Category, and Deadline)`);
+                return false;
+            }
+            
+            // Validate job_id is a number
+            if (job.job_id && isNaN(Number(job.job_id))) {
+                alert(`Job ${i + 1}: Job ID must be a number`);
+                return false;
+            }
+            
+            // Validate job_details required fields
+            if (!job.job_details.jobUrl || !job.job_details.jobTitle || 
+                !job.job_details.location || !job.job_details.companyName) {
+                alert(`Job ${i + 1}: Please fill in all required job details (Job URL, Job Title, Location, Company Name)`);
+                return false;
+            }
+        }
+        
+        return true;
     };
 
     const handleBulkCreate = async () => {
-        const invalidJobs = jobs.some(job => 
-            !job.company_name || !job.job_title || !job.job_id || !job.category || !job.deadline ||
-            !job.job_details.jobUrl || !job.job_details.deadLine || !job.job_details.jobTitle ||
-            !job.job_details.location || !job.job_details.companyLogo || !job.job_details.companyName
-        );
-
-        if (invalidJobs) {
-            alert('Please fill in all required fields for each job listing');
+        // Clone and prepare jobs data for submission
+        const jobsToSubmit = jobs.map(job => ({
+            ...job,
+            job_id: job.job_id ? Number(job.job_id) : '',  // Convert to number if not empty
+        }));
+        
+        // Validate job data
+        if (!validateJobData(jobsToSubmit)) {
             return;
         }
 
         try {
-            const response = await axios.post(bulkCreateUrl, jobs);
+            console.log('Submitting jobs:', jobsToSubmit);
+            
+            const response = await axios.post(bulkCreateUrl, jobsToSubmit, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            console.log('Success response:', response.data);
             alert('Jobs created successfully!');
+            
+            // Reset form after successful submission
             setJobs([{
                 company_name: '',
                 job_title: '',
@@ -141,7 +199,7 @@ function TesterPage() {
             }]);
         } catch (error) {
             console.error('Error creating jobs:', error);
-            alert('Failed to create jobs: ' + (error.response?.data || error.message));
+            alert('Failed to create jobs: ' + (error.response?.data?.message || error.message));
         }
     };
 
@@ -249,7 +307,7 @@ function TesterPage() {
                                     <div>
                                         <label className="block text-sm font-medium text-gray-300">Job ID</label>
                                         <input
-                                            type="text"
+                                            type="number"
                                             value={job.job_id}
                                             onChange={(e) => handleJobChange(index, 'job_id', e.target.value)}
                                             className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
@@ -290,7 +348,7 @@ function TesterPage() {
                                                 <input
                                                     type="url"
                                                     value={job.job_details.jobUrl}
-                                                    onChange={(e) => handleJobChange(index, 'jobUrl', e.target.value, 'job_details')}
+                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'jobUrl')}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                     required
                                                 />
@@ -300,7 +358,7 @@ function TesterPage() {
                                                 <input
                                                     type="text"
                                                     value={job.job_details.deadLine}
-                                                    onChange={(e) => handleJobChange(index, 'deadLine', e.target.value, 'job_details')}
+                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'deadLine')}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                     required
                                                 />
@@ -310,7 +368,7 @@ function TesterPage() {
                                                 <input
                                                     type="text"
                                                     value={job.job_details.jobTitle}
-                                                    onChange={(e) => handleJobChange(index, 'jobTitle', e.target.value, 'job_details')}
+                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'jobTitle')}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                     required
                                                 />
@@ -320,7 +378,7 @@ function TesterPage() {
                                                 <input
                                                     type="text"
                                                     value={job.job_details.location}
-                                                    onChange={(e) => handleJobChange(index, 'location', e.target.value, 'job_details')}
+                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'location')}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                     required
                                                 />
@@ -330,7 +388,7 @@ function TesterPage() {
                                                 <input
                                                     type="url"
                                                     value={job.job_details.companyLogo}
-                                                    onChange={(e) => handleJobChange(index, 'companyLogo', e.target.value, 'job_details')}
+                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'companyLogo')}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                     required
                                                 />
@@ -340,7 +398,7 @@ function TesterPage() {
                                                 <input
                                                     type="text"
                                                     value={job.job_details.companyName}
-                                                    onChange={(e) => handleJobChange(index, 'companyName', e.target.value, 'job_details')}
+                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'companyName')}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                     required
                                                 />
@@ -350,7 +408,7 @@ function TesterPage() {
                                                 <input
                                                     type="text"
                                                     value={job.job_details.skillRequired.otherSkill}
-                                                    onChange={(e) => handleJobChange(index, 'otherSkill', e.target.value, 'job_details', 'skillRequired')}
+                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'skillRequired', 'otherSkill')}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                 />
                                             </div>
@@ -358,7 +416,7 @@ function TesterPage() {
                                                 <label className="block text-sm font-medium text-gray-300">Educational Requirements</label>
                                                 <textarea
                                                     value={job.job_details.skillRequired.educational}
-                                                    onChange={(e) => handleJobChange(index, 'educational', e.target.value, 'job_details', 'skillRequired')}
+                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'skillRequired', 'educational')}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                     rows="4"
                                                 />
@@ -368,9 +426,8 @@ function TesterPage() {
                                                 <input
                                                     type="text"
                                                     value={job.job_details.experienceRequired.year}
-                                                    onChange={(e) => handleJobChange(index, 'year', e.target.value, 'job_details', 'experienceRequired')}
+                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'experienceRequired', 'year')}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
-                                                    required
                                                 />
                                             </div>
                                             <div>
@@ -378,7 +435,7 @@ function TesterPage() {
                                                 <input
                                                     type="text"
                                                     value={job.job_details.experienceRequired.workArea}
-                                                    onChange={(e) => handleJobChange(index, 'workArea', e.target.value, 'job_details', 'experienceRequired')}
+                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'experienceRequired', 'workArea')}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                 />
                                             </div>
@@ -387,7 +444,7 @@ function TesterPage() {
                                                 <input
                                                     type="text"
                                                     value={job.job_details.experienceRequired.organization}
-                                                    onChange={(e) => handleJobChange(index, 'organization', e.target.value, 'job_details', 'experienceRequired')}
+                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'experienceRequired', 'organization')}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                 />
                                             </div>
@@ -395,7 +452,7 @@ function TesterPage() {
                                                 <label className="block text-sm font-medium text-gray-300">Additional Requirements</label>
                                                 <textarea
                                                     value={job.job_details.experienceRequired.additionalRequirements}
-                                                    onChange={(e) => handleJobChange(index, 'additionalRequirements', e.target.value, 'job_details', 'experienceRequired')}
+                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'experienceRequired', 'additionalRequirements')}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                     rows="4"
                                                 />
