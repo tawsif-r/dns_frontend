@@ -33,7 +33,7 @@ function App() {
           <Route path="/subscriptionPlans" element={<Layout><SubscriptionPlanPage /></Layout>} />
           <Route path="/messages" element={<Layout><MessagesPage /></Layout>} />
           <Route path="/reports" element={<Layout><ReportsPage/></Layout>} />
-          <Route path="/tester" element={<TesterPage />} />
+          {/* <Route path="/tester" element={<TesterPage />} /> */}
         </Routes>
       </div>
     </Router>

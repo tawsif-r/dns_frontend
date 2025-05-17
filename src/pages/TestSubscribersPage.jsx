@@ -12,7 +12,6 @@ function TestSubscribersPage() {
 
     const baseUrl = '/admin/api/test_subscribers/';
 
-    // Fetch test subscribers on page load
     useEffect(() => {
         const fetchTestSubscribers = async () => {
             try {
