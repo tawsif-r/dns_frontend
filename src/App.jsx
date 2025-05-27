@@ -46,9 +46,9 @@ function App() {
             <Route path="/subscriptionPlans" element={<ProtectedRoute><Layout><SubscriptionPlanPage /></Layout></ProtectedRoute>} />
             <Route path="/messages" element={<ProtectedRoute><Layout><MessagesPage /></Layout></ProtectedRoute>} />
             <Route path="/reports" element={<ProtectedRoute><Layout><ReportsPage /></Layout></ProtectedRoute>} /> */}
-            <Route path="/tester" element={<Layout><TestSubscribersPage /></Layout>} />
+            <Route path="/subscribertester" element={<Layout><TestSubscribersPage /></Layout>} />
             <Route path="/test" element={<Layout><TesterPage /></Layout>} />
-            <Route path="/testJobEntry" element={<Layout><JobEntryPage /></Layout>} />
+            <Route path="/joblisttester" element={<Layout><JobEntryPage /></Layout>} />
             {/* <Route path="/subscriber_tester" element={<Layout><TestSubscribersPage /></Layout>} /> */}
           </Routes>
         {/* </AuthProvider> */}

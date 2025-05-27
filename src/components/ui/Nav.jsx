@@ -19,7 +19,8 @@ const Nav = () => {
     { path: '/operators', label: 'Operators', icon: <Phone size={18} /> },
     { path: '/messages', label: 'Messages', icon: <MessageSquare size={18} /> },
     { path: '/reports', label: 'Report', icon: <BarChart2 size={18} /> },
-    { path: '/tester', label: 'Tester', icon: <TestTube size={18} /> },
+    { path: '/subscribertester', label: 'Tester', icon: <TestTube size={18} /> },
+    { path: '/joblisttester', label: 'Tester', icon: <TestTube size={18} /> },
   ];
 
   return (

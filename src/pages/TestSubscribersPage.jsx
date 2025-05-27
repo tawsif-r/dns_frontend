@@ -7,7 +7,8 @@ function TestSubscribersPage() {
     const [testSubscribers, setTestSubscribers] = useState([]);
     const [newTestSubscriber, setNewTestSubscriber] = useState({
         phone_number: '',
-        keyword: ''
+        keyword: '',
+        email: '' // Added missing email field
     });
 
     const baseUrl = '/admin/api/test_subscribers/';
@@ -32,18 +33,27 @@ function TestSubscribersPage() {
     );
 
     const handleCreateTestSubscriber = async () => {
-        if (!newTestSubscriber.phone_number || !newTestSubscriber.keyword) {
-            alert('Please fill in required fields (Phone Number, Keyword)');
+        // Updated validation to include email
+        if (!newTestSubscriber.phone_number || !newTestSubscriber.keyword || !newTestSubscriber.email) {
+            alert('Please fill in all required fields (Phone Number, Keyword, Email)');
             return;
         }
 
         try {
+            console.log('Sending data:', newTestSubscriber); // Debug log
             const response = await apiClient.post(baseUrl, newTestSubscriber);
             setTestSubscribers([...testSubscribers, response.data]);
-            setNewTestSubscriber({ phone_number: '', keyword: '' });
+            setNewTestSubscriber({ phone_number: '', keyword: '', email: '' }); // Reset email too
         } catch (error) {
             console.error('Error creating test subscriber:', error);
-            alert('Failed to create test subscriber');
+            // More detailed error logging
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+                console.error('Response status:', error.response.status);
+                alert(`Failed to create test subscriber: ${error.response.data?.message || error.response.status}`);
+            } else {
+                alert('Failed to create test subscriber: Network error');
+            }
         }
     };
 
@@ -107,7 +117,7 @@ function TestSubscribersPage() {
                                 className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                             />
                             <input
-                                type="text"
+                                type="email"
                                 placeholder="Email *"
                                 value={newTestSubscriber.email}
                                 onChange={(e) => setNewTestSubscriber({ ...newTestSubscriber, email: e.target.value })}
