@@ -11,6 +11,7 @@ import ReportsPage from './pages/ReportPage';
 import Layout from './components/ui/Layout';
 import LoginPage from './pages/LoginPage';
 import OperatorsPage from './pages/OperatorsPage';
+import JobEntryPage from './pages/JobEntryPage';
 import SignUpPage from './pages/SignUpPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './components/context/AuthContext';
@@ -47,6 +48,7 @@ function App() {
             <Route path="/reports" element={<ProtectedRoute><Layout><ReportsPage /></Layout></ProtectedRoute>} /> */}
             <Route path="/tester" element={<Layout><TestSubscribersPage /></Layout>} />
             <Route path="/test" element={<Layout><TesterPage /></Layout>} />
+            <Route path="/testJobEntry" element={<Layout><JobEntryPage /></Layout>} />
             {/* <Route path="/subscriber_tester" element={<Layout><TestSubscribersPage /></Layout>} /> */}
           </Routes>
         {/* </AuthProvider> */}

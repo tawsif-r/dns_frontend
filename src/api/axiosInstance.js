@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Import inside component or setup separately
 
 // --- Configuration ---
-const API_BASE_URL = 'http://192.168.3.37:8001'; // Your API base URL
+const API_BASE_URL = 'http://192.168.3.35:8001'; // Your API base URL
 const REFRESH_TOKEN_URL = '/auth/api/token/refresh/';
 const LOGIN_URL = '/login'; // Your login page route
 

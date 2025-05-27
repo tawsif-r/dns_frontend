@@ -3,7 +3,7 @@ import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
 import apiClient from '../api/axiosInstance';
 import axios from 'axios';
 
-function TesterPage() {
+function JobEntryPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [contents, setContents] = useState([]);
     const [editingContent, setEditingContent] = useState(null);
@@ -145,8 +145,7 @@ function TesterPage() {
             }
             
             // Validate job_details required fields
-            if (!job.job_details.jobUrl || !job.job_details.jobTitle || 
-                !job.job_details.location || !job.job_details.companyName) {
+            if (!job.job_details.jobUrl) {
                 alert(`Job ${i + 1}: Please fill in all required job details (Job URL, Job Title, Location, Company Name)`);
                 return false;
             }
@@ -353,7 +352,7 @@ function TesterPage() {
                                                     required
                                                 />
                                             </div>
-                                            <div>
+                                            {/* <div>
                                                 <label className="block text-sm font-medium text-gray-300">Job Deadline (Text)</label>
                                                 <input
                                                     type="text"
@@ -362,8 +361,8 @@ function TesterPage() {
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                     required
                                                 />
-                                            </div>
-                                            <div>
+                                            </div> */}
+                                            {/* <div>
                                                 <label className="block text-sm font-medium text-gray-300">Job Title (Detail)</label>
                                                 <input
                                                     type="text"
@@ -372,8 +371,8 @@ function TesterPage() {
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                     required
                                                 />
-                                            </div>
-                                            <div>
+                                            </div> */}
+                                            {/* <div>
                                                 <label className="block text-sm font-medium text-gray-300">Location</label>
                                                 <input
                                                     type="text"
@@ -382,8 +381,8 @@ function TesterPage() {
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                     required
                                                 />
-                                            </div>
-                                            <div>
+                                            </div> */}
+                                            {/* <div>
                                                 <label className="block text-sm font-medium text-gray-300">Company Logo URL</label>
                                                 <input
                                                     type="url"
@@ -392,8 +391,8 @@ function TesterPage() {
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                     required
                                                 />
-                                            </div>
-                                            <div>
+                                            </div> */}
+                                            {/* <div>
                                                 <label className="block text-sm font-medium text-gray-300">Company Name (Detail)</label>
                                                 <input
                                                     type="text"
@@ -402,8 +401,8 @@ function TesterPage() {
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                     required
                                                 />
-                                            </div>
-                                            <div>
+                                            </div> */}
+                                            {/* <div>
                                                 <label className="block text-sm font-medium text-gray-300">Other Skills</label>
                                                 <input
                                                     type="text"
@@ -411,7 +410,7 @@ function TesterPage() {
                                                     onChange={(e) => handleJobChange(index, null, e.target.value, 'skillRequired', 'otherSkill')}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                 />
-                                            </div>
+                                            </div> */}
                                             <div>
                                                 <label className="block text-sm font-medium text-gray-300">Educational Requirements</label>
                                                 <textarea
@@ -430,7 +429,7 @@ function TesterPage() {
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                 />
                                             </div>
-                                            <div>
+                                            {/* <div>
                                                 <label className="block text-sm font-medium text-gray-300">Work Area</label>
                                                 <input
                                                     type="text"
@@ -438,8 +437,8 @@ function TesterPage() {
                                                     onChange={(e) => handleJobChange(index, null, e.target.value, 'experienceRequired', 'workArea')}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                 />
-                                            </div>
-                                            <div>
+                                            </div> */}
+                                            {/* <div>
                                                 <label className="block text-sm font-medium text-gray-300">Organization</label>
                                                 <input
                                                     type="text"
@@ -447,8 +446,8 @@ function TesterPage() {
                                                     onChange={(e) => handleJobChange(index, null, e.target.value, 'experienceRequired', 'organization')}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                 />
-                                            </div>
-                                            <div>
+                                            </div> */}
+                                            {/* <div>
                                                 <label className="block text-sm font-medium text-gray-300">Additional Requirements</label>
                                                 <textarea
                                                     value={job.job_details.experienceRequired.additionalRequirements}
@@ -456,7 +455,7 @@ function TesterPage() {
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                     rows="4"
                                                 />
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
@@ -573,4 +572,4 @@ function TesterPage() {
     );
 }
 
-export default TesterPage;
+export default JobEntryPage;
