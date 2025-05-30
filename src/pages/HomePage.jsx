@@ -15,7 +15,7 @@ function HomePage() {
 
 
   const base = "http://10.0.0.27:8000/admin/api";
-  const base = "/admin/api";
+
 
   const categoryUrl = `${base}/categories/`
   const contentUrl = `${base}/contents/`

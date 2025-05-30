@@ -16,6 +16,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './components/context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import TestSubscribersPage from './pages/TestSubscribersPage';
+import CharCount from './pages/CharCountPage';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             <Route path="/messages" element={<ProtectedRoute><Layout><MessagesPage /></Layout></ProtectedRoute>} />
             <Route path="/reports" element={<ProtectedRoute><Layout><ReportsPage /></Layout></ProtectedRoute>} />
             <Route path="/tester" element={<Layout><TestSubscribersPage /></Layout>} />
+            <Route path="/charCount" element={<Layout><CharCount /></Layout>} />
             {/* <Route path="/subscriber_tester" element={<Layout><TestSubscribersPage /></Layout>} /> */}
           </Routes>
         </AuthProvider>
