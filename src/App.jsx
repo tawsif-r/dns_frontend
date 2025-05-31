@@ -16,6 +16,7 @@ import SignUpPage from './pages/SignUpPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './components/context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import JobEntryTestPage from './pages/JobEntryPageTest';
 import TestSubscribersPage from './pages/TestSubscribersPage';
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
             <Route path="/reports" element={<ProtectedRoute><Layout><ReportsPage /></Layout></ProtectedRoute>} /> */}
             <Route path="/subscribertester" element={<Layout><TestSubscribersPage /></Layout>} />
             <Route path="/joblisttester" element={<Layout><JobEntryPage /></Layout>} />
+            <Route path="/jobtester" element={<Layout><JobEntryTestPage /></Layout>} />
             {/* <Route path="/subscriber_tester" element={<Layout><TestSubscribersPage /></Layout>} /> */}
           </Routes>
         {/* </AuthProvider> */}
