@@ -25,7 +25,8 @@ function JobEntryTestPage() {
                 companyName: '',
                 skillRequired: { otherSkill: '', educational: '' },
                 experienceRequired: { year: '', workArea: '', organization: '', additionalRequirements: '' }
-            }
+            },
+            source: ''
         }
     ]);
 
@@ -33,15 +34,27 @@ function JobEntryTestPage() {
     const categoriesUrl = 'http://192.168.3.35:8002/content/job_categories/';
     const bulkCreateUrl = 'http://192.168.3.35:8002/content/job_list/bulk_create/';
 
-    // Function to generate unique job ID
+    // Function to generate unique alphanumeric job ID (e.g., MAN908293)
     function generateUniqueJobId() {
+        const prefix = 'MAN'; // Fixed prefix, or use randomPrefix() for random
         let jobId;
         do {
-            // Generate a random 7-digit number
-            jobId = Math.floor(1000000 + Math.random() * 9000000);
+            // Generate a random 6-digit number
+            const number = Math.floor(100000 + Math.random() * 900000);
+            jobId = `${prefix}${number}`;
         } while (usedJobIds.has(jobId));
         
         return jobId;
+    }
+
+    // Optional: Function to generate a random 3-letter prefix
+    function randomPrefix() {
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let prefix = '';
+        for (let i = 0; i < 3; i++) {
+            prefix += letters.charAt(Math.floor(Math.random() * letters.length));
+        }
+        return prefix;
     }
 
     // Function to reserve a job ID
@@ -80,7 +93,7 @@ function JobEntryTestPage() {
             try {
                 const response = await axios.get(categoriesUrl);
                 console.log('Categories API Response:', response.data);
-                const data = Array.isArray(response.data) ? response.data : response.data.data || [];
+                const data = Array.isArray(response.data) ? response.data: response.data.data || [];
                 setCategories(data);
             } catch (error) {
                 console.error('Error fetching Categories:', error);
@@ -99,7 +112,7 @@ function JobEntryTestPage() {
     // Ensure contents is an array before filtering
     const filteredContents = Array.isArray(contents)
         ? contents.filter((content) =>
-            content.title?.toLowerCase().includes(searchTerm.toLowerCase())
+            content.title?.toLowerCase().includes(searchTerm.toLowerCase()) || content.external_id?.includes(searchTerm)
         )
         : [];
 
@@ -122,7 +135,9 @@ function JobEntryTestPage() {
                 companyName: '',
                 skillRequired: { otherSkill: '', educational: '' },
                 experienceRequired: { year: '', workArea: '', organization: '', additionalRequirements: '' }
-            }
+            },
+            created_at: '',
+            source: ''
         }]);
     };
 
@@ -192,9 +207,9 @@ function JobEntryTestPage() {
                 return false;
             }
 
-            // Job ID is auto-generated and should always be valid
-            if (!job.job_id || isNaN(Number(job.job_id))) {
-                alert(`Job ${i + 1}: Invalid Job ID. Please regenerate the Job ID.`);
+            // Validate job ID
+            if (!job.job_id || !/^[A-Z]{3}\d{6}$/.test(job.job_id)) {
+                alert(`Job ${i + 1}: Invalid Job ID format. Please regenerate the Job ID.`);
                 return false;
             }
 
@@ -217,7 +232,9 @@ function JobEntryTestPage() {
             job.deadline || '',
             job.job_details.skillRequired.educational || '',
             job.job_details.experienceRequired.year || '',
-            job.job_details.jobUrl || ''
+            job.job_details.jobUrl || '',
+            job.created_at || '',
+            job.source || ''
         ];
 
         // Join with spaces for readability
@@ -229,7 +246,7 @@ function JobEntryTestPage() {
         // Clone and prepare jobs data for submission
         const jobsToSubmit = jobs.map(job => ({
             ...job,
-            job_id: Number(job.job_id),  // Convert to number
+            job_id: job.job_id,  // Keep as string since it's alphanumeric
         }));
 
         // Validate job data
@@ -268,7 +285,8 @@ function JobEntryTestPage() {
                     companyName: '',
                     skillRequired: { otherSkill: '', educational: '' },
                     experienceRequired: { year: '', workArea: '', organization: '', additionalRequirements: '' }
-                }
+                },
+                source: ''
             }]);
         } catch (error) {
             console.error('Error creating jobs:', error);
@@ -412,7 +430,7 @@ function JobEntryTestPage() {
                                                 🔄
                                             </button>
                                         </div>
-                                        <p className="text-xs text-gray-400 mt-1">Auto-generated unique 7-digit ID</p>
+                                        <p className="text-xs text-gray-400 mt-1">Auto-generated unique alphanumeric ID (e.g., MAN908293)</p>
                                     </div>
                                     
                                     <div>
@@ -458,6 +476,15 @@ function JobEntryTestPage() {
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                 />
                                             </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-300">Source: (bdjobs, manual)</label>
+                                                <input
+                                                    type="text"
+                                                    value={job.source}
+                                                    onChange={(e) => handleJobChange(index, 'source',e.target.value)}
+                                                    className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                                />
+                                            </div>
                                             
                                             <div>
                                                 <div className="flex justify-between items-center mb-2">
@@ -467,6 +494,7 @@ function JobEntryTestPage() {
                                                     </span>
                                                 </div>
                                                 <div className="bg-emerald-900 border-2 p-5 rounded">
+                                                    {job.job_id}
                                                     {job.company_name}
                                                     {job.job_title}
                                                     {job.category}
@@ -474,6 +502,7 @@ function JobEntryTestPage() {
                                                     {job.job_details.skillRequired.educational}
                                                     {job.job_details.experienceRequired.year}
                                                     {job.job_details.jobUrl}
+                                                    {job.source}
                                                 </div>
                                             </div>
                                         </div>
@@ -602,7 +631,7 @@ function JobEntryTestPage() {
                 </div>
                 <div>
                     <h1>Final output</h1>
-                    {/* TODO: Output the text in this carasoul*/}
+                    {/* TODO: Output the text in this carousel */}
                 </div>
             </div>
             
