@@ -358,6 +358,22 @@ function JobEntryTestPage() {
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
+                                        <label className="block text-sm font-medium text-gray-300">Category: </label>
+                                        <select
+                                            value={job.category}
+                                            onChange={(e) => handleJobChange(index, 'category', e.target.value)}
+                                            className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                            required
+                                        >
+                                            <option value="">Select Category</option>
+                                            {categories.map(category => (
+                                                <option key={category.id} value={category.id}>
+                                                    {category.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div>
                                         <label className="block text-sm font-medium text-gray-300">Company Name: (e.g Electra International)</label>
                                         <input
                                             type="text"
@@ -398,22 +414,7 @@ function JobEntryTestPage() {
                                         </div>
                                         <p className="text-xs text-gray-400 mt-1">Auto-generated unique 7-digit ID</p>
                                     </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300">Category: </label>
-                                        <select
-                                            value={job.category}
-                                            onChange={(e) => handleJobChange(index, 'category', e.target.value)}
-                                            className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
-                                            required
-                                        >
-                                            <option value="">Select Category</option>
-                                            {categories.map(category => (
-                                                <option key={category.id} value={category.id}>
-                                                    {category.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                    
                                     <div>
                                         <label className="block text-sm font-medium text-gray-300">Deadline (e.g 2025-07-01T01:01:00Z)</label>
                                         <input
@@ -466,7 +467,6 @@ function JobEntryTestPage() {
                                                     </span>
                                                 </div>
                                                 <div className="bg-emerald-900 border-2 p-5 rounded">
-                                                    {job.job_id}
                                                     {job.company_name}
                                                     {job.job_title}
                                                     {job.category}
