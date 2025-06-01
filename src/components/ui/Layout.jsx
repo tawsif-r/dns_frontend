@@ -2,10 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import Nav from './Nav';
 import Notifications from '../Notifications';
 import { Bell,CircleUser } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { LogOut } from 'lucide-react';
 
 const Layout = ({ children }) => {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const notificationsRef = useRef(null);
+  const navigate = useNavigate()
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -44,6 +47,9 @@ const Layout = ({ children }) => {
             
             <div className="p-3 hover:bg-gray-700 transition-colors cursor-pointer">
             <CircleUser className="m-2" size={18} />
+            </div>
+            <div className="p-3 hover:bg-gray-700 transition-colors cursor-pointer">
+            <button onClick= {()=>navigate('/logout')}><LogOut /></button>
             </div>
           </div>
         </div>
