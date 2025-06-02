@@ -96,6 +96,16 @@ function Form({ route, method }) {
                     >
                         {loading ? "Loading..." : name}
                     </button>
+                    {/* Conditionally render email field only for registration */}
+                    {method === "login" && (
+                        <div className="mb-4">
+                            <div className="block text-white mt-2 mb-2" >
+                                Don't have an account? <button className="underline" onClick={()=>navigate('/register')}>sign up</button>
+                            </div>
+     
+                        </div>
+                    )}
+
                 </form>
             </div>
         </div>
