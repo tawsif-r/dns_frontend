@@ -43,7 +43,7 @@ function JobEntryPage() {
             const number = Math.floor(100000 + Math.random() * 900000);
             jobId = `${prefix}${number}`;
         } while (usedJobIds.has(jobId));
-        
+
         return jobId;
     }
 
@@ -93,7 +93,7 @@ function JobEntryPage() {
             try {
                 const response = await axios.get(categoriesUrl);
                 console.log('Categories API Response:', response.data);
-                const data = Array.isArray(response.data) ? response.data: response.data.data || [];
+                const data = Array.isArray(response.data) ? response.data : response.data.data || [];
                 setCategories(data);
             } catch (error) {
                 console.error('Error fetching Categories:', error);
@@ -119,7 +119,7 @@ function JobEntryPage() {
     const addJob = () => {
         const newJobId = generateUniqueJobId();
         reserveJobId(newJobId);
-        
+
         setJobs([...jobs, {
             company_name: '',
             job_title: '',
@@ -155,10 +155,10 @@ function JobEntryPage() {
         if (oldJobId) {
             releaseJobId(oldJobId);
         }
-        
+
         const newJobId = generateUniqueJobId();
         reserveJobId(newJobId);
-        
+
         const newJobs = [...jobs];
         newJobs[index].job_id = newJobId;
         setJobs(newJobs);
@@ -225,7 +225,6 @@ function JobEntryPage() {
 
     const getOutputCharCountWithSpaces = (job) => {
         const outputFields = [
-            job.job_id || '',
             job.company_name || '',
             job.job_title || '',
             job.category || '',
@@ -269,7 +268,7 @@ function JobEntryPage() {
             // Reset form after successful submission
             const newJobId = generateUniqueJobId();
             setUsedJobIds(new Set([newJobId])); // Reset used IDs with only the new job ID
-            
+
             setJobs([{
                 company_name: '',
                 job_title: '',
@@ -432,7 +431,7 @@ function JobEntryPage() {
                                         </div>
                                         <p className="text-xs text-gray-400 mt-1">Auto-generated unique alphanumeric ID (e.g., MAN908293)</p>
                                     </div>
-                                    
+
                                     <div>
                                         <label className="block text-sm font-medium text-gray-300">Deadline (e.g 2025-07-01T01:01:00Z)</label>
                                         <input
@@ -457,7 +456,7 @@ function JobEntryPage() {
                                                     required
                                                 />
                                             </div>
-                                            
+
                                             <div>
                                                 <label className="block text-sm font-medium text-gray-300">Educational Requirements: (e.g Masters, Bachelor's Degree)</label>
                                                 <textarea
@@ -481,29 +480,29 @@ function JobEntryPage() {
                                                 <input
                                                     type="text"
                                                     value={job.source}
-                                                    onChange={(e) => handleJobChange(index, 'source',e.target.value)}
+                                                    onChange={(e) => handleJobChange(index, 'source', e.target.value)}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                 />
                                             </div>
-                                            
-                                            <div>
-                                                <div className="flex justify-between items-center mb-2">
-                                                    <span className="font-semibold">Output:</span>
-                                                    <span className="text-sm text-gray-400">
-                                                        Character Count: {getOutputCharCountWithSpaces(job)}
-                                                    </span>
-                                                </div>
-                                                <div className="bg-emerald-900 border-2 p-5 rounded">
-                                                    {job.job_id}
-                                                    {job.company_name}
-                                                    {job.job_title}
-                                                    {job.category}
-                                                    {job.deadline}
-                                                    {job.job_details.skillRequired.educational}
-                                                    {job.job_details.experienceRequired.year}
-                                                    {job.job_details.jobUrl}
-                                                    {job.source}
-                                                </div>
+
+
+                                        </div>
+                                        <div>
+                                            <div className="flex justify-between items-center mt-2 mb-2">
+                                                <span className="font-semibold">Output:</span>
+                                                <span className="text-sm text-gray-400">
+                                                    Character Count: {getOutputCharCountWithSpaces(job)}
+                                                </span>
+                                            </div>
+                                            <div className="bg-emerald-900 border-2 p-5 rounded overflow-auto whitespace-normal">
+                                                {job.company_name}
+                                                {job.job_title}
+                                                {job.category}
+                                                {job.deadline}
+                                                {job.job_details.skillRequired.educational}
+                                                {job.job_details.experienceRequired.year}
+                                                {job.job_details.jobUrl}
+                                                {job.source}
                                             </div>
                                         </div>
                                     </div>
@@ -627,14 +626,14 @@ function JobEntryPage() {
                         <Wrench />
                         <h1 className="text-xl font-bold">Approval</h1>
                     </div>
-                    
+
                 </div>
                 <div>
                     <h1>Final output</h1>
                     {/* TODO: Output the text in this carousel */}
                 </div>
             </div>
-            
+
         </div>
     );
 }
