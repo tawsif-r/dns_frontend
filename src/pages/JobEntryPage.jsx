@@ -8,11 +8,12 @@ function JobEntryPage() {
     const [contents, setContents] = useState([]);
     const [editingContent, setEditingContent] = useState(null);
     const [categories, setCategories] = useState([]);
+    const [usedJobIds, setUsedJobIds] = useState(new Set()); // Track used job IDs
     const [jobs, setJobs] = useState([
         {
             company_name: '',
             job_title: '',
-            job_id: '',
+            job_id: generateUniqueJobId(), // Auto-generated unique ID
             category: '',
             deadline: '',
             job_details: {
@@ -24,13 +25,51 @@ function JobEntryPage() {
                 companyName: '',
                 skillRequired: { otherSkill: '', educational: '' },
                 experienceRequired: { year: '', workArea: '', organization: '', additionalRequirements: '' }
-            }
+            },
+            source: ''
         }
     ]);
 
     const baseUrl = '/admin/api/contents/';
     const categoriesUrl = 'http://192.168.3.35:8002/content/job_categories/';
     const bulkCreateUrl = 'http://192.168.3.35:8002/content/job_list/bulk_create/';
+
+    // Function to generate unique alphanumeric job ID (e.g., MAN908293)
+    function generateUniqueJobId() {
+        const prefix = 'MAN'; // Fixed prefix, or use randomPrefix() for random
+        let jobId;
+        do {
+            // Generate a random 6-digit number
+            const number = Math.floor(100000 + Math.random() * 900000);
+            jobId = `${prefix}${number}`;
+        } while (usedJobIds.has(jobId));
+        
+        return jobId;
+    }
+
+    // Optional: Function to generate a random 3-letter prefix
+    function randomPrefix() {
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let prefix = '';
+        for (let i = 0; i < 3; i++) {
+            prefix += letters.charAt(Math.floor(Math.random() * letters.length));
+        }
+        return prefix;
+    }
+
+    // Function to reserve a job ID
+    const reserveJobId = (jobId) => {
+        setUsedJobIds(prev => new Set([...prev, jobId]));
+    };
+
+    // Function to release a job ID when job is removed
+    const releaseJobId = (jobId) => {
+        setUsedJobIds(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(jobId);
+            return newSet;
+        });
+    };
 
     // Fetch Contents on page load
     useEffect(() => {
@@ -54,7 +93,7 @@ function JobEntryPage() {
             try {
                 const response = await axios.get(categoriesUrl);
                 console.log('Categories API Response:', response.data);
-                const data = Array.isArray(response.data) ? response.data : response.data.data || [];
+                const data = Array.isArray(response.data) ? response.data: response.data.data || [];
                 setCategories(data);
             } catch (error) {
                 console.error('Error fetching Categories:', error);
@@ -64,18 +103,27 @@ function JobEntryPage() {
         fetchCategories();
     }, []);
 
+    // Initialize used job IDs when jobs state changes
+    useEffect(() => {
+        const currentJobIds = jobs.map(job => job.job_id).filter(id => id);
+        setUsedJobIds(new Set(currentJobIds));
+    }, []);
+
     // Ensure contents is an array before filtering
     const filteredContents = Array.isArray(contents)
         ? contents.filter((content) =>
-            content.title?.toLowerCase().includes(searchTerm.toLowerCase())
+            content.title?.toLowerCase().includes(searchTerm.toLowerCase()) || content.external_id?.includes(searchTerm)
         )
         : [];
 
     const addJob = () => {
+        const newJobId = generateUniqueJobId();
+        reserveJobId(newJobId);
+        
         setJobs([...jobs, {
             company_name: '',
             job_title: '',
-            job_id: '',
+            job_id: newJobId,
             category: '',
             deadline: '',
             job_details: {
@@ -87,12 +135,33 @@ function JobEntryPage() {
                 companyName: '',
                 skillRequired: { otherSkill: '', educational: '' },
                 experienceRequired: { year: '', workArea: '', organization: '', additionalRequirements: '' }
-            }
+            },
+            created_at: '',
+            source: ''
         }]);
     };
 
     const removeJob = (index) => {
+        const jobToRemove = jobs[index];
+        if (jobToRemove.job_id) {
+            releaseJobId(jobToRemove.job_id);
+        }
         setJobs(jobs.filter((_, i) => i !== index));
+    };
+
+    // Regenerate job ID function
+    const regenerateJobId = (index) => {
+        const oldJobId = jobs[index].job_id;
+        if (oldJobId) {
+            releaseJobId(oldJobId);
+        }
+        
+        const newJobId = generateUniqueJobId();
+        reserveJobId(newJobId);
+        
+        const newJobs = [...jobs];
+        newJobs[index].job_id = newJobId;
+        setJobs(newJobs);
     };
 
     // Fixed handleJobChange function that properly handles nested objects
@@ -138,21 +207,22 @@ function JobEntryPage() {
                 return false;
             }
 
-            // Validate job_id is a number
-            if (job.job_id && isNaN(Number(job.job_id))) {
-                alert(`Job ${i + 1}: Job ID must be a number`);
+            // Validate job ID
+            if (!job.job_id || !/^[A-Z]{3}\d{6}$/.test(job.job_id)) {
+                alert(`Job ${i + 1}: Invalid Job ID format. Please regenerate the Job ID.`);
                 return false;
             }
 
             // Validate job_details required fields
             if (!job.job_details.jobUrl) {
-                alert(`Job ${i + 1}: Please fill in all required job details (Job URL, Job Title, Location, Company Name)`);
+                alert(`Job ${i + 1}: Please fill in all required job details (Job URL)`);
                 return false;
             }
         }
 
         return true;
     };
+
     const getOutputCharCountWithSpaces = (job) => {
         const outputFields = [
             job.job_id || '',
@@ -162,7 +232,9 @@ function JobEntryPage() {
             job.deadline || '',
             job.job_details.skillRequired.educational || '',
             job.job_details.experienceRequired.year || '',
-            job.job_details.jobUrl || ''
+            job.job_details.jobUrl || '',
+            job.created_at || '',
+            job.source || ''
         ];
 
         // Join with spaces for readability
@@ -174,7 +246,7 @@ function JobEntryPage() {
         // Clone and prepare jobs data for submission
         const jobsToSubmit = jobs.map(job => ({
             ...job,
-            job_id: job.job_id ? Number(job.job_id) : '',  // Convert to number if not empty
+            job_id: job.job_id,  // Keep as string since it's alphanumeric
         }));
 
         // Validate job data
@@ -195,10 +267,13 @@ function JobEntryPage() {
             alert('Jobs created successfully!');
 
             // Reset form after successful submission
+            const newJobId = generateUniqueJobId();
+            setUsedJobIds(new Set([newJobId])); // Reset used IDs with only the new job ID
+            
             setJobs([{
                 company_name: '',
                 job_title: '',
-                job_id: '',
+                job_id: newJobId,
                 category: '',
                 deadline: '',
                 job_details: {
@@ -210,7 +285,8 @@ function JobEntryPage() {
                     companyName: '',
                     skillRequired: { otherSkill: '', educational: '' },
                     experienceRequired: { year: '', workArea: '', organization: '', additionalRequirements: '' }
-                }
+                },
+                source: ''
             }]);
         } catch (error) {
             console.error('Error creating jobs:', error);
@@ -252,8 +328,8 @@ function JobEntryPage() {
     const columns = ['title', 'external_id', 'category', 'description', 'deadline'];
 
     return (
-        <div className="grid grid-cols-2 gap-2 px-4 py-8">
-            <div className="border-2 rounded-lg shadow-lg">
+        <div className="grid grid-cols-3 gap-1 px-4 py-8">
+            <div className="border-2 col-span-2 rounded-lg shadow-lg">
                 <div className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-t-lg">
                     <div className="flex items-center">
                         <svg
@@ -300,37 +376,7 @@ function JobEntryPage() {
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300">Company Name</label>
-                                        <input
-                                            type="text"
-                                            value={job.company_name}
-                                            onChange={(e) => handleJobChange(index, 'company_name', e.target.value)}
-                                            className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300">Job Title</label>
-                                        <input
-                                            type="text"
-                                            value={job.job_title}
-                                            onChange={(e) => handleJobChange(index, 'job_title', e.target.value)}
-                                            className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300">Job ID</label>
-                                        <input
-                                            type="number"
-                                            value={job.job_id}
-                                            onChange={(e) => handleJobChange(index, 'job_id', e.target.value)}
-                                            className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300">Category</label>
+                                        <label className="block text-sm font-medium text-gray-300">Category: </label>
                                         <select
                                             value={job.category}
                                             onChange={(e) => handleJobChange(index, 'category', e.target.value)}
@@ -346,7 +392,49 @@ function JobEntryPage() {
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300">Deadline</label>
+                                        <label className="block text-sm font-medium text-gray-300">Company Name: (e.g Electra International)</label>
+                                        <input
+                                            type="text"
+                                            value={job.company_name}
+                                            onChange={(e) => handleJobChange(index, 'company_name', e.target.value)}
+                                            className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-300">Job Title: (e.g Executive/Sr. Executive (Audit Department))</label>
+                                        <input
+                                            type="text"
+                                            value={job.job_title}
+                                            onChange={(e) => handleJobChange(index, 'job_title', e.target.value)}
+                                            className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-300">Job ID (Auto-Generated)</label>
+                                        <div className="flex gap-2">
+                                            <input
+                                                type="text"
+                                                value={job.job_id}
+                                                className="flex-1 bg-gray-700 border rounded px-3 py-2 text-gray-300"
+                                                readOnly
+                                                disabled
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => regenerateJobId(index)}
+                                                className="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                                                title="Generate New ID"
+                                            >
+                                                🔄
+                                            </button>
+                                        </div>
+                                        <p className="text-xs text-gray-400 mt-1">Auto-generated unique alphanumeric ID (e.g., MAN908293)</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-300">Deadline (e.g 2025-07-01T01:01:00Z)</label>
                                         <input
                                             type="datetime-local"
                                             value={job.deadline}
@@ -360,7 +448,7 @@ function JobEntryPage() {
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             <div>
-                                                <label className="block text-sm font-medium text-gray-300">Job URL</label>
+                                                <label className="block text-sm font-medium text-gray-300">Job URL: (e.g https://jobs.bdjobs.com/jobdetails.asp?id=1371575&ln=1&src=10ms)</label>
                                                 <input
                                                     type="url"
                                                     value={job.job_details.jobUrl}
@@ -369,67 +457,9 @@ function JobEntryPage() {
                                                     required
                                                 />
                                             </div>
-                                            {/* <div>
-                                                <label className="block text-sm font-medium text-gray-300">Job Deadline (Text)</label>
-                                                <input
-                                                    type="text"
-                                                    value={job.job_details.deadLine}
-                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'deadLine')}
-                                                    className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
-                                                    required
-                                                />
-                                            </div> */}
-                                            {/* <div>
-                                                <label className="block text-sm font-medium text-gray-300">Job Title (Detail)</label>
-                                                <input
-                                                    type="text"
-                                                    value={job.job_details.jobTitle}
-                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'jobTitle')}
-                                                    className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
-                                                    required
-                                                />
-                                            </div> */}
-                                            {/* <div>
-                                                <label className="block text-sm font-medium text-gray-300">Location</label>
-                                                <input
-                                                    type="text"
-                                                    value={job.job_details.location}
-                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'location')}
-                                                    className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
-                                                    required
-                                                />
-                                            </div> */}
-                                            {/* <div>
-                                                <label className="block text-sm font-medium text-gray-300">Company Logo URL</label>
-                                                <input
-                                                    type="url"
-                                                    value={job.job_details.companyLogo}
-                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'companyLogo')}
-                                                    className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
-                                                    required
-                                                />
-                                            </div> */}
-                                            {/* <div>
-                                                <label className="block text-sm font-medium text-gray-300">Company Name (Detail)</label>
-                                                <input
-                                                    type="text"
-                                                    value={job.job_details.companyName}
-                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'companyName')}
-                                                    className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
-                                                    required
-                                                />
-                                            </div> */}
-                                            {/* <div>
-                                                <label className="block text-sm font-medium text-gray-300">Other Skills</label>
-                                                <input
-                                                    type="text"
-                                                    value={job.job_details.skillRequired.otherSkill}
-                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'skillRequired', 'otherSkill')}
-                                                    className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
-                                                />
-                                            </div> */}
+                                            
                                             <div>
-                                                <label className="block text-sm font-medium text-gray-300">Educational Requirements</label>
+                                                <label className="block text-sm font-medium text-gray-300">Educational Requirements: (e.g Masters, Bachelor's Degree)</label>
                                                 <textarea
                                                     value={job.job_details.skillRequired.educational}
                                                     onChange={(e) => handleJobChange(index, null, e.target.value, 'skillRequired', 'educational')}
@@ -438,7 +468,7 @@ function JobEntryPage() {
                                                 />
                                             </div>
                                             <div>
-                                                <label className="block text-sm font-medium text-gray-300">Experience Years</label>
+                                                <label className="block text-sm font-medium text-gray-300">Experience Years: (e.g 5 yrs)</label>
                                                 <input
                                                     type="text"
                                                     value={job.job_details.experienceRequired.year}
@@ -446,33 +476,16 @@ function JobEntryPage() {
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                 />
                                             </div>
-                                            {/* <div>
-                                                <label className="block text-sm font-medium text-gray-300">Work Area</label>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-300">Source: (bdjobs, manual)</label>
                                                 <input
                                                     type="text"
-                                                    value={job.job_details.experienceRequired.workArea}
-                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'experienceRequired', 'workArea')}
+                                                    value={job.source}
+                                                    onChange={(e) => handleJobChange(index, 'source',e.target.value)}
                                                     className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                                                 />
-                                            </div> */}
-                                            {/* <div>
-                                                <label className="block text-sm font-medium text-gray-300">Organization</label>
-                                                <input
-                                                    type="text"
-                                                    value={job.job_details.experienceRequired.organization}
-                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'experienceRequired', 'organization')}
-                                                    className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
-                                                />
-                                            </div> */}
-                                            {/* <div>
-                                                <label className="block text-sm font-medium text-gray-300">Additional Requirements</label>
-                                                <textarea
-                                                    value={job.job_details.experienceRequired.additionalRequirements}
-                                                    onChange={(e) => handleJobChange(index, null, e.target.value, 'experienceRequired', 'additionalRequirements')}
-                                                    className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
-                                                    rows="4"
-                                                />
-                                            </div> */}
+                                            </div>
+                                            
                                             <div>
                                                 <div className="flex justify-between items-center mb-2">
                                                     <span className="font-semibold">Output:</span>
@@ -489,6 +502,7 @@ function JobEntryPage() {
                                                     {job.job_details.skillRequired.educational}
                                                     {job.job_details.experienceRequired.year}
                                                     {job.job_details.jobUrl}
+                                                    {job.source}
                                                 </div>
                                             </div>
                                         </div>
@@ -617,7 +631,7 @@ function JobEntryPage() {
                 </div>
                 <div>
                     <h1>Final output</h1>
-                    {/* TODO: Output the text in this carasoul*/}
+                    {/* TODO: Output the text in this carousel */}
                 </div>
             </div>
             
