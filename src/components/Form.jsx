@@ -18,13 +18,13 @@ function Form({ route, method }) {
 
         try {
             // Only include email in payload for registration
-            const payload = method === "login" 
+            const payload = method === "login"
                 ? { username, password }
                 : { username, email, password };
 
             const res = await apiClient.post(route, payload)
             console.log(`Payload: ${res.data}`)
-            
+
             if (method === "login") {
                 localStorage.setItem(ACCESS_TOKEN, res.data.access);
                 localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
@@ -33,7 +33,17 @@ function Form({ route, method }) {
                 navigate("/login")
             }
         } catch (error) {
-            alert(error)
+            let errorMessage = 'An error occurred. Please try again.';
+
+            if (error.response?.status === 401) {
+                errorMessage = 'Wrong credentials. Please check your username and password.';
+            } else if (error.response?.status === 400) {
+                errorMessage = error.response.data?.detail || 'Invalid input. Please check your information.';
+            } else if (error.response?.status >= 500) {
+                errorMessage = 'Server error. Please try again later.';
+            }
+
+            alert(errorMessage);
         } finally {
             setLoading(false)
         }
@@ -89,8 +99,8 @@ function Form({ route, method }) {
                         />
                     </div>
 
-                    <button 
-                        className="w-full p-3 bg-gray-600 text-white font-semibold rounded-md border-2 border-gray-500 hover:bg-gray-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+                    <button
+                        className="w-full p-3 bg-gray-600 text-white font-semibold rounded-md border-2 border-gray-500 hover:bg-gray-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         type="submit"
                         disabled={loading}
                     >
@@ -100,9 +110,9 @@ function Form({ route, method }) {
                     {method === "login" && (
                         <div className="mb-4">
                             <div className="block text-white mt-2 mb-2" >
-                                Don't have an account? <button className="underline" onClick={()=>navigate('/register')}>sign up</button>
+                                Don't have an account? <button className="underline" onClick={() => navigate('/register')}>sign up</button>
                             </div>
-     
+
                         </div>
                     )}
 

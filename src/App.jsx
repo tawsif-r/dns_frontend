@@ -62,7 +62,7 @@ function App() {
             <Route path="/messages" element={<ProtectedRoute><Layout><MessagesPage /></Layout></ProtectedRoute>} />
             <Route path="/reports" element={<ProtectedRoute><Layout><ReportsPage /></Layout></ProtectedRoute>} />
             <Route path="/subscribertester" element={<Layout><TestSubscribersPage /></Layout>} />
-            <Route path="/joblisttester" element={<Layout><JobEntryPage /></Layout>} />
+            {/* <Route path="/joblisttester" element={<Layout><JobEntryPage /></Layout>} /> */}
             <Route path="/jobtester" element={<Layout><JobEntryTestPage /></Layout>} />
             <Route path='*' element={<NotFound />} />
             {/* <Route path="/subscriber_tester" element={<Layout><TestSubscribersPage /></Layout>} /> */}
