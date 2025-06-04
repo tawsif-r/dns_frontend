@@ -18,6 +18,7 @@ import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import ReportGpPage from './pages/ReportsGpPage';
 import ReportRobiPage from './pages/ReportsRobiPage';
+import TestReportsPage from './pages/TestReportsPage';
 
 
 function Logout() {
@@ -48,6 +49,8 @@ function App() {
             <Route path="/subscriptionPlans" element={<ProtectedRoute><Layout><SubscriptionPlanPage /></Layout></ProtectedRoute>} />
             <Route path="/messages" element={<ProtectedRoute><Layout><MessagesPage /></Layout></ProtectedRoute>} />
             <Route path="/reports" element={<ProtectedRoute><Layout><ReportsPage /></Layout></ProtectedRoute>} />
+            {/* Test routes */}
+            <Route path="/testreports" element={<ProtectedRoute><Layout><TestReportsPage /></Layout></ProtectedRoute>} />
             {/* New routes */}
             <Route path="/reportsGp" element={<ProtectedRoute><Layout><ReportGpPage /></Layout></ProtectedRoute>} />
             <Route path="/reportsRobi" element={<ProtectedRoute><Layout><ReportRobiPage /></Layout></ProtectedRoute>} />
