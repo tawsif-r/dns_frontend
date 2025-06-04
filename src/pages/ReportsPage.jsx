@@ -9,9 +9,9 @@ function ReportsPage() {
     const [editingReport, setEditingReport] = useState(null);
     const [newReport, setNewReport] = useState({
         subscriber: '',
-        period_start: '',
-        period_end: '',
-        sent_messages: 0,
+        subscriprion_plan: '',
+        category: '',
+        operator: '',
         total_charge: '0.00'
     });
 
@@ -46,9 +46,9 @@ function ReportsPage() {
             setReports([...reports, response.data]);
             setNewReport({
                 subscriber: '',
-                period_start: '',
-                period_end: '',
-                sent_messages: 0,
+                subscriprion_plan: '',
+                category: '',
+                operator: '',
                 total_charge: '0.00'
             });
         } catch (error) {
@@ -135,22 +135,22 @@ function ReportsPage() {
                             <input
                                 type="datetime-local"
                                 placeholder="Period Start *"
-                                value={newReport.period_start}
-                                onChange={(e) => setNewReport({ ...newReport, period_start: e.target.value })}
+                                value={newReport.subscriprion_plan}
+                                onChange={(e) => setNewReport({ ...newReport, subscriprion_plan: e.target.value })}
                                 className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                             />
                             <input
                                 type="datetime-local"
                                 placeholder="Period End *"
-                                value={newReport.period_end}
-                                onChange={(e) => setNewReport({ ...newReport, period_end: e.target.value })}
+                                value={newReport.category}
+                                onChange={(e) => setNewReport({ ...newReport, category: e.target.value })}
                                 className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                             />
                             <input
                                 type="number"
                                 placeholder="Sent Messages"
-                                value={newReport.sent_messages}
-                                onChange={(e) => setNewReport({ ...newReport, sent_messages: parseInt(e.target.value) || 0 })}
+                                value={newReport.operator}
+                                onChange={(e) => setNewReport({ ...newReport, operator: parseInt(e.target.value) || 0 })}
                                 className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
                             />
                             <input
@@ -199,24 +199,24 @@ function ReportsPage() {
                                                 <td className="px-4 py-2">
                                                     <input
                                                         type="datetime-local"
-                                                        value={editingReport.period_start}
-                                                        onChange={(e) => setEditingReport({ ...editingReport, period_start: e.target.value })}
+                                                        value={editingReport.subscriprion_plan}
+                                                        onChange={(e) => setEditingReport({ ...editingReport, subscriprion_plan: e.target.value })}
                                                         className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
                                                     />
                                                 </td>
                                                 <td className="px-4 py-2">
                                                     <input
                                                         type="datetime-local"
-                                                        value={editingReport.period_end}
-                                                        onChange={(e) => setEditingReport({ ...editingReport, period_end: e.target.value })}
+                                                        value={editingReport.category}
+                                                        onChange={(e) => setEditingReport({ ...editingReport, category: e.target.value })}
                                                         className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
                                                     />
                                                 </td>
                                                 <td className="px-4 py-2">
                                                     <input
                                                         type="number"
-                                                        value={editingReport.sent_messages}
-                                                        onChange={(e) => setEditingReport({ ...editingReport, sent_messages: parseInt(e.target.value) || 0 })}
+                                                        value={editingReport.operator}
+                                                        onChange={(e) => setEditingReport({ ...editingReport, operator: parseInt(e.target.value) || 0 })}
                                                         className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
                                                     />
                                                 </td>
@@ -247,9 +247,9 @@ function ReportsPage() {
                                         ) : (
                                             <tr key={report.id} className="hover:bg-gray-700">
                                                 <td className="px-4 py-3 text-gray-300">{report.subscriber || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{report.period_start || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{report.period_end || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{report.sent_messages}</td>
+                                                <td className="px-4 py-3 text-gray-300">{report.subscription_plan || 'N/A'}</td>
+                                                <td className="px-4 py-3 text-gray-300">{report.category || 'N/A'}</td>
+                                                <td className="px-4 py-3 text-gray-300">{report.operator}</td>
                                                 <td className="px-4 py-3 text-gray-300">{report.total_charge}</td>
                                                 <td className="px-4 py-3 text-right whitespace-nowrap">
                                                     <button
