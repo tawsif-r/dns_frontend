@@ -31,8 +31,8 @@ function JobEntryPage() {
     ]);
 
     const baseUrl = '/admin/api/contents/';
-    const categoriesUrl = 'http://192.168.3.35:8002/content/job_categories/';
-    const bulkCreateUrl = 'http://192.168.3.35:8002/content/job_list/bulk_create/';
+    const categoriesUrl = 'http://10.0.0.27:8002/content/job_categories/';
+    const bulkCreateUrl = 'http://10.0.0.27:8002/content/job_list/bulk_create/';
 
     // Function to generate unique alphanumeric job ID (e.g., MAN908293)
     function generateUniqueJobId() {
