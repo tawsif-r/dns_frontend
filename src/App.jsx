@@ -9,16 +9,13 @@ import ReportsPage from './pages/ReportsPage';
 import Layout from './components/ui/Layout';
 import OperatorsPage from './pages/OperatorsPage';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-// import { AuthProvider } from './components/context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import JobEntryPage from './pages/JobEntryPage';
 import TestSubscribersPage from './pages/TestSubscribersPage';
 import RegisterPage from './pages/RegisterPage';
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
-import ReportGpPage from './pages/ReportsGpPage';
-import ReportRobiPage from './pages/ReportsRobiPage';
-import TestReportsPage from './pages/TestReportsPage';
+
 
 
 function Logout() {
@@ -48,13 +45,9 @@ function App() {
             <Route path="/subscribers" element={<ProtectedRoute><Layout><SubscribersPage /></Layout></ProtectedRoute>} />
             <Route path="/subscriptionPlans" element={<ProtectedRoute><Layout><SubscriptionPlanPage /></Layout></ProtectedRoute>} />
             <Route path="/messages" element={<ProtectedRoute><Layout><MessagesPage /></Layout></ProtectedRoute>} />
-            <Route path="/reports" element={<ProtectedRoute><Layout><ReportsPage /></Layout></ProtectedRoute>} />
             {/* Test routes */}
-            <Route path="/testreports" element={<ProtectedRoute><Layout><TestReportsPage /></Layout></ProtectedRoute>} />
+            <Route path="/reports" element={<ProtectedRoute><Layout><ReportsPage /></Layout></ProtectedRoute>} />
             {/* New routes */}
-            <Route path="/reportsGp" element={<ProtectedRoute><Layout><ReportGpPage /></Layout></ProtectedRoute>} />
-            <Route path="/reportsRobi" element={<ProtectedRoute><Layout><ReportRobiPage /></Layout></ProtectedRoute>} />
-
             <Route path="/subscribertester" element={<Layout><TestSubscribersPage /></Layout>} />
             <Route path="/jobEntry" element={<Layout><JobEntryPage /></Layout>} />
             <Route path='*' element={<NotFound />} />
