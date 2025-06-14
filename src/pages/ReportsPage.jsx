@@ -7,7 +7,7 @@ function ReportsPage() {
     const [reports, setReports] = useState([]);
     const [filteredReports, setFilteredReports] = useState([]);
     const [loading, setLoading] = useState(false);
-    
+
     // Filter states
     const [filters, setFilters] = useState({
         operator: '',
@@ -45,25 +45,25 @@ function ReportsPage() {
     const applyFilters = (reportsToFilter, currentFilters) => {
         return reportsToFilter.filter(report => {
             // Operator filter
-            if (currentFilters.operator && 
+            if (currentFilters.operator &&
                 !report.operator?.toString().toLowerCase().includes(currentFilters.operator.toLowerCase())) {
                 return false;
             }
 
             // Subscriber name filter
-            if (currentFilters.subscriber_name && 
+            if (currentFilters.subscriber_name &&
                 !report.subscriber_name?.toLowerCase().includes(currentFilters.subscriber_name.toLowerCase())) {
                 return false;
             }
 
             // Category name filter
-            if (currentFilters.category_name && 
+            if (currentFilters.category_name &&
                 !report.category_name?.toLowerCase().includes(currentFilters.category_name.toLowerCase())) {
                 return false;
             }
 
             // Subscription plan name filter
-            if (currentFilters.subscription_plan_name && 
+            if (currentFilters.subscription_plan_name &&
                 !report.subscription_plan_name?.toLowerCase().includes(currentFilters.subscription_plan_name.toLowerCase())) {
                 return false;
             }
@@ -72,7 +72,7 @@ function ReportsPage() {
             if (currentFilters.date_time && report.created_at) {
                 const reportDate = new Date(report.created_at);
                 const filterDate = new Date(currentFilters.date_time);
-                
+
                 // Filter to show reports created on or after the selected date/time
                 if (reportDate < filterDate) {
                     return false;
@@ -87,7 +87,7 @@ function ReportsPage() {
     const handleFilterChange = (filterName, value) => {
         const newFilters = { ...filters, [filterName]: value };
         setFilters(newFilters);
-        
+
         // Apply filters to the original reports data
         const filtered = applyFilters(reports, newFilters);
         setFilteredReports(filtered);
@@ -119,7 +119,7 @@ function ReportsPage() {
 
     const columns = [
         'subscriber_name',
-        'subscription_plan_name', 
+        'subscription_plan_name',
         'category_name',
         'operator',
         'created_at',
@@ -187,7 +187,11 @@ function ReportsPage() {
                                 placeholder="Date & Time"
                                 value={filters.date_time}
                                 onChange={(e) => handleFilterChange('date_time', e.target.value)}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200
+                                                        [&::-webkit-calendar-picker-indicator]:bg-dark 
+                                                        [&::-webkit-calendar-picker-indicator]:rounded
+                                                        [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                                style={{ colorScheme: 'dark' }}
                             />
                             <button
                                 onClick={clearFilters}
@@ -244,9 +248,9 @@ function ReportsPage() {
                             </table>
                         ) : (
                             <div className="text-center text-gray-500 py-8">
-                                {loading ? 'Loading...' : 
-                                 reports.length === 0 ? 'No reports found' : 
-                                 'No reports match the current filters'}
+                                {loading ? 'Loading...' :
+                                    reports.length === 0 ? 'No reports found' :
+                                        'No reports match the current filters'}
                             </div>
                         )}
                     </div>

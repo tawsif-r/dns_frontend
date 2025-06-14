@@ -438,7 +438,12 @@ function JobEntryPage() {
                                             type="datetime-local"
                                             value={job.deadline}
                                             onChange={(e) => handleJobChange(index, 'deadline', e.target.value)}
-                                            className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                            className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white 
+                                                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                                                        [&::-webkit-calendar-picker-indicator]:bg-dark 
+                                                        [&::-webkit-calendar-picker-indicator]:rounded
+                                                        [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                                            style={{ colorScheme: 'dark' }}
                                             required
                                         />
                                     </div>
