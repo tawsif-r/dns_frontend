@@ -25,7 +25,9 @@ function ReportsPage() {
         try {
             const response = await apiClient.get(baseUrl);
             console.log("Fetch reports is fired");
+            // saving the response data in reports
             setReports(response.data);
+            // saving the response data in filteredReports
             setFilteredReports(response.data); // Initially show all reports
         } catch (error) {
             console.error('Error fetching reports:', error);
@@ -37,6 +39,7 @@ function ReportsPage() {
     };
 
     // Initial load
+    // why the empty list set as the target
     useEffect(() => {
         fetchReports();
     }, []);
@@ -82,6 +85,12 @@ function ReportsPage() {
             return true;
         });
     };
+    // Handle total charge
+    const totalCharge = filteredReports.reduce((sum, report) => {
+        // report is each individual report
+        const charge = parseFloat(report.total_charge);
+        return sum + (isNaN(charge) ? 0 : charge);
+    }, 0);
 
     // Handle filter changes
     const handleFilterChange = (filterName, value) => {
@@ -257,9 +266,18 @@ function ReportsPage() {
 
                     {/* Show filtering stats */}
                     {!loading && reports.length > 0 && (
-                        <div className="mt-4 text-sm text-gray-500 text-center">
-                            Showing {filteredReports.length} of {reports.length} reports
+                        <div>
+                            <div className="mt-4 text-sm text-gray-500 text-center">
+                                Showing {filteredReports.length} of {reports.length} reports
+
+                            </div>
+                            <div className="mt-4 text-sm text-gray-300 text-center">
+                                Total Charge: {filteredReports ? totalCharge : 0}
+
+                            </div>
                         </div>
+
+
                     )}
                 </div>
             </div>
