@@ -127,13 +127,14 @@ function ReportsPage() {
     };
 
     const columns = [
-        'subscriber_name',
-        'subscription_plan_name',
-        'category_name',
+        'subscriber name',
+        'message count',
+        'subscription plan',
+        'category name',
         'operator',
-        'created_at',
-        'updated_at',
-        'total_charge'
+        'created at',
+        'updated at',
+        'charge'
     ];
 
     return (
@@ -237,6 +238,7 @@ function ReportsPage() {
                                     {filteredReports.map((report) => (
                                         <tr key={report.id} className="hover:bg-gray-700">
                                             <td className="px-4 py-3 text-gray-300">{report.subscriber_name || 'N/A'}</td>
+                                            <td className="px-4 py-3 text-gray-300">{report.subscriber_message_count || 0}</td>
                                             <td className="px-4 py-3 text-gray-300">{report.subscription_plan_name || 'N/A'}</td>
                                             <td className="px-4 py-3 text-gray-300">{report.category_name || 'N/A'}</td>
                                             <td className="px-4 py-3 text-gray-300">{report.operator}</td>
