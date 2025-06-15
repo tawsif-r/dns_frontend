@@ -7,6 +7,11 @@ function TestReportsPage() {
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
+    
+    // Dropdown data states
+    const [operators, setOperators] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [dropdownsLoading, setDropdownsLoading] = useState(false);
 
     // Filter states
     const [filters, setFilters] = useState({
@@ -23,6 +28,34 @@ function TestReportsPage() {
 
     const baseUrl = '/admin/api/reports/';
 
+    // Fetch operators and categories for dropdowns
+    const fetchDropdownData = async () => {
+        setDropdownsLoading(true);
+        try {
+            const [operatorsResponse, categoriesResponse] = await Promise.all([
+                apiClient.get('http://192.168.3.35:8001/admin/api/operators/'),
+                apiClient.get('http://192.168.3.35:8001/admin/api/categories/')
+            ]);
+            
+            setOperators(operatorsResponse.data);
+            setCategories(categoriesResponse.data);
+            console.log("Operators loaded:", operatorsResponse.data.length);
+            console.log("Categories loaded:", categoriesResponse.data.length);
+        } catch (error) {
+            console.error('Error fetching dropdown data:', error);
+            // Set empty arrays on error to prevent crashes
+            setOperators([]);
+            setCategories([]);
+        } finally {
+            setDropdownsLoading(false);
+        }
+    };
+
+    // Load dropdown data on component mount
+    useEffect(() => {
+        fetchDropdownData();
+    }, []);
+
     // Fetch reports with backend filtering
     const fetchReports = async (searchFilters = filters) => {
         setLoading(true);
@@ -33,7 +66,6 @@ function TestReportsPage() {
                 if (searchFilters[key] && searchFilters[key].trim() !== '') {
                     params[key] = searchFilters[key].trim();
                 }
-                console.log("Params:",params[key])
             });
 
             console.log("Fetching reports with params:", params);
@@ -167,14 +199,23 @@ function TestReportsPage() {
                                 onKeyPress={handleKeyPress}
                                 className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
                             />
-                            <input
-                                type="text"
-                                placeholder="Operator ID"
+                            
+                            {/* Operator Dropdown */}
+                            <select
                                 value={filters.operator}
                                 onChange={(e) => handleFilterChange('operator', e.target.value)}
-                                onKeyPress={handleKeyPress}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
-                            />
+                                disabled={dropdownsLoading}
+                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200 cursor-pointer"
+                            >
+                                <option value="">
+                                    {dropdownsLoading ? 'Loading operators...' : 'Select Operator'}
+                                </option>
+                                {operators.map((operator) => (
+                                    <option key={operator.id} value={operator.id}>
+                                        {operator.name} ({operator.short_code})
+                                    </option>
+                                ))}
+                            </select>
                             <input
                                 type="text"
                                 placeholder="Service"
@@ -199,14 +240,23 @@ function TestReportsPage() {
                                 onKeyPress={handleKeyPress}
                                 className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
                             />
-                            <input
-                                type="text"
-                                placeholder="Category ID"
+                            
+                            {/* Category Dropdown */}
+                            <select
                                 value={filters.category}
                                 onChange={(e) => handleFilterChange('category', e.target.value)}
-                                onKeyPress={handleKeyPress}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
-                            />
+                                disabled={dropdownsLoading}
+                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200 cursor-pointer"
+                            >
+                                <option value="">
+                                    {dropdownsLoading ? 'Loading categories...' : 'Select Category'}
+                                </option>
+                                {categories.map((category) => (
+                                    <option key={category.id} value={category.id}>
+                                        {category.name} - {category.keyword}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         
                         {/* Date Range Filter Section */}
@@ -245,7 +295,7 @@ function TestReportsPage() {
                         <div className="flex gap-4">
                             <button
                                 onClick={handleSearch}
-                                disabled={loading}
+                                disabled={loading || dropdownsLoading}
                                 className="flex items-center bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200 disabled:opacity-50"
                             >
                                 <SearchIcon className="mr-2" size={16} />
@@ -253,7 +303,7 @@ function TestReportsPage() {
                             </button>
                             <button
                                 onClick={clearFilters}
-                                disabled={loading}
+                                disabled={loading || dropdownsLoading}
                                 className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition duration-200 disabled:opacity-50"
                             >
                                 Clear All
