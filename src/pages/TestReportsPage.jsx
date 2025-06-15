@@ -16,7 +16,9 @@ function TestReportsPage() {
         service: '',
         keyword: '',
         subscription_plan: '',
-        category: ''
+        category: '',
+        date_from: '',
+        date_to: ''
     });
 
     const baseUrl = '/admin/api/reports/';
@@ -31,6 +33,7 @@ function TestReportsPage() {
                 if (searchFilters[key] && searchFilters[key].trim() !== '') {
                     params[key] = searchFilters[key].trim();
                 }
+                console.log("Params:",params[key])
             });
 
             console.log("Fetching reports with params:", params);
@@ -68,7 +71,9 @@ function TestReportsPage() {
             service: '',
             keyword: '',
             subscription_plan: '',
-            category: ''
+            category: '',
+            date_from: '',
+            date_to: ''
         };
         setFilters(clearedFilters);
         setReports([]);
@@ -202,6 +207,39 @@ function TestReportsPage() {
                                 onKeyPress={handleKeyPress}
                                 className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
                             />
+                        </div>
+                        
+                        {/* Date Range Filter Section */}
+                        <div className="mb-4">
+                            <h3 className="text-sm font-medium text-gray-300 mb-2">Date Range Filter</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs text-gray-400 mb-1">From Date & Time</label>
+                                    <input
+                                        type="datetime-local"
+                                        value={filters.date_from}
+                                        onChange={(e) => handleFilterChange('date_from', e.target.value)}
+                                        className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200
+                                                   [&::-webkit-calendar-picker-indicator]:bg-dark 
+                                                   [&::-webkit-calendar-picker-indicator]:rounded
+                                                   [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                                        style={{ colorScheme: 'dark' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs text-gray-400 mb-1">To Date & Time</label>
+                                    <input
+                                        type="datetime-local"
+                                        value={filters.date_to}
+                                        onChange={(e) => handleFilterChange('date_to', e.target.value)}
+                                        className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200
+                                                   [&::-webkit-calendar-picker-indicator]:bg-dark 
+                                                   [&::-webkit-calendar-picker-indicator]:rounded
+                                                   [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                                        style={{ colorScheme: 'dark' }}
+                                    />
+                                </div>
+                            </div>
                         </div>
                         
                         <div className="flex gap-4">
