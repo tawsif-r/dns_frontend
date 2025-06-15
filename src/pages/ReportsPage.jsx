@@ -26,9 +26,9 @@ function ReportsPage() {
             const response = await apiClient.get(baseUrl);
             console.log("Fetch reports is fired");
             // saving the response data in reports
-            setReports(response.data);
+            setReports(response.data.data);
             // saving the response data in filteredReports
-            setFilteredReports(response.data); // Initially show all reports
+            setFilteredReports(response.data.data); // Initially show all reports
         } catch (error) {
             console.error('Error fetching reports:', error);
             setReports([]);

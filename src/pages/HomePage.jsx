@@ -73,7 +73,7 @@ function HomePage() {
         setSubscribersData(subscribersResponse.data);
         setMessagesQData(messagesQResponse.data);
         setSubscriptionsData(subscriptionsResponse.data);
-        setReportsData(reportsResponse.data);
+        setReportsData(reportsResponse.data.data);
         setMessagesData(messagesResponse.data);
 
       } catch (error) {

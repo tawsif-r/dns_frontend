@@ -7,6 +7,7 @@ function TestReportsPage() {
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
+    const [active_subscribers, setActive_subscribers] = useState(0)
     
     // Dropdown data states
     const [operators, setOperators] = useState([]);
@@ -71,11 +72,13 @@ function TestReportsPage() {
             console.log("Fetching reports with params:", params);
             
             const response = await apiClient.get(baseUrl, { params });
-            setReports(response.data);
+            setReports(response.data.data);
+            setActive_subscribers(response.data.active_subscribers);
             setHasSearched(true);
         } catch (error) {
             console.error('Error fetching reports:', error);
             setReports([]);
+             setActive_subscribers(0)
         } finally {
             setLoading(false);
         }
@@ -109,6 +112,7 @@ function TestReportsPage() {
         };
         setFilters(clearedFilters);
         setReports([]);
+        setActive_subscribers(0);
         setHasSearched(false);
     };
 
@@ -309,6 +313,10 @@ function TestReportsPage() {
                                 Clear All
                             </button>
                         </div>
+                    </div>
+                    <div className="mb-6 p-4 bg-gray-800 rounded-lg">
+                        <p className='font-semibold'>Active subscribers: {active_subscribers ? active_subscribers : "0"}</p>
+                        <p className='font-semibold'>Total Charge: Tk {totalCharge.toFixed(2)}</p>
                     </div>
 
                     {/* Loading Indicator */}
