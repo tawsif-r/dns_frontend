@@ -367,7 +367,7 @@ function RecentReportsPage() {
                                     </div>
                                 </div>
                             )}
-                            <div className="font-semibold text-lg text-gray-800 dark:text-gray-200">
+                            <div className="font-semibold text-lg text-gray-200">
                                 Number of subscribers:{subscriber_count ? subscriber_count : "0"}
                                 <div className="flex flex-col items-start">
                                     
