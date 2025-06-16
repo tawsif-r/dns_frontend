@@ -175,7 +175,6 @@ function RecentReportsPage() {
 
     const columns = [
         'subscriber name',
-        'message count',
         'subscription plan',
         'category name',
         'operator',
@@ -432,7 +431,6 @@ function RecentReportsPage() {
                                         {reports.map((report) => (
                                             <tr key={report.id} className="hover:bg-gray-700">
                                                 <td className="px-4 py-3 text-gray-300">{report.subscriber_name || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{report.subscriber_message_count || 0}</td>
                                                 <td className="px-4 py-3 text-gray-300">{report.subscription_plan_name || 'N/A'}</td>
                                                 <td className="px-4 py-3 text-gray-300">{report.category_name || 'N/A'}</td>
                                                 <td className="px-4 py-3 text-gray-300">{report.operator}</td>

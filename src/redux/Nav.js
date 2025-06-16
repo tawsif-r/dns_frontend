@@ -8,9 +8,12 @@ export const navSlice = createSlice({
     reducers: {
         toggleMenu: (state) => {
             state.menuOpen = !state.menuOpen;
+        },
+        openMenu: (state) => {
+            state.menuOpen = true;
         }
     }
 
 });
-export const { toggleMenu } = navSlice.actions;
+export const { toggleMenu,openMenu } = navSlice.actions;
 export default navSlice.reducer;

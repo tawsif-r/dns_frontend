@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, ChevronLeft, LampDesk, Phone, Home, FileText, Users, CreditCard, Tag, MessageSquare, BarChart2, TestTube, ChevronDown, ChevronRight } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleMenu } from '../../redux/Nav';
+import { toggleMenu,openMenu } from '../../redux/Nav';
 import { Link, useLocation } from 'react-router-dom';
 
 const Nav = () => {
@@ -36,7 +36,7 @@ const Nav = () => {
   return (
     <aside className="bg-gray-800 border-r-2 border-gray-700 h-full flex flex-col flex-shrink-0 transition-all duration-300 ease-in-out">
       <div className="h-16 flex mx-2 items-center justify-center">
-        <button 
+        <button
           onClick={() => dispatch(toggleMenu())}
           className="p-2 rounded-md hover:bg-gray-700 transition-colors duration-200"
           aria-label={menu ? "Collapse sidebar" : "Expand sidebar"}
@@ -49,7 +49,7 @@ const Nav = () => {
         </button>
       </div>
 
-      <nav 
+      <nav
         className={`
           ${menu ? 'w-48' : 'w-16'} 
           transition-all duration-300 ease-in-out 
@@ -61,7 +61,7 @@ const Nav = () => {
         {navItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
-            <Link 
+            <Link
               key={item.path}
               to={item.path}
               className={`
@@ -71,7 +71,7 @@ const Nav = () => {
               `}
             >
               <div className="flex-shrink-0">{item.icon}</div>
-              <span 
+              <span
                 className={`
                   ml-3 whitespace-nowrap
                   ${menu ? 'opacity-100 visible' : 'opacity-0 invisible absolute'}
@@ -87,7 +87,10 @@ const Nav = () => {
         {/* Reports dropdown */}
         <div className="my-1">
           <button
-            onClick={() => setReportsDropdownOpen(!reportsDropdownOpen)}
+            onClick={() => {
+              setReportsDropdownOpen(!reportsDropdownOpen);
+              dispatch(openMenu());
+            }}
             className={`
               flex items-center w-full rounded-md px-3 py-2 
               transition-all duration-200
@@ -97,7 +100,7 @@ const Nav = () => {
             <div className="flex-shrink-0">
               <BarChart2 size={18} />
             </div>
-            <span 
+            <span
               className={`
                 ml-3 whitespace-nowrap flex-1 text-left
                 ${menu ? 'opacity-100 visible' : 'opacity-0 invisible absolute'}
@@ -106,7 +109,7 @@ const Nav = () => {
             >
               Reports
             </span>
-            <div 
+            <div
               className={`
                 flex-shrink-0 ml-2
                 ${menu ? 'opacity-100 visible' : 'opacity-0 invisible absolute'}
@@ -127,7 +130,7 @@ const Nav = () => {
               {reportsItems.map((item) => {
                 const isActive = location.pathname === item.path;
                 return (
-                  <Link 
+                  <Link
                     key={item.path}
                     to={item.path}
                     className={`
