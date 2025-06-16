@@ -8,7 +8,7 @@ function TestReportsPage() {
     const [loading, setLoading] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
     const [active_subscribers, setActive_subscribers] = useState(0)
-    
+
     // Dropdown data states
     const [operators, setOperators] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -37,7 +37,7 @@ function TestReportsPage() {
                 apiClient.get('http://192.168.3.35:8001/admin/api/operators/'),
                 apiClient.get('http://192.168.3.35:8001/admin/api/categories/')
             ]);
-            
+
             setOperators(operatorsResponse.data);
             setCategories(categoriesResponse.data);
             console.log("Operators loaded:", operatorsResponse.data.length);
@@ -70,7 +70,7 @@ function TestReportsPage() {
             });
 
             console.log("Fetching reports with params:", params);
-            
+
             const response = await apiClient.get(baseUrl, { params });
             setReports(response.data.data);
             setActive_subscribers(response.data.active_subscribers);
@@ -78,7 +78,7 @@ function TestReportsPage() {
         } catch (error) {
             console.error('Error fetching reports:', error);
             setReports([]);
-             setActive_subscribers(0)
+            setActive_subscribers(0)
         } finally {
             setLoading(false);
         }
@@ -192,7 +192,7 @@ function TestReportsPage() {
                                 placeholder="Subscriber ID"
                                 value={filters.subscriber}
                                 onChange={(e) => handleFilterChange('subscriber', e.target.value)}
-                                onKeyPress={handleKeyPress}
+                                onKeyDown={handleKeyPress}
                                 className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
                             />
                             <input
@@ -200,10 +200,10 @@ function TestReportsPage() {
                                 placeholder="Short Code"
                                 value={filters.shortcode}
                                 onChange={(e) => handleFilterChange('shortcode', e.target.value)}
-                                onKeyPress={handleKeyPress}
+                                onKeyDown={handleKeyPress}
                                 className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
                             />
-                            
+
                             {/* Operator Dropdown */}
                             <select
                                 value={filters.operator}
@@ -225,7 +225,7 @@ function TestReportsPage() {
                                 placeholder="Service"
                                 value={filters.service}
                                 onChange={(e) => handleFilterChange('service', e.target.value)}
-                                onKeyPress={handleKeyPress}
+                                onKeyDown={handleKeyPress}
                                 className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
                             />
                             <input
@@ -233,7 +233,7 @@ function TestReportsPage() {
                                 placeholder="Keyword"
                                 value={filters.keyword}
                                 onChange={(e) => handleFilterChange('keyword', e.target.value)}
-                                onKeyPress={handleKeyPress}
+                                onKeyDown={handleKeyPress}
                                 className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
                             />
                             <input
@@ -241,10 +241,10 @@ function TestReportsPage() {
                                 placeholder="Subscription Plan ID"
                                 value={filters.subscription_plan}
                                 onChange={(e) => handleFilterChange('subscription_plan', e.target.value)}
-                                onKeyPress={handleKeyPress}
+                                onKeyDown={handleKeyPress}
                                 className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
                             />
-                            
+
                             {/* Category Dropdown */}
                             <select
                                 value={filters.category}
@@ -262,7 +262,7 @@ function TestReportsPage() {
                                 ))}
                             </select>
                         </div>
-                        
+
                         {/* Date Range Filter Section */}
                         <div className="mb-4">
                             <h3 className="text-sm font-medium text-gray-300 mb-2">Date Range Filter</h3>
@@ -295,7 +295,7 @@ function TestReportsPage() {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div className="flex gap-4">
                             <button
                                 onClick={handleSearch}
@@ -314,10 +314,20 @@ function TestReportsPage() {
                             </button>
                         </div>
                     </div>
-                    <div className="mb-6 p-4 bg-gray-800 rounded-lg">
-                        <p className='font-semibold'>Active subscribers: {active_subscribers ? active_subscribers : "0"}</p>
-                        <p className='font-semibold'>Total Charge: Tk {totalCharge.toFixed(2)}</p>
+                    <div className='grid grid-cols-3 gap-1'>
+                        <div className="mb-6 p-4 bg-gray-800 rounded-lg">
+                            <p className='font-semibold'>Active subscribers: {active_subscribers ? active_subscribers : "0"}</p>
+                           
+                        </div>
+                        <div className="mb-6 p-4 bg-gray-800 rounded-lg">
+                            <p className='font-semibold'>Inactive subscribers: {active_subscribers ? active_subscribers : "0"}</p>
+                    
+                        </div>
+                        <div className="mb-6 p-4 bg-gray-800 rounded-lg">
+                            <p className='font-semibold'>Recent subscribers: {active_subscribers ? active_subscribers : "0"}</p>
+                        </div>
                     </div>
+
 
                     {/* Loading Indicator */}
                     {loading && (
