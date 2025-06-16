@@ -3,13 +3,19 @@ import { TrashIcon, FilterIcon, SearchIcon } from 'lucide-react';
 import apiClient from '../api/axiosInstance';
 import axios from 'axios';
 
-function TestReportsPage() {
+function RecentReportsPage() {
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
-    const [active_subscribers, setActive_subscribers] = useState(0)
-    const [inactive_subscribers, setInActive_subscribers] = useState(0)
-    const [recent_subscribers, setRecent_subscribers] = useState(0)
+    const [subscriber_count, setSubscriberCount] = useState(0);
+    const [active_subscribers, setActive_subscribers] = useState(0);
+    const [inactive_subscribers, setInActive_subscribers] = useState(0);
+    const [recent_subscribers, setRecent_subscribers] = useState(0);
+    const [appliedFilters, setAppliedFilters] = useState({});
+    const [viewTable, setViewTable] = useState(false);
+
+    // New state for plan-based statistics
+    const [planStats, setPlanStats] = useState({});
 
     // Dropdown data states
     const [operators, setOperators] = useState([]);
@@ -46,7 +52,6 @@ function TestReportsPage() {
             console.log("Categories loaded:", categoriesResponse.data.length);
         } catch (error) {
             console.error('Error fetching dropdown data:', error);
-            // Set empty arrays on error to prevent crashes
             setOperators([]);
             setCategories([]);
         } finally {
@@ -63,7 +68,6 @@ function TestReportsPage() {
     const fetchReports = async (searchFilters = filters) => {
         setLoading(true);
         try {
-            // Build query parameters object, only including non-empty values
             const params = {};
             Object.keys(searchFilters).forEach(key => {
                 if (searchFilters[key] && searchFilters[key].trim() !== '') {
@@ -75,6 +79,8 @@ function TestReportsPage() {
 
             const response = await apiClient.get(baseUrl, { params });
             setReports(response.data.data);
+            setAppliedFilters(response.data.filters_applied);
+            setSubscriberCount(response.data.subscriber_count);
             setActive_subscribers(response.data.active_subscribers);
             setInActive_subscribers(response.data.inactive_subscribers);
             setRecent_subscribers(response.data.recent_subscribers);
@@ -82,12 +88,30 @@ function TestReportsPage() {
         } catch (error) {
             console.error('Error fetching reports:', error);
             setReports([]);
+            setSubscriberCount(0);
             setActive_subscribers(0);
             setInActive_subscribers(0);
             setRecent_subscribers(0);
         } finally {
             setLoading(false);
         }
+    };
+
+    // Calculate plan-based statistics
+    useEffect(() => {
+        const stats = reports.reduce((acc, report) => {
+            const plan = report.subscription_plan_name || 'Unknown';
+            acc[plan] = acc[plan] || { count: 0, totalCharge: 0 };
+            acc[plan].count += 1;
+            acc[plan].totalCharge += parseFloat(report.total_charge) || 0;
+            return acc;
+        }, {});
+        setPlanStats(stats);
+    }, [reports]);
+
+    // Handle table view toggle
+    const handleTableView = () => {
+        setViewTable(!viewTable);
     };
 
     // Handle filter changes
@@ -118,10 +142,12 @@ function TestReportsPage() {
         };
         setFilters(clearedFilters);
         setReports([]);
+        setSubscriberCount(0);
         setActive_subscribers(0);
         setInActive_subscribers(0);
         setRecent_subscribers(0);
         setHasSearched(false);
+        setViewTable(false);
     };
 
     // Handle Enter key press in filter inputs
@@ -140,7 +166,6 @@ function TestReportsPage() {
     const handleDeleteReport = async (id) => {
         try {
             await axios.delete(`${baseUrl}${id}/`);
-            // Refresh the reports after deletion with current filters
             fetchReports();
         } catch (error) {
             console.error('Error deleting report:', error);
@@ -211,8 +236,6 @@ function TestReportsPage() {
                                 onKeyDown={handleKeyPress}
                                 className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
                             />
-
-                            {/* Operator Dropdown */}
                             <select
                                 value={filters.operator}
                                 onChange={(e) => handleFilterChange('operator', e.target.value)}
@@ -242,7 +265,7 @@ function TestReportsPage() {
                                 value={filters.keyword}
                                 onChange={(e) => handleFilterChange('keyword', e.target.value)}
                                 onKeyDown={handleKeyPress}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black border rounded px-3 py-2 text-gray-300 focus:outline-none focus:border-blue-200"
                             />
                             <input
                                 type="text"
@@ -252,8 +275,6 @@ function TestReportsPage() {
                                 onKeyDown={handleKeyPress}
                                 className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
                             />
-
-                            {/* Category Dropdown */}
                             <select
                                 value={filters.category}
                                 onChange={(e) => handleFilterChange('category', e.target.value)}
@@ -322,20 +343,67 @@ function TestReportsPage() {
                             </button>
                         </div>
                     </div>
-                    <div className='grid grid-cols-3 gap-1'>
+
+                    <div className='grid grid-cols-2 gap-1'>
                         <div className="mb-6 p-4 bg-gray-800 rounded-lg">
-                            <p className='font-semibold'>Active subscribers: {active_subscribers ? active_subscribers : "0"}</p>
-                           
+                            {/* Applied Filters Section */}
+                            {hasSearched && Object.keys(appliedFilters).length > 0 && (
+                                <div className="mb-6 p-4 bg-gray-800 rounded-lg">
+                                    <h2 className="text-lg font-semibold mb-2 text-white">Applied Filters</h2>
+                                    <div className="flex flex-wrap gap-2">
+                                        {Object.entries(appliedFilters).map(([key, value]) => {
+                                            if (!value) return null;
+                                            const formattedKey = key
+                                                .replace('_', ' ')
+                                                .split(' ')
+                                                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                                                .join(' ');
+                                            return (
+                                                <span key={key} className="px-3 py-1 bg-blue-900 text-blue-200 rounded-full text-xs">
+                                                    <strong>{formattedKey}:</strong> {value}
+                                                </span>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                            <div className="font-semibold text-lg text-gray-800 dark:text-gray-200">
+                                Number of subscribers:{subscriber_count ? subscriber_count : "0"}
+                                <div className="flex flex-col items-start">
+                                    
+                                    {/* Subscription Plan Statistics */}
+                                    {hasSearched && Object.keys(planStats).length > 0 && (
+                                        <div className="mt-4 w-full">
+                                            <h3 className="text-md font-semibold text-white mb-2">Subscription Plan Breakdown:</h3>
+                                            {Object.entries(planStats).map(([plan, { count, totalCharge }]) => {
+                                                const individualCharge = count > 0 ? (totalCharge / count).toFixed(2) : '0.00';
+                                                return (
+                                                    <div key={plan} className="flex justify-between items-center py-2 border-b border-gray-600">
+                                                        <span className="text-gray-300">{plan}</span>
+                                                        <span className="text-gray-300">
+                                                            Tk {individualCharge} X {count} = Tk {individualCharge*count.toFixed(2)}
+                                                        </span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                    {hasSearched && (
+                                        <button
+                                            onClick={handleTableView}
+                                            className="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200"
+                                        >
+                                            {viewTable ? 'Hide Table' : 'View Table'}
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                         <div className="mb-6 p-4 bg-gray-800 rounded-lg">
-                            <p className='font-semibold'>Inactive subscribers: {inactive_subscribers ? inactive_subscribers : "0"}</p>
-                    
-                        </div>
-                        <div className="mb-6 p-4 bg-gray-800 rounded-lg">
-                            <p className='font-semibold'>Recent subscribers: {recent_subscribers ? recent_subscribers : "0"}</p>
+                            <p className='font-semibold'>Billing:</p>
+                            <p className='font-semibold'>Total Charge: Tk {totalCharge.toFixed(2)}</p>
                         </div>
                     </div>
-
 
                     {/* Loading Indicator */}
                     {loading && (
@@ -346,7 +414,7 @@ function TestReportsPage() {
                     )}
 
                     {/* Reports Table */}
-                    {hasSearched && !loading && (
+                    {hasSearched && !loading && viewTable && (
                         <div className="overflow-x-auto border-2 rounded-lg">
                             {reports.length > 0 ? (
                                 <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
@@ -415,4 +483,4 @@ function TestReportsPage() {
     );
 }
 
-export default TestReportsPage;
+export default RecentReportsPage;
