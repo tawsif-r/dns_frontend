@@ -6,7 +6,6 @@ function SubscribersPage() {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [subscribers, setSubscribers] = useState([]);
-    const [editingSubscriber, setEditingSubscriber] = useState(null);
 
     const baseUrl = '/admin/api/subscribercategories/'; // Adjust the API endpoint as needed
 
