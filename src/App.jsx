@@ -17,7 +17,7 @@ import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import TestReportsPage from './pages/TestReportsPage';
 import RecentReportsPage from './pages/RecentReportsPage';
-
+import FootballMessagePage from './pages/FootballMessagePage';
 
 
 function Logout() {
@@ -50,6 +50,7 @@ function App() {
             {/* Test routes */}
             <Route path="/testreports" element={<ProtectedRoute><Layout><TestReportsPage /></Layout></ProtectedRoute>} />
             <Route path="/recentreports" element={<ProtectedRoute><Layout><RecentReportsPage /></Layout></ProtectedRoute>} />
+            <Route path='/football' element={<ProtectedRoute><Layout><FootballMessagePage /></Layout></ProtectedRoute>} />
             {/* New routes */}
             <Route path="/reports" element={<ProtectedRoute><Layout><ReportsPage /></Layout></ProtectedRoute>} />
             <Route path="/subscribertester" element={<Layout><TestSubscribersPage /></Layout>} />

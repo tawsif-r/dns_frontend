@@ -9,6 +9,7 @@ const Nav = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [reportsDropdownOpen, setReportsDropdownOpen] = useState(false);
+  const [sportsDropdownOpen, setSportsDropdownOpen] = useState(false);
 
   // Navigation items with their icons
   const navItems = [
@@ -28,6 +29,11 @@ const Nav = () => {
     { path: '/reports', label: 'Report', icon: <BarChart2 size={18} /> },
     { path: '/testreports', label: 'Test Report', icon: <BarChart2 size={18} /> },
     { path: '/recentreports', label: 'Recent Subs', icon: <BarChart2 size={18} /> },
+  ];
+
+    // Reports dropdown items
+  const sportsItems = [
+    { path: '/football', label: 'Football', icon: <BarChart2 size={18} /> },
   ];
 
   // Check if any reports item is active
@@ -128,6 +134,72 @@ const Nav = () => {
           {reportsDropdownOpen && menu && (
             <div className="ml-6 mt-1">
               {reportsItems.map((item) => {
+                const isActive = location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`
+                      flex items-center rounded-md my-1 px-3 py-2 
+                      transition-all duration-200
+                      ${isActive ? 'bg-gray-600 text-cyan-400' : 'hover:bg-gray-600 hover:text-cyan-400 text-gray-300'}
+                    `}
+                  >
+                    <div className="flex-shrink-0">{item.icon}</div>
+                    <span className="ml-3 whitespace-nowrap">
+                      {item.label}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Sports dropdown */}
+        <div className="my-1">
+          <button
+            onClick={() => {
+              setSportsDropdownOpen(!sportsDropdownOpen);
+              dispatch(openMenu());
+            }}
+            className={`
+              flex items-center w-full rounded-md px-3 py-2 
+              transition-all duration-200
+              ${isReportsActive ? 'bg-gray-700 text-cyan-400' : 'hover:bg-gray-700 hover:text-cyan-400 text-gray-300'}
+            `}
+          >
+            <div className="flex-shrink-0">
+              <BarChart2 size={18} />
+            </div>
+            <span
+              className={`
+                ml-3 whitespace-nowrap flex-1 text-left
+                ${menu ? 'opacity-100 visible' : 'opacity-0 invisible absolute'}
+                transition-opacity duration-200
+              `}
+            >
+              Sports
+            </span>
+            <div
+              className={`
+                flex-shrink-0 ml-2
+                ${menu ? 'opacity-100 visible' : 'opacity-0 invisible absolute'}
+                transition-opacity duration-200
+              `}
+            >
+              {sportsDropdownOpen ? (
+                <ChevronDown size={16} />
+              ) : (
+                <ChevronRight size={16} />
+              )}
+            </div>
+          </button>
+
+          {/* Dropdown items */}
+          {sportsDropdownOpen && menu && (
+            <div className="ml-6 mt-1">
+              {sportsItems.map((item) => {
                 const isActive = location.pathname === item.path;
                 return (
                   <Link
