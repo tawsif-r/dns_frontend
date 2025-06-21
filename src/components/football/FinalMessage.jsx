@@ -1,5 +1,3 @@
-import React from 'react';
-
 function FinalMessage({ teamsData, scoreData, currentTime }) {
   const recentMessages = [
     { id: 1, type: 'GOAL', player: 'Bukayo Saka', team: 'Arsenal', score: '2 - 1 Chelsea', minute: 67, time: '2 min ago' },

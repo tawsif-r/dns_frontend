@@ -1,5 +1,3 @@
-import React from 'react';
-
 function ActiveMatch({ activeMatches, liveMatchesCount, selectedMatchId, onMatchSelect }) {
   
   const handleMatchClick = (match) => {
