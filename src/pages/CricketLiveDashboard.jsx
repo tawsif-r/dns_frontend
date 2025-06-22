@@ -1,32 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Clock, Users, Trophy, AlertCircle, Target, Star, Calendar, Activity } from 'lucide-react';
+import { Activity } from 'lucide-react';
 import axios from 'axios';
 
 function CricketLiveDashboard() {
   const [selectedMatch, setSelectedMatch] = useState(0);
-  const [selectedEventType, setSelectedEventType] = useState('wicket');
   const [matches, setMatches] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [eventDetails, setEventDetails] = useState({
-    batsman: '',
-    bowler: '',
-    runs: '',
-    ballType: '',
-    dismissalType: '',
-    fielder: '',
-  });
+  const [messages, setMessages] = useState([]);
+  const [loadingMatches, setLoadingMatches] = useState(true);
+  const [loadingMessages, setLoadingMessages] = useState(true);
+  const [errorMatches, setErrorMatches] = useState(null);
+  const [errorMessages, setErrorMessages] = useState(null);
+  const [messageInput, setMessageInput] = useState('');
+  const [generating, setGenerating] = useState(false);
+  const [generateStatus, setGenerateStatus] = useState(null);
 
-  // Fetch matches from API
+  // Fetch matches
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        setLoading(true);
+        setLoadingMatches(true);
         const baseUrl = 'http://192.168.3.35:8002/sport/api/matches/?sport_category=cricket';
         const response = await axios.get(baseUrl);
         console.log('Matches API Response:', response.data);
 
-        // Validate and filter matches
         const validMatches = response.data.filter(
           (match) =>
             match &&
@@ -39,20 +35,39 @@ function CricketLiveDashboard() {
         );
         setMatches(validMatches);
 
-        // Reset selectedMatch if out of bounds
         if (selectedMatch >= validMatches.length) {
           setSelectedMatch(0);
         }
       } catch (error) {
         console.error('Error fetching Matches:', error);
-        setError('Failed to load matches. Please try again later.');
+        setErrorMatches('Failed to load matches. Please try again later.');
         setMatches([]);
       } finally {
-        setLoading(false);
+        setLoadingMatches(false);
       }
     };
     fetchMatches();
-  }, []); // Removed selectedMatch from dependency array to avoid infinite loop
+  }, []);
+
+  // Fetch messages
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        setLoadingMessages(true);
+        const baseUrl = 'http://192.168.3.35:8002/sport/api/spMessageBox/?sport_category=cricket';
+        const response = await axios.get(baseUrl);
+        console.log('Messages API Response:', response.data);
+        setMessages(response.data);
+      } catch (error) {
+        console.error('Error fetching Messages:', error);
+        setErrorMessages('Failed to load messages. Please try again later.');
+        setMessages([]);
+      } finally {
+        setLoadingMessages(false);
+      }
+    };
+    fetchMessages();
+  }, []);
 
   // Reset selectedMatch when matches change
   useEffect(() => {
@@ -61,54 +76,38 @@ function CricketLiveDashboard() {
     }
   }, [matches, selectedMatch]);
 
-  const publishedMessages = [
-    {
-      time: '18.3',
-      type: 'WICKET',
-      message: 'WICKET! Jadeja bowls Iyer for 34! What a delivery that was!',
-      team: 'MI',
-      minutes: '2 min ago',
-    },
-    {
-      time: '17.5',
-      type: 'SIX',
-      message: "SIX! Massive hit by Suryakumar Yadav! That's gone into the stands!",
-      team: 'MI',
-      minutes: '4 min ago',
-    },
-    {
-      time: '16.2',
-      type: 'FOUR',
-      message: 'FOUR! Beautiful cover drive by Rohit Sharma! Textbook shot!',
-      team: 'MI',
-      minutes: '7 min ago',
-    },
-    {
-      time: '15.4',
-      type: 'WICKET',
-      message: 'WICKET! Chahar strikes! Tilak Varma caught behind for 28!',
-      team: 'MI',
-      minutes: '12 min ago',
-    },
-  ];
+  // Handle message generation
+  const handleGenerateMessage = async () => {
+    if (!messageInput.trim()) {
+      setGenerateStatus({ type: 'error', message: 'Please enter a message.' });
+      return;
+    }
 
-  const eventTypes = [
-    { id: 'wicket', label: 'Wicket', icon: Target, color: 'bg-red-500' },
-    { id: 'boundary', label: 'Boundary', icon: Star, color: 'bg-green-500' },
-    { id: 'milestone', label: 'Milestone', icon: Trophy, color: 'bg-yellow-500' },
-    { id: 'strategic', label: 'Strategic', icon: Activity, color: 'bg-blue-500' },
-    { id: 'special', label: 'Special', icon: AlertCircle, color: 'bg-purple-500' },
-    { id: 'other', label: 'Other', icon: Calendar, color: 'bg-gray-500' },
-  ];
+    setGenerating(true);
+    setGenerateStatus(null);
 
-  const quickEvents = [
-    { label: 'Wicket Taken', type: 'wicket' },
-    { label: 'Boundary Scored', type: 'boundary' },
-    { label: 'Fifty Milestone', type: 'milestone' },
-    { label: 'Century Milestone', type: 'milestone' },
-    { label: 'Dropped Catch', type: 'special' },
-    { label: 'Strategic Timeout', type: 'strategic' },
-  ];
+    try {
+      const payload = {
+        text_for_review: messageInput,
+        sport_category: 'cricket',
+        processed: false,
+      };
+      await axios.post('http://192.168.3.35:8002/sport/api/sportListing/', payload);
+      setGenerateStatus({ type: 'success', message: 'Message generated successfully!' });
+
+      // Refetch messages to update the Published Messages section
+      const response = await axios.get('http://192.168.3.35:8002/sport/api/spMessageBox/?sport_category=cricket');
+      setMessages(response.data);
+
+      // Clear input
+      setMessageInput('');
+    } catch (error) {
+      console.error('Error generating message:', error);
+      setGenerateStatus({ type: 'error', message: 'Failed to generate message. Please try again.' });
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   const currentMatch = matches[selectedMatch] || {};
 
@@ -138,12 +137,12 @@ function CricketLiveDashboard() {
     }
   };
 
-  if (loading) {
+  if (loadingMatches) {
     return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">Loading matches...</div>;
   }
 
-  if (error) {
-    return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">{error}</div>;
+  if (errorMatches) {
+    return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">{errorMatches}</div>;
   }
 
   if (matches.length === 0) {
@@ -243,7 +242,7 @@ function CricketLiveDashboard() {
               <div className="text-xs text-gray-300">
                 <strong>Tip</strong>
                 <br />
-                Click on any match to view details and create events for that specific game
+                Click on any match to view details and generate messages for that specific game
               </div>
             </div>
           </div>
@@ -327,131 +326,82 @@ function CricketLiveDashboard() {
             )}
           </div>
 
-          {/* Message Templates */}
+          {/* Message Template */}
           <div className="bg-gray-800 rounded-lg p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold">Message Templates</h3>
+              <h3 className="text-xl font-semibold">Generate Message</h3>
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-400">12 Messages</span>
+                <span className="text-sm text-gray-400">{messages.length} Messages</span>
                 <span className="bg-blue-600 text-xs px-2 py-1 rounded">Match #1</span>
               </div>
             </div>
 
-            {/* Event Type Tabs */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              {eventTypes.map((type) => {
-                const Icon = type.icon;
-                return (
-                  <button
-                    key={type.id}
-                    onClick={() => setSelectedEventType(type.id)}
-                    className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                      selectedEventType === type.id
-                        ? `${type.color} text-white`
-                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                    }`}
-                  >
-                    <Icon className="w-4 h-4" />
-                    <span>{type.label}</span>
-                  </button>
-                );
-              })}
+            {/* Message Input */}
+            <div className="mb-4">
+              <label className="block text-xs text-gray-400 mb-1">Message Content</label>
+              <textarea
+                placeholder="Enter your message (e.g., WICKET! Jadeja bowls Iyer for 34!)"
+                className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+                rows="4"
+                value={messageInput}
+                onChange={(e) => setMessageInput(e.target.value)}
+              />
             </div>
 
-            {/* Quick Select */}
-            <div className="mb-6">
-              <h4 className="text-sm font-semibold text-gray-400 mb-3">Quick Select</h4>
-              <div className="text-xs text-gray-500 mb-3">Choose event type</div>
-              <div className="grid grid-cols-3 gap-3">
-                {quickEvents.map((event, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedEventType(event.type)}
-                    className="p-3 bg-gray-700 hover:bg-gray-600 rounded-lg text-left transition-colors"
-                  >
-                    <div className="text-sm font-medium">{event.label}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
+            {/* Generate Button */}
+            <button
+              onClick={handleGenerateMessage}
+              disabled={generating || !messageInput.trim()}
+              className={`w-full py-2 rounded-lg text-sm font-semibold transition-colors ${
+                generating || !messageInput.trim()
+                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
+              }`}
+            >
+              {generating ? 'Generating...' : 'Generate Message'}
+            </button>
 
-            {/* Event Details Form */}
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <h4 className="text-sm font-semibold text-gray-400 mb-3">Event Details</h4>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs text-gray-400 mb-1">Batsman</label>
-                    <input
-                      type="text"
-                      placeholder="Enter batsman name"
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
-                      value={eventDetails.batsman}
-                      onChange={(e) => setEventDetails({ ...eventDetails, batsman: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-400 mb-1">Bowler</label>
-                    <input
-                      type="text"
-                      placeholder="Enter bowler name"
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
-                      value={eventDetails.bowler}
-                      onChange={(e) => setEventDetails({ ...eventDetails, bowler: e.target.value })}
-                    />
-                  </div>
-                </div>
+            {/* Status Message */}
+            {generateStatus && (
+              <div
+                className={`mt-3 text-sm ${
+                  generateStatus.type === 'success' ? 'text-green-400' : 'text-red-400'
+                }`}
+              >
+                {generateStatus.message}
               </div>
-
-              <div>
-                <h4 className="text-sm font-semibold text-gray-400 mb-3">Event Type</h4>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs text-gray-400 mb-1">Runs Scored</label>
-                    <select
-                      className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
-                      value={eventDetails.runs}
-                      onChange={(e) => setEventDetails({ ...eventDetails, runs: e.target.value })}
-                    >
-                      <option value="">Select runs</option>
-                      <option value="0">Dot Ball</option>
-                      <option value="1">1 Run</option>
-                      <option value="2">2 Runs</option>
-                      <option value="3">3 Runs</option>
-                      <option value="4">Four</option>
-                      <option value="6">Six</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-400 mb-1">Difficulty</label>
-                    <select className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
-                      <option>Easy/Good/Brilliant/World Class</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         </div>
 
         {/* Right Sidebar - Published Messages */}
         <div className="w-80 bg-gray-800 border-l border-gray-700 p-4">
           <h3 className="text-lg font-semibold mb-4">Published Messages</h3>
-          <div className="space-y-3">
-            {publishedMessages.map((msg, index) => (
-              <div key={index} className="bg-gray-700 rounded-lg p-3">
-                <div className="flex items-center justify-between mb-2">
-                  <span className={`text-xs font-bold ${getMessageTypeColor(msg.type)}`}>{msg.type}!</span>
-                  <span className="text-xs text-gray-400">{msg.time}'</span>
+          {loadingMessages ? (
+            <div className="text-gray-400 text-sm">Loading messages...</div>
+          ) : errorMessages ? (
+            <div className="text-red-400 text-sm">{errorMessages}</div>
+          ) : messages.length === 0 ? (
+            <div className="text-gray-400 text-sm">No messages available.</div>
+          ) : (
+            <div className="space-y-3">
+              {messages.map((msg, index) => (
+                <div key={msg.id || index} className="bg-gray-700 rounded-lg p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className={`text-xs font-bold ${getMessageTypeColor(msg.type || 'DEFAULT')}`}>
+                      {(msg.type || 'UPDATE') + '!'}
+                    </span>
+                    <span className="text-xs text-gray-400">{msg.time || 'N/A'}</span>
+                  </div>
+                  <p className="text-sm text-gray-300 mb-2">{msg.text_for_review || 'No message content'}</p>
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    <span>Sent to users</span>
+                    <span>{msg.minutes || 'Just now'}</span>
+                  </div>
                 </div>
-                <p className="text-sm text-gray-300 mb-2">{msg.message}</p>
-                <div className="flex items-center justify-between text-xs text-gray-500">
-                  <span>Sent to 22,334 users</span>
-                  <span>{msg.minutes}</span>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
