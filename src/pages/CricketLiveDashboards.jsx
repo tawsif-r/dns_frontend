@@ -1,95 +1,146 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Clock, Users, Trophy, AlertCircle, Target, Star, Calendar, Activity } from 'lucide-react';
+import apiClient from '../api/axiosInstance';
 import axios from 'axios';
 
 function CricketLiveDashboard() {
   const [selectedMatch, setSelectedMatch] = useState(0);
   const [selectedEventType, setSelectedEventType] = useState('wicket');
   const [matches, setMatches] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [eventDetails, setEventDetails] = useState({
     batsman: '',
     bowler: '',
     runs: '',
     ballType: '',
     dismissalType: '',
-    fielder: '',
+    fielder: ''
   });
 
-  // Fetch matches from API
+  // fetch the data from api endpoint
+
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        setLoading(true);
-        const baseUrl = 'http://192.168.3.35:8002/sport/api/matches/?sport_category=cricket';
         const response = await axios.get(baseUrl);
         console.log('Matches API Response:', response.data);
-
-        // Validate and filter matches
-        const validMatches = response.data.filter(
-          (match) =>
-            match &&
-            match.id &&
-            match.teams &&
-            match.teams.home &&
-            match.teams.away &&
-            match.teams.home.team_short &&
-            match.teams.away.team_short
-        );
-        setMatches(validMatches);
-
-        // Reset selectedMatch if out of bounds
-        if (selectedMatch >= validMatches.length) {
-          setSelectedMatch(0);
-        }
+        setMatches(response.data);
       } catch (error) {
         console.error('Error fetching Matches:', error);
-        setError('Failed to load matches. Please try again later.');
         setMatches([]);
-      } finally {
-        setLoading(false);
       }
     };
     fetchMatches();
-  }, []); // Removed selectedMatch from dependency array to avoid infinite loop
+  }, []);
 
-  // Reset selectedMatch when matches change
-  useEffect(() => {
-    if (matches.length > 0 && selectedMatch >= matches.length) {
-      setSelectedMatch(0);
-    }
-  }, [matches, selectedMatch]);
+
+  // // Mock data for cricket matches
+  // const matches = [
+  //   {
+  //     id: 1,
+  //     match_id: "IPL_2025_M45",
+  //     matchday: 45,
+  //     match_date: "2025-06-21T14:30:00Z",
+  //     status: "live",
+  //     over: 18,
+  //     ball: 3,
+  //     sport_category: "cricket",
+  //     format: "T20",
+  //     venue: "Eden Gardens",
+  //     teams: {
+  //       home: {
+  //         team_name: "Mumbai Indians",
+  //         team_short: "MI",
+  //         captain: "Rohit Sharma",
+  //         score: { runs: 156, wickets: 4, overs: 18.3 }
+  //       },
+  //       away: {
+  //         team_name: "Chennai Super Kings",
+  //         team_short: "CSK", 
+  //         captain: "MS Dhoni",
+  //         score: { runs: 142, wickets: 6, overs: 20.0 }
+  //       }
+  //     },
+  //     current_innings: 2,
+  //     target: 157
+  //   },
+  //   {
+  //     id: 2,
+  //     match_id: "BBL_2025_M23",
+  //     matchday: 23,
+  //     match_date: "2025-06-21T09:45:00Z",
+  //     status: "upcoming",
+  //     sport_category: "cricket",
+  //     format: "T20",
+  //     venue: "MCG Melbourne",
+  //     teams: {
+  //       home: {
+  //         team_name: "Melbourne Stars",
+  //         team_short: "STA",
+  //         captain: "Glenn Maxwell"
+  //       },
+  //       away: {
+  //         team_name: "Sydney Sixers", 
+  //         team_short: "SIX",
+  //         captain: "Moises Henriques"
+  //       }
+  //     }
+  //   },
+  //   {
+  //     id: 3,
+  //     match_id: "PSL_2025_M12",
+  //     matchday: 12,
+  //     match_date: "2025-06-21T16:00:00Z",
+  //     status: "finished",
+  //     sport_category: "cricket",
+  //     format: "T20",
+  //     venue: "National Stadium",
+  //     teams: {
+  //       home: {
+  //         team_name: "Karachi Kings",
+  //         team_short: "KK",
+  //         captain: "Babar Azam",
+  //         score: { runs: 178, wickets: 5, overs: 20.0 }
+  //       },
+  //       away: {
+  //         team_name: "Lahore Qalandars",
+  //         team_short: "LQ",
+  //         captain: "Shaheen Afridi", 
+  //         score: { runs: 165, wickets: 8, overs: 20.0 }
+  //       }
+  //     },
+  //     result: "KK won by 13 runs"
+  //   }
+  // ];
 
   const publishedMessages = [
     {
-      time: '18.3',
-      type: 'WICKET',
-      message: 'WICKET! Jadeja bowls Iyer for 34! What a delivery that was!',
-      team: 'MI',
-      minutes: '2 min ago',
+      time: "18.3",
+      type: "WICKET",
+      message: "WICKET! Jadeja bowls Iyer for 34! What a delivery that was!",
+      team: "MI",
+      minutes: "2 min ago"
     },
     {
-      time: '17.5',
-      type: 'SIX',
+      time: "17.5",
+      type: "SIX",
       message: "SIX! Massive hit by Suryakumar Yadav! That's gone into the stands!",
-      team: 'MI',
-      minutes: '4 min ago',
+      team: "MI",
+      minutes: "4 min ago"
     },
     {
-      time: '16.2',
-      type: 'FOUR',
-      message: 'FOUR! Beautiful cover drive by Rohit Sharma! Textbook shot!',
-      team: 'MI',
-      minutes: '7 min ago',
+      time: "16.2",
+      type: "FOUR",
+      message: "FOUR! Beautiful cover drive by Rohit Sharma! Textbook shot!",
+      team: "MI",
+      minutes: "7 min ago"
     },
     {
-      time: '15.4',
-      type: 'WICKET',
-      message: 'WICKET! Chahar strikes! Tilak Varma caught behind for 28!',
-      team: 'MI',
-      minutes: '12 min ago',
-    },
+      time: "15.4",
+      type: "WICKET",
+      message: "WICKET! Chahar strikes! Tilak Varma caught behind for 28!",
+      team: "MI",
+      minutes: "12 min ago"
+    }
   ];
 
   const eventTypes = [
@@ -98,7 +149,7 @@ function CricketLiveDashboard() {
     { id: 'milestone', label: 'Milestone', icon: Trophy, color: 'bg-yellow-500' },
     { id: 'strategic', label: 'Strategic', icon: Activity, color: 'bg-blue-500' },
     { id: 'special', label: 'Special', icon: AlertCircle, color: 'bg-purple-500' },
-    { id: 'other', label: 'Other', icon: Calendar, color: 'bg-gray-500' },
+    { id: 'other', label: 'Other', icon: Calendar, color: 'bg-gray-500' }
   ];
 
   const quickEvents = [
@@ -107,48 +158,28 @@ function CricketLiveDashboard() {
     { label: 'Fifty Milestone', type: 'milestone' },
     { label: 'Century Milestone', type: 'milestone' },
     { label: 'Dropped Catch', type: 'special' },
-    { label: 'Strategic Timeout', type: 'strategic' },
+    { label: 'Strategic Timeout', type: 'strategic' }
   ];
 
-  const currentMatch = matches[selectedMatch] || {};
+  const currentMatch = matches[selectedMatch];
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'live':
-        return 'bg-red-500';
-      case 'upcoming':
-        return 'bg-blue-500';
-      case 'finished':
-        return 'bg-green-500';
-      default:
-        return 'bg-gray-500';
+      case 'live': return 'bg-red-500';
+      case 'upcoming': return 'bg-blue-500';
+      case 'finished': return 'bg-green-500';
+      default: return 'bg-gray-500';
     }
   };
 
   const getMessageTypeColor = (type) => {
     switch (type) {
-      case 'WICKET':
-        return 'text-red-400';
-      case 'SIX':
-        return 'text-purple-400';
-      case 'FOUR':
-        return 'text-green-400';
-      default:
-        return 'text-blue-400';
+      case 'WICKET': return 'text-red-400';
+      case 'SIX': return 'text-purple-400';
+      case 'FOUR': return 'text-green-400';
+      default: return 'text-blue-400';
     }
   };
-
-  if (loading) {
-    return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">Loading matches...</div>;
-  }
-
-  if (error) {
-    return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">{error}</div>;
-  }
-
-  if (matches.length === 0) {
-    return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">No matches available.</div>;
-  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -158,8 +189,7 @@ function CricketLiveDashboard() {
           <div className="flex items-center space-x-4">
             <h1 className="text-xl font-bold text-blue-400">CricApp</h1>
             <p className="text-gray-400 text-sm">
-              CricApp bridges the gap by acting as a smart intermediary between cricket boards, broadcasters, and fans,
-              delivering tailored updates and curated content straight to your fingertips.
+              CricApp bridges the gap by acting as a smart intermediary between cricket boards, broadcasters, and fans, delivering tailored updates and curated content straight to your fingertips.
             </p>
           </div>
           <div className="flex items-center space-x-3">
@@ -185,9 +215,7 @@ function CricketLiveDashboard() {
               <h2 className="font-bold text-lg">CricApp Live Cricket</h2>
               <div className="flex items-center space-x-2">
                 <span className="bg-green-500 text-xs px-2 py-1 rounded">Live</span>
-                <span className="bg-blue-500 text-xs px-2 py-1 rounded">
-                  {matches.filter((m) => m.status === 'live').length} Active
-                </span>
+                <span className="bg-blue-500 text-xs px-2 py-1 rounded">{matches.filter(m => m.status === 'live').length} Active</span>
               </div>
             </div>
           </div>
@@ -199,25 +227,22 @@ function CricketLiveDashboard() {
               {matches.map((match, index) => (
                 <div
                   key={match.id}
-                  className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                    selectedMatch === index ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-650'
-                  }`}
+                  className={`p-3 rounded-lg cursor-pointer transition-colors ${selectedMatch === index ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-650'
+                    }`}
                   onClick={() => setSelectedMatch(index)}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className={`text-xs px-2 py-1 rounded text-white ${getStatusColor(match.status)}`}>
-                      {(match.status || 'N/A').toUpperCase()}
+                      {match.status.toUpperCase()}
                     </span>
-                    <span className="text-xs text-gray-400">{match.format || 'N/A'}</span>
+                    <span className="text-xs text-gray-400">{match.format}</span>
                   </div>
                   <div className="text-sm font-medium">
-                    {match.teams?.home?.team_short && match.teams?.away?.team_short
-                      ? `${match.teams.home.team_short} vs ${match.teams.away.team_short}`
-                      : 'Teams not available'}
+                    {match.teams.home.team_short} vs {match.teams.away.team_short}
                   </div>
-                  {match.status === 'live' && match.teams?.home?.score && match.teams?.away?.score && (
+                  {match.status === 'live' && match.teams.home.score && (
                     <div className="text-xs text-gray-300 mt-1">
-                      {match.teams.home.score.runs}/{match.teams.home.score.wickets} ({match.teams.home.score.overs}) -{' '}
+                      {match.teams.home.score.runs}/{match.teams.home.score.wickets} ({match.teams.home.score.overs}) -
                       {match.teams.away.score.runs}/{match.teams.away.score.wickets} ({match.teams.away.score.overs})
                     </div>
                   )}
@@ -226,7 +251,7 @@ function CricketLiveDashboard() {
                   )}
                   {match.status === 'live' && (
                     <div className="text-xs text-blue-400 mt-1">
-                      Over {match.over || 0}.{match.ball || 0}
+                      Over {match.over}.{match.ball}
                     </div>
                   )}
                 </div>
@@ -241,8 +266,7 @@ function CricketLiveDashboard() {
                 <span className="text-xs">💡</span>
               </div>
               <div className="text-xs text-gray-300">
-                <strong>Tip</strong>
-                <br />
+                <strong>Tip</strong><br />
                 Click on any match to view details and create events for that specific game
               </div>
             </div>
@@ -255,46 +279,40 @@ function CricketLiveDashboard() {
           <div className="bg-gray-800 rounded-lg p-6 mb-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-bold">
-                {currentMatch.teams?.home?.team_name && currentMatch.teams?.away?.team_name
-                  ? `${currentMatch.teams.home.team_name} vs ${currentMatch.teams.away.team_name}`
-                  : 'Match details not available'}
+                {currentMatch.teams.home.team_name} vs {currentMatch.teams.away.team_name}
               </h2>
               {currentMatch.status === 'live' && (
                 <div className="flex items-center space-x-2 text-red-400">
                   <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm">
-                    Over {currentMatch.over || 0}.{currentMatch.ball || 0}
-                  </span>
+                  <span className="text-sm">Over {currentMatch.over}.{currentMatch.ball}</span>
                 </div>
               )}
             </div>
 
             <div className="flex items-center space-x-6 text-sm text-gray-400 mb-4">
-              <span>🏟️ {currentMatch.venue || 'N/A'}</span>
-              <span>🏏 {currentMatch.format || 'N/A'}</span>
-              {currentMatch.teams?.home?.captain && currentMatch.teams?.away?.captain && (
-                <span>
-                  👤 {currentMatch.teams.home.captain} vs {currentMatch.teams.away.captain}
-                </span>
+              <span>🏟️ {currentMatch.venue}</span>
+              <span>🏏 {currentMatch.format}</span>
+              {currentMatch.teams.home.captain && (
+                <span>👤 {currentMatch.teams.home.captain} vs {currentMatch.teams.away.captain}</span>
               )}
             </div>
 
             {/* Score Display */}
-            {currentMatch.status === 'live' && currentMatch.teams?.home?.score && currentMatch.teams?.away?.score && (
+            {currentMatch.status === 'live' && currentMatch.teams.home.score && (
               <div className="flex items-center justify-center space-x-8 py-4">
                 <div className="text-center">
-                  <div className="text-xs text-gray-400 mb-1">{currentMatch.teams.home.team_short || 'N/A'}</div>
+                  <div className="text-xs text-gray-400 mb-1">{currentMatch.teams.home.team_short}</div>
                   <div className="flex items-center space-x-2">
                     <span className="text-2xl font-bold text-blue-400">
-                      {currentMatch.teams.home.score.runs || 0}
+                      {currentMatch.teams.home.score.runs}
                     </span>
                     <span className="text-red-400">-</span>
                     <span className="text-xl font-semibold text-red-400">
-                      {currentMatch.teams.home.score.wickets || 0}
+                      {currentMatch.teams.home.score.wickets}
                     </span>
                     <span className="text-green-400">+</span>
                   </div>
-                  <div className="text-xs text-gray-400">({currentMatch.teams.home.score.overs || 0} overs)</div>
+                  <div className="text-xs text-gray-400">({currentMatch.teams.home.score.overs} overs)</div>
                 </div>
 
                 <div className="text-center">
@@ -302,27 +320,25 @@ function CricketLiveDashboard() {
                 </div>
 
                 <div className="text-center">
-                  <div className="text-xs text-gray-400 mb-1">{currentMatch.teams.away.team_short || 'N/A'}</div>
+                  <div className="text-xs text-gray-400 mb-1">{currentMatch.teams.away.team_short}</div>
                   <div className="flex items-center space-x-2">
                     <span className="text-2xl font-bold text-blue-400">
-                      {currentMatch.teams.away.score.runs || 0}
+                      {currentMatch.teams.away.score.runs}
                     </span>
                     <span className="text-red-400">-</span>
                     <span className="text-xl font-semibold text-red-400">
-                      {currentMatch.teams.away.score.wickets || 0}
+                      {currentMatch.teams.away.score.wickets}
                     </span>
                     <span className="text-green-400">+</span>
                   </div>
-                  <div className="text-xs text-gray-400">({currentMatch.teams.away.score.overs || 0} overs)</div>
+                  <div className="text-xs text-gray-400">({currentMatch.teams.away.score.overs} overs)</div>
                 </div>
               </div>
             )}
 
-            {currentMatch.target && currentMatch.teams?.home?.score && (
+            {currentMatch.target && (
               <div className="text-center text-sm text-yellow-400 mt-2">
-                Target: {currentMatch.target} | Need{' '}
-                {currentMatch.target - (currentMatch.teams.home.score.runs || 0)} runs from{' '}
-                {((20 - (currentMatch.over || 0)) * 6 - (currentMatch.ball || 0))} balls
+                Target: {currentMatch.target} | Need {currentMatch.target - currentMatch.teams.home.score.runs} runs from {(20 - currentMatch.over) * 6 - currentMatch.ball} balls
               </div>
             )}
           </div>
@@ -345,11 +361,10 @@ function CricketLiveDashboard() {
                   <button
                     key={type.id}
                     onClick={() => setSelectedEventType(type.id)}
-                    className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                      selectedEventType === type.id
+                    className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm transition-colors ${selectedEventType === type.id
                         ? `${type.color} text-white`
                         : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                    }`}
+                      }`}
                   >
                     <Icon className="w-4 h-4" />
                     <span>{type.label}</span>
@@ -441,7 +456,9 @@ function CricketLiveDashboard() {
             {publishedMessages.map((msg, index) => (
               <div key={index} className="bg-gray-700 rounded-lg p-3">
                 <div className="flex items-center justify-between mb-2">
-                  <span className={`text-xs font-bold ${getMessageTypeColor(msg.type)}`}>{msg.type}!</span>
+                  <span className={`text-xs font-bold ${getMessageTypeColor(msg.type)}`}>
+                    {msg.type}!
+                  </span>
                   <span className="text-xs text-gray-400">{msg.time}'</span>
                 </div>
                 <p className="text-sm text-gray-300 mb-2">{msg.message}</p>
@@ -456,6 +473,6 @@ function CricketLiveDashboard() {
       </div>
     </div>
   );
-}
+};
 
 export default CricketLiveDashboard;

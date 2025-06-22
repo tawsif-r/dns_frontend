@@ -287,7 +287,7 @@ function FootballMessagePage() {
         
         console.log('Starting to fetch matches data...');
         
-        const response = await fetch('http://192.168.3.35:8002/sport/api/matches/', {
+        const response = await fetch('http://192.168.3.35:8002/sport/api/matches/?sport_category=football', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
