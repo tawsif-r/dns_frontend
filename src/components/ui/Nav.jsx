@@ -34,6 +34,7 @@ const Nav = () => {
     // Reports dropdown items
   const sportsItems = [
     { path: '/football', label: 'Football', icon: <BarChart2 size={18} /> },
+    { path: '/cricket', label: 'Cricket', icon: <BarChart2 size={18} /> },
   ];
 
   // Check if any reports item is active

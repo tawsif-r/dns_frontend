@@ -634,7 +634,7 @@ function JobEntryPage() {
 
                 </div>
                 <div>
-                    <h1>Final output</h1>
+                    {/* <h1>Final output</h1> */}
                     {/* TODO: Output the text in this carousel */}
                 </div>
             </div>

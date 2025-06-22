@@ -62,10 +62,10 @@ const Layout = ({ children }) => {
         
         {/* Scrollable Content Area */}
         <main className="flex-1 overflow-y-auto">
-          <div className="px-4 py-8">
-            <p className="mb-6 text-gray-300">
+          <div className="px-4 py-4">
+            {/* <p className="mb-6 text-gray-300">
               DnsApp bridges the gap by acting as a smart intermediary between telecommunication companies, content providers, and subscribers, delivering tailored job alerts and curated content straight to your fingertips.
-            </p>
+            </p> */}
             {children}
           </div>
         </main>
