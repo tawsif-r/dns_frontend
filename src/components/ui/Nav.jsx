@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, ChevronLeft, LampDesk, Phone, Home, FileText, Users, CreditCard, Tag, MessageSquare, BarChart2, TestTube, ChevronDown, ChevronRight } from 'lucide-react';
+import { Menu, ChevronLeft, LampDesk, Phone, Home, FileText, Users, Volleyball,CreditCard, Dumbbell,Tag, MessageSquare, BarChart2, TestTube, ChevronDown, ChevronRight } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleMenu,openMenu } from '../../redux/Nav';
 import { Link, useLocation } from 'react-router-dom';
@@ -33,7 +33,7 @@ const Nav = () => {
 
     // Reports dropdown items
   const sportsItems = [
-    { path: '/football', label: 'Football', icon: <BarChart2 size={18} /> },
+    { path: '/football', label: 'Football', icon: <Volleyball size={18} /> },
     { path: '/cricket', label: 'Cricket', icon: <BarChart2 size={18} /> },
   ];
 
@@ -171,7 +171,7 @@ const Nav = () => {
             `}
           >
             <div className="flex-shrink-0">
-              <BarChart2 size={18} />
+              <Dumbbell size={18} />
             </div>
             <span
               className={`
