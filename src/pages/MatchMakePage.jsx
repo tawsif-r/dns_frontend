@@ -87,23 +87,23 @@ function MatchMakePage() {
                     team_short: "HAM"
                 },
                 home: {
-                    manager: "Kaka",
-                    team_id: "BRI_2024",
-                    formation: "4-3-3",
-                    team_name: "Brighton",
-                    team_short: "BRI"
+                    manager: "",
+                    team_id: "",
+                    formation: "",
+                    team_name: "",
+                    team_short: ""
                 }
             }
         },
         venue: {
             venue: {
-                city: "London",
-                country: "England",
-                stadium: "Ethihad Stadium",
+                city: "",
+                country: "",
+                stadium: "",
                 weather: {
-                    "humidity": "45%",
-                    "condition": "Sunny",
-                    "temperature": "28°C"
+                    humidity: "%",
+                    condition: "",
+                    temperature: ""
                 },
                 "capacity": 60704
             }
