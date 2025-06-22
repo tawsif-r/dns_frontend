@@ -9,7 +9,128 @@ import { useState, useEffect } from "react";
 function MatchMakePage() {
     // make useStates for matches
     const [matches, setMatches] = useState([]);
-    const [newMatch, setNewMatch] = useState({});
+    //"id": 3,
+        // "match_id": "EPL_2024_25_M381",
+        // "matchday": 24,
+        // "match_date": "2025-06-25T11:00:00Z",
+        // "status": "UPCOMING",
+        // "minute": 15,
+        // "added_time": null,
+        // "sport_category": "football",
+        // "teams": {
+        //     "teams": {
+        //         "away": {
+        //             "manager": "Casa",
+        //             "team_id": "WEST_2024",
+        //             "formation": "4-5-1",
+        //             "team_name": "West Ham",
+        //             "team_short": "HAM"
+        //         },
+        //         "home": {
+        //             "manager": "Kaka",
+        //             "team_id": "BRI_2024",
+        //             "formation": "4-3-3",
+        //             "team_name": "Brighton",
+        //             "team_short": "BRI"
+        //         }
+        //     }
+        // },
+        // "venue": {
+        //     "venue": {
+        //         "city": "London",
+        //         "country": "England",
+        //         "stadium": "Ethihad Stadium",
+        //         "weather": {
+        //             "humidity": "45%",
+        //             "condition": "Sunny",
+        //             "temperature": "28°C"
+        //         },
+        //         "capacity": 60704
+        //     }
+        // },
+        // "score": {
+        //     "away": 0,
+        //     "home": 1,
+        //     "penalty": {
+        //         "away": 0,
+        //         "home": 0
+        //     },
+        //     "fulltime": {
+        //         "away": 0,
+        //         "home": 1
+        //     },
+        //     "halftime": {
+        //         "away": 0,
+        //         "home": 0
+        //     }
+        // },
+        // "events": null,
+        // "officials": null,
+        // "created_at": null,
+        // "updated_at": "2025-06-19T07:46:20.860011Z",
+        // "tournament_id": "EPL_2024_25"
+    const [newMatch, setNewMatch] = useState({
+        match_id : '',
+        matchday : '',
+        match_date: "",
+        status: "",
+        minute: "",
+        added_time: "",
+        sport_category: "",
+        teams: {
+            teams: {
+                away: {
+                    manager: "",
+                    team_id: "WEST_2024",
+                    formation: "4-5-1",
+                    team_name: "West Ham",
+                    team_short: "HAM"
+                },
+                home: {
+                    manager: "Kaka",
+                    team_id: "BRI_2024",
+                    formation: "4-3-3",
+                    team_name: "Brighton",
+                    team_short: "BRI"
+                }
+            }
+        },
+        venue: {
+            venue: {
+                city: "London",
+                country: "England",
+                stadium: "Ethihad Stadium",
+                weather: {
+                    "humidity": "45%",
+                    "condition": "Sunny",
+                    "temperature": "28°C"
+                },
+                "capacity": 60704
+            }
+        },
+        "score": {
+            "away": 0,
+            "home": 1,
+            "penalty": {
+                "away": 0,
+                "home": 0
+            },
+            "fulltime": {
+                "away": 0,
+                "home": 1
+            },
+            "halftime": {
+                "away": 0,
+                "home": 0
+            }
+        },
+        "events": null,
+        "officials": null,
+        "created_at": null,
+        "updated_at": "2025-06-19T07:46:20.860011Z",
+        "tournament_id": "EPL_2024_25"
+
+    });
     const [loadingPage, setLoadingPage] = useState(true);
     // use effect
     useEffect(() => {
@@ -28,8 +149,7 @@ function MatchMakePage() {
             }
         };
         fetchMatches();
-    }, []
-    );
+    }, []);
     return (
         <div>
             Match Make page

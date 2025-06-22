@@ -21,7 +21,6 @@ import FootballMessagePage from './pages/FootballMessagePage';
 import CricketLiveDashboard from './pages/CricketLiveDashboard';
 import MatchMakePage from './pages/MatchMakePage';
 
-
 function Logout() {
   localStorage.clear()
   return <Navigate to="/login" />
