@@ -78,11 +78,6 @@ function CricketLiveDashboard() {
 
 
 
-
-  // Count Message length
-  const countMessageLen = (message) => {
-    return message.length;
-  }
   // Handle message generation
   const handleGenerateMessage = async () => {
     if (!messageInput.trim()) {
