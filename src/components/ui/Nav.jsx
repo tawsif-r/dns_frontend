@@ -33,6 +33,8 @@ const Nav = () => {
 
     // Reports dropdown items
   const sportsItems = [
+    { path: '/football-matches', label: 'Football Matches', icon: <BarChart2 size={18} /> },
+    { path: '/cricket-matches', label: 'Cricket Matches', icon: <BarChart2 size={18} /> },
     { path: '/football', label: 'Football', icon: <Volleyball size={18} /> },
     { path: '/cricket', label: 'Cricket', icon: <BarChart2 size={18} /> },
   ];
@@ -58,7 +60,7 @@ const Nav = () => {
 
       <nav
         className={`
-          ${menu ? 'w-48' : 'w-16'} 
+          ${menu ? 'w-64' : 'w-16'} 
           transition-all duration-300 ease-in-out 
           flex-grow overflow-y-auto
           py-4 px-2

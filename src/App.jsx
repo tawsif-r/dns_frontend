@@ -19,7 +19,8 @@ import TestReportsPage from './pages/TestReportsPage';
 import RecentReportsPage from './pages/RecentReportsPage';
 import FootballMessagePage from './pages/FootballMessagePage';
 import CricketLiveDashboard from './pages/CricketLiveDashboard';
-import MatchMakePage from './pages/MatchMakePage';
+import MatchMakeCricketPage from './pages/MatchMakeCricketPage';
+import MatchMakeFootballPage from './pages/MatchMakeFootballPage';
 
 function Logout() {
   localStorage.clear()
@@ -53,7 +54,8 @@ function App() {
             <Route path="/recentreports" element={<ProtectedRoute><Layout><RecentReportsPage /></Layout></ProtectedRoute>} />
             <Route path='/football' element={<ProtectedRoute><Layout><FootballMessagePage /></Layout></ProtectedRoute>} />
             <Route path='/cricket' element={<ProtectedRoute><Layout><CricketLiveDashboard /></Layout></ProtectedRoute>} />
-            <Route path='/matches' element={<ProtectedRoute><Layout><MatchMakePage /></Layout></ProtectedRoute>} />
+            <Route path='/cricket-matches' element={<ProtectedRoute><Layout><MatchMakeCricketPage /></Layout></ProtectedRoute>} />
+            <Route path='/football-matches' element={<ProtectedRoute><Layout><MatchMakeFootballPage /></Layout></ProtectedRoute>} />
             {/* New routes */}
             <Route path="/reports" element={<ProtectedRoute><Layout><ReportsPage /></Layout></ProtectedRoute>} />
             <Route path="/subscribertester" element={<Layout><TestSubscribersPage /></Layout>} />
