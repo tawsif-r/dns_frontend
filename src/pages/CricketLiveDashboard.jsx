@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Activity } from 'lucide-react';
+import { Activity, Plus, Minus } from 'lucide-react';
 import axios from 'axios';
 
 function CricketLiveDashboard() {
@@ -76,6 +76,13 @@ function CricketLiveDashboard() {
     }
   }, [matches, selectedMatch]);
 
+
+
+
+  // Count Message length
+  const countMessageLen = (message) => {
+    return message.length;
+  }
   // Handle message generation
   const handleGenerateMessage = async () => {
     if (!messageInput.trim()) {
@@ -123,6 +130,51 @@ function CricketLiveDashboard() {
         return 'bg-gray-500';
     }
   };
+  const updateHomeScore = (field, increment) => {
+    setMatches(prev => {
+      const updatedMatches = [...prev];
+      if (updatedMatches[selectedMatch] && updatedMatches[selectedMatch].teams?.home?.score) {
+        const currentValue = updatedMatches[selectedMatch].teams.home.score[field] || 0;
+        updatedMatches[selectedMatch] = {
+          ...updatedMatches[selectedMatch],
+          teams: {
+            ...updatedMatches[selectedMatch].teams,
+            home: {
+              ...updatedMatches[selectedMatch].teams.home,
+              score: {
+                ...updatedMatches[selectedMatch].teams.home.score,
+                [field]: Math.max(0, currentValue + (increment ? 1 : -1))
+              }
+            }
+          }
+        };
+      }
+      return updatedMatches;
+    });
+  };
+
+  const updateAwayScore = (field, increment) => {
+    setMatches(prev => {
+      const updatedMatches = [...prev];
+      if (updatedMatches[selectedMatch] && updatedMatches[selectedMatch].teams?.away?.score) {
+        const currentValue = updatedMatches[selectedMatch].teams.away.score[field] || 0;
+        updatedMatches[selectedMatch] = {
+          ...updatedMatches[selectedMatch],
+          teams: {
+            ...updatedMatches[selectedMatch].teams,
+            away: {
+              ...updatedMatches[selectedMatch].teams.away,
+              score: {
+                ...updatedMatches[selectedMatch].teams.away.score,
+                [field]: Math.max(0, currentValue + (increment ? 1 : -1))
+              }
+            }
+          }
+        };
+      }
+      return updatedMatches;
+    });
+  };
 
   const getMessageTypeColor = (type) => {
     switch (type) {
@@ -151,27 +203,6 @@ function CricketLiveDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700 p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <h1 className="text-xl font-bold text-blue-400">CricApp</h1>
-            <p className="text-gray-400 text-sm">
-              CricApp bridges the gap by acting as a smart intermediary between cricket boards, broadcasters, and fans,
-              delivering tailored updates and curated content straight to your fingertips.
-            </p>
-          </div>
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
-              <span className="text-xs">🔔</span>
-            </div>
-            <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
-              <span className="text-xs">👤</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className="flex">
         {/* Sidebar */}
         <div className="w-80 bg-gray-800 border-r border-gray-700 p-4">
@@ -198,9 +229,8 @@ function CricketLiveDashboard() {
               {matches.map((match, index) => (
                 <div
                   key={match.id}
-                  className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                    selectedMatch === index ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-650'
-                  }`}
+                  className={`p-3 rounded-lg cursor-pointer transition-colors ${selectedMatch === index ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-650'
+                    }`}
                   onClick={() => setSelectedMatch(index)}
                 >
                   <div className="flex items-center justify-between mb-2">
@@ -232,20 +262,6 @@ function CricketLiveDashboard() {
               ))}
             </div>
           </div>
-
-          {/* Tip */}
-          <div className="bg-gray-700 p-3 rounded-lg">
-            <div className="flex items-start space-x-2">
-              <div className="w-4 h-4 bg-yellow-500 rounded-full flex items-center justify-center mt-0.5">
-                <span className="text-xs">💡</span>
-              </div>
-              <div className="text-xs text-gray-300">
-                <strong>Tip</strong>
-                <br />
-                Click on any match to view details and generate messages for that specific game
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Main Content */}
@@ -269,7 +285,7 @@ function CricketLiveDashboard() {
             </div>
 
             <div className="flex items-center space-x-6 text-sm text-gray-400 mb-4">
-              <span>🏟️ {currentMatch.venue || 'N/A'}</span>
+              <span>{currentMatch.venue || 'N/A'}</span>
               <span>🏏 {currentMatch.format || 'N/A'}</span>
               {currentMatch.teams?.home?.captain && currentMatch.teams?.away?.captain && (
                 <span>
@@ -281,9 +297,26 @@ function CricketLiveDashboard() {
             {/* Score Display */}
             {currentMatch.status === 'live' && currentMatch.teams?.home?.score && currentMatch.teams?.away?.score && (
               <div className="flex items-center justify-center space-x-8 py-4">
+                {/* Home Team */}
                 <div className="text-center">
                   <div className="text-xs text-gray-400 mb-1">{currentMatch.teams.home.team_short || 'N/A'}</div>
-                  <div className="flex items-center space-x-2">
+
+                  {/* Runs with buttons */}
+                  <div className="flex items-center justify-center space-x-2 mb-2">
+                    <div className="flex flex-col space-y-1">
+                      <button
+                        onClick={() => updateHomeScore('runs', true)}
+                        className="p-1 bg-green-600 hover:bg-green-700 rounded text-white"
+                      >
+                        <Plus size={12} />
+                      </button>
+                      <button
+                        onClick={() => updateHomeScore('runs', false)}
+                        className="p-1 bg-red-600 hover:bg-red-700 rounded text-white"
+                      >
+                        <Minus size={12} />
+                      </button>
+                    </div>
                     <span className="text-2xl font-bold text-blue-400">
                       {currentMatch.teams.home.score.runs || 0}
                     </span>
@@ -291,18 +324,75 @@ function CricketLiveDashboard() {
                     <span className="text-xl font-semibold text-red-400">
                       {currentMatch.teams.home.score.wickets || 0}
                     </span>
-                    <span className="text-green-400">+</span>
+                    <div className="flex flex-col space-y-1">
+                      <button
+                        onClick={() => updateHomeScore('wickets', true)}
+                        className="p-1 bg-green-600 hover:bg-green-700 rounded text-white"
+                      >
+                        <Plus size={12} />
+                      </button>
+                      <button
+                        onClick={() => updateHomeScore('wickets', false)}
+                        className="p-1 bg-red-600 hover:bg-red-700 rounded text-white"
+                      >
+                        <Minus size={12} />
+                      </button>
+                    </div>
                   </div>
+
                   <div className="text-xs text-gray-400">({currentMatch.teams.home.score.overs || 0} overs)</div>
+
+                  {/* Quick Action Buttons for Home Team */}
+                  <div className="flex justify-center space-x-1 mt-2">
+                    <button
+                      onClick={() => updateHomeScore('runs', true)}
+                      className="px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded text-xs text-white"
+                    >
+                      +1
+                    </button>
+                    <button
+                      onClick={() => {
+                        for (let i = 0; i < 4; i++) updateHomeScore('runs', true);
+                      }}
+                      className="px-2 py-1 bg-green-600 hover:bg-green-700 rounded text-xs text-white"
+                    >
+                      +4
+                    </button>
+                    <button
+                      onClick={() => {
+                        for (let i = 0; i < 6; i++) updateHomeScore('runs', true);
+                      }}
+                      className="px-2 py-1 bg-purple-600 hover:bg-purple-700 rounded text-xs text-white"
+                    >
+                      +6
+                    </button>
+                  </div>
                 </div>
 
                 <div className="text-center">
                   <div className="text-lg font-bold text-gray-400">VS</div>
                 </div>
 
+                {/* Away Team */}
                 <div className="text-center">
                   <div className="text-xs text-gray-400 mb-1">{currentMatch.teams.away.team_short || 'N/A'}</div>
-                  <div className="flex items-center space-x-2">
+
+                  {/* Runs with buttons */}
+                  <div className="flex items-center justify-center space-x-2 mb-2">
+                    <div className="flex flex-col space-y-1">
+                      <button
+                        onClick={() => updateAwayScore('runs', true)}
+                        className="p-1 bg-green-600 hover:bg-green-700 rounded text-white"
+                      >
+                        <Plus size={12} />
+                      </button>
+                      <button
+                        onClick={() => updateAwayScore('runs', false)}
+                        className="p-1 bg-red-600 hover:bg-red-700 rounded text-white"
+                      >
+                        <Minus size={12} />
+                      </button>
+                    </div>
                     <span className="text-2xl font-bold text-blue-400">
                       {currentMatch.teams.away.score.runs || 0}
                     </span>
@@ -310,9 +400,49 @@ function CricketLiveDashboard() {
                     <span className="text-xl font-semibold text-red-400">
                       {currentMatch.teams.away.score.wickets || 0}
                     </span>
-                    <span className="text-green-400">+</span>
+                    <div className="flex flex-col space-y-1">
+                      <button
+                        onClick={() => updateAwayScore('wickets', true)}
+                        className="p-1 bg-green-600 hover:bg-green-700 rounded text-white"
+                      >
+                        <Plus size={12} />
+                      </button>
+                      <button
+                        onClick={() => updateAwayScore('wickets', false)}
+                        className="p-1 bg-red-600 hover:bg-red-700 rounded text-white"
+                      >
+                        <Minus size={12} />
+                      </button>
+                    </div>
                   </div>
+
                   <div className="text-xs text-gray-400">({currentMatch.teams.away.score.overs || 0} overs)</div>
+
+                  {/* Quick Action Buttons for Away Team */}
+                  <div className="flex justify-center space-x-1 mt-2">
+                    <button
+                      onClick={() => updateAwayScore('runs', true)}
+                      className="px-2 py-1 bg-blue-600 hover:bg-blue-700 rounded text-xs text-white"
+                    >
+                      +1
+                    </button>
+                    <button
+                      onClick={() => {
+                        for (let i = 0; i < 4; i++) updateAwayScore('runs', true);
+                      }}
+                      className="px-2 py-1 bg-green-600 hover:bg-green-700 rounded text-xs text-white"
+                    >
+                      +4
+                    </button>
+                    <button
+                      onClick={() => {
+                        for (let i = 0; i < 6; i++) updateAwayScore('runs', true);
+                      }}
+                      className="px-2 py-1 bg-purple-600 hover:bg-purple-700 rounded text-xs text-white"
+                    >
+                      +6
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
@@ -339,6 +469,7 @@ function CricketLiveDashboard() {
             {/* Message Input */}
             <div className="mb-4">
               <label className="block text-xs text-gray-400 mb-1">Message Content</label>
+              <p>Message length: {messageInput.length}</p>
               <textarea
                 placeholder="Enter your message (e.g., WICKET! Jadeja bowls Iyer for 34!)"
                 className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
@@ -346,17 +477,17 @@ function CricketLiveDashboard() {
                 value={messageInput}
                 onChange={(e) => setMessageInput(e.target.value)}
               />
+
             </div>
 
             {/* Generate Button */}
             <button
               onClick={handleGenerateMessage}
               disabled={generating || !messageInput.trim()}
-              className={`w-full py-2 rounded-lg text-sm font-semibold transition-colors ${
-                generating || !messageInput.trim()
-                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
-              }`}
+              className={`w-full py-2 rounded-lg text-sm font-semibold transition-colors ${generating || !messageInput.trim()
+                ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
             >
               {generating ? 'Generating...' : 'Generate Message'}
             </button>
@@ -364,9 +495,8 @@ function CricketLiveDashboard() {
             {/* Status Message */}
             {generateStatus && (
               <div
-                className={`mt-3 text-sm ${
-                  generateStatus.type === 'success' ? 'text-green-400' : 'text-red-400'
-                }`}
+                className={`mt-3 text-sm ${generateStatus.type === 'success' ? 'text-green-400' : 'text-red-400'
+                  }`}
               >
                 {generateStatus.message}
               </div>
