@@ -16,7 +16,7 @@ const TABS = [
   { name: 'VAR', icon: '📹' }, { name: 'Time Events', icon: '⏰' }, { name: 'Special', icon: '🔴' }, { name: 'Other', icon: '📋' }
 ];
 
-const API_URL = 'http://192.168.3.35:8002/sport/api/spMessageBox/';
+const API_URL = 'http://192.168.3.35:8002/sport/api/sportListing/';
 
 // Error Boundary
 class ErrorBoundary extends React.Component {

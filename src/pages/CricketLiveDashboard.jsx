@@ -54,7 +54,7 @@ function CricketLiveDashboard() {
     const fetchMessages = async () => {
       try {
         setLoadingMessages(true);
-        const baseUrl = 'http://192.168.3.35:8002/sport/api/spMessageBox/?sport_category=cricket';
+        const baseUrl = 'http://192.168.3.35:8002/sport/api/sportListing/?sport_category=cricket';
         const response = await axios.get(baseUrl);
         console.log('Messages API Response:', response.data);
         setMessages(response.data);
@@ -98,7 +98,7 @@ function CricketLiveDashboard() {
       setGenerateStatus({ type: 'success', message: 'Message generated successfully!' });
 
       // Refetch messages to update the Published Messages section
-      const response = await axios.get('http://192.168.3.35:8002/sport/api/spMessageBox/?sport_category=cricket');
+      const response = await axios.get('http://192.168.3.35:8002/sport/api/sportListing/?sport_category=cricket');
       setMessages(response.data);
 
       // Clear input
