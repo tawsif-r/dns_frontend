@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 
 function FootballMatchMakePage() {
   const [matches, setMatches] = useState([]);
-  const [newMatch, setNewMatch] = useState({
+  const [newMatch, setNewMatchFootball] = useState({
     match_id: "",
     matchday: 0,
     match_date: "",
@@ -79,7 +79,7 @@ function FootballMatchMakePage() {
     const { name, value } = e.target;
 
     if (team && score) {
-      setNewMatch({
+      setNewMatchFootball({
         ...newMatch,
         score: {
           ...newMatch.score,
@@ -87,7 +87,7 @@ function FootballMatchMakePage() {
         }
       });
     } else if (team) {
-      setNewMatch({
+      setNewMatchFootball({
         ...newMatch,
         teams: {
           ...newMatch.teams,
@@ -98,7 +98,7 @@ function FootballMatchMakePage() {
         }
       });
     } else if (venue && weather) {
-      setNewMatch({
+      setNewMatchFootball({
         ...newMatch,
         venue: {
           ...newMatch.venue,
@@ -109,7 +109,7 @@ function FootballMatchMakePage() {
         }
       });
     } else if (venue) {
-      setNewMatch({
+      setNewMatchFootball({
         ...newMatch,
         venue: {
           ...newMatch.venue,
@@ -117,7 +117,7 @@ function FootballMatchMakePage() {
         }
       });
     } else {
-      setNewMatch({
+      setNewMatchFootball({
         ...newMatch,
         [name]: ["matchday", "minute", "added_time"].includes(name)
           ? parseInt(value) || 0
@@ -140,7 +140,7 @@ function FootballMatchMakePage() {
   };
 
   const resetForm = () => {
-    setNewMatch({
+    setNewMatchFootball({
       match_id: "",
       matchday: 0,
       match_date: "",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, Plus, Minus } from 'lucide-react';
+import { Activity, Plus, Minus, Pin } from 'lucide-react';
 import axios from 'axios';
 
 function CricketLiveDashboard() {
@@ -85,7 +85,7 @@ function CricketLiveDashboard() {
     if (matches.length > 0 && matches[selectedMatch]) {
       const currentMatch = matches[selectedMatch];
       const team = selectedTeam === 0 ? currentMatch.teams?.home : currentMatch.teams?.away;
-      
+
       if (team?.score) {
         setTeamRuns(team.score.runs || 0);
         setTeamWickets(team.score.wickets || 0);
@@ -104,7 +104,7 @@ function CricketLiveDashboard() {
       const currentMatch = matches[selectedMatch];
       const team = selectedTeam === 0 ? currentMatch.teams?.home : currentMatch.teams?.away;
       const teamName = team?.team_short || 'Team';
-      
+
       setMessageInput(`${teamName} has scored ${teamRuns} runs for ${teamWickets} wickets in ${teamOvers} overs`);
     }
   }, [teamRuns, teamWickets, teamOvers, selectedTeam, selectedMatch, matches]);
@@ -156,11 +156,65 @@ function CricketLiveDashboard() {
         return 'bg-gray-500';
     }
   };
+  const saveScore = async () => {
+    try {
+      if (!matches[selectedMatch] || !matches[selectedMatch].id) {
+        console.error("No valid match selected");
+        return;
+      }
+      const currentMatch = matches[selectedMatch]
+      const payload = {
+        id: currentMatch.id,
+        match_id: currentMatch.match_id,
+        matchday: currentMatch.matchday,
+        match_date: currentMatch.match_date,
+        status: currentMatch.status,
+        minute: currentMatch.minute,
+        added_time: currentMatch.added_time,
+        sport_category: currentMatch.sport_category,
+        teams: {
+          home: {
+            score: {
+              runs: currentMatch.teams.home.score.runs,
+              overs: currentMatch.teams.home.score.overs,
+              wickets: currentMatch.teams.home.score.wickets
+            },
+            captain: currentMatch.teams.home.captain,
+            team_name: currentMatch.teams.home.team_name,
+            team_short: currentMatch.teams.home.team_short
+          },
+          away: {
+            score: {
+              runs: currentMatch.teams.away.score.runs,
+              overs: currentMatch.teams.away.score.overs,
+              wickets: currentMatch.teams.away.score.wickets
+            },
+            captain: currentMatch.teams.away.captain,
+            team_name: currentMatch.teams.away.team_name,
+            team_short: currentMatch.teams.away.team_short
+          }
+        },
+        venue: currentMatch.venue,
+        score: currentMatch.score,
+        events: currentMatch.events,
+        officials: currentMatch.officials,
+        tournament_id: currentMatch.tournament_id
+      };
+      const response = await axios.put(`http://192.168.3.35:8002/sport/api/matches/${currentMatch.id}/`, payload);
+      if (response.status === 200) {
+        console.log('Score saved successfully')
+        setGenerateStatus({ type: 'success', message: 'Score saved successfully!' });
+      }
+    } catch (error) {
+      console.error("error saving score", error);
+      setGenerateStatus({ type: "error", message: "Failed to save score, please try again" });
+    }
 
+  };
   // Update selected team stats
   const updateSelectedTeamScore = (field, increment) => {
     const value = increment ? 1 : -1;
-    
+
     if (field === 'runs') {
       const newRuns = Math.max(0, teamRuns + value);
       setTeamRuns(newRuns);
@@ -372,21 +426,19 @@ function CricketLiveDashboard() {
               <div className="flex space-x-2">
                 <button
                   onClick={() => setSelectedTeam(0)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    selectedTeam === 0 
-                      ? 'bg-blue-600 text-white' 
-                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                  }`}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${selectedTeam === 0
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    }`}
                 >
                   {currentMatch.teams?.home?.team_short || 'Home Team'}
                 </button>
                 <button
                   onClick={() => setSelectedTeam(1)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    selectedTeam === 1 
-                      ? 'bg-blue-600 text-white' 
-                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                  }`}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${selectedTeam === 1
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    }`}
                 >
                   {currentMatch.teams?.away?.team_short || 'Away Team'}
                 </button>
@@ -398,7 +450,7 @@ function CricketLiveDashboard() {
               <h4 className="text-sm font-semibold text-gray-300 mb-3">
                 TRACKING: {selectedTeam === 0 ? currentMatch.teams?.home?.team_short : currentMatch.teams?.away?.team_short}
               </h4>
-              
+
               <div className="grid grid-cols-3 gap-4">
                 {/* Runs */}
                 <div className="text-center">
@@ -419,6 +471,7 @@ function CricketLiveDashboard() {
                     >
                       <Plus size={12} />
                     </button>
+
                   </div>
                 </div>
 
@@ -668,6 +721,13 @@ function CricketLiveDashboard() {
                 {((20 - (currentMatch.over || 0)) * 6 - (currentMatch.ball || 0))} balls
               </div>
             )}
+
+            <div>
+              <button className='rounded-sm px-4 py-2 bg-indigo-400 animate-pulse shadow-lg shadow-indigo-500/50 hover:bg-indigo-500'
+                onClick={() => saveScore()}
+              >Save</button>
+            </div>
+
           </div>
 
           {/* Message Template */}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, ChevronLeft, LampDesk, Phone, Home, FileText, Users, Volleyball,CreditCard, Dumbbell,Tag, MessageSquare, BarChart2, TestTube, ChevronDown, ChevronRight } from 'lucide-react';
+import { Menu, ChevronLeft, LampDesk, Phone, Home, FileText,ScrollText,TestTubeDiagonal,GalleryHorizontal,ChartNoAxesCombined,HandCoins, Users, Volleyball,CreditCard, Dumbbell,Tag, MessageSquare, BarChart2, TestTube, ChevronDown, ChevronRight } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleMenu,openMenu } from '../../redux/Nav';
 import { Link, useLocation } from 'react-router-dom';
@@ -26,17 +26,17 @@ const Nav = () => {
 
   // Reports dropdown items
   const reportsItems = [
-    { path: '/reports', label: 'Report', icon: <BarChart2 size={18} /> },
-    { path: '/testreports', label: 'Test Report', icon: <BarChart2 size={18} /> },
-    { path: '/recentreports', label: 'Recent Subs', icon: <BarChart2 size={18} /> },
+    { path: '/reports', label: 'Report', icon: <ChartNoAxesCombined size={18} /> },
+    { path: '/testreports', label: 'Test Report', icon: <TestTubeDiagonal size={18} /> },
+    { path: '/recentreports', label: 'Recent Subs', icon: <HandCoins size={18} /> },
   ];
 
     // Reports dropdown items
   const sportsItems = [
-    { path: '/football-matches', label: 'Football Matches', icon: <BarChart2 size={18} /> },
-    { path: '/cricket-matches', label: 'Cricket Matches', icon: <BarChart2 size={18} /> },
+    { path: '/football-matches', label: 'Football Matches', icon: <ScrollText size={18} /> },
+    { path: '/cricket-matches', label: 'Cricket Matches', icon: <ScrollText size={18} /> },
     { path: '/football', label: 'Football', icon: <Volleyball size={18} /> },
-    { path: '/cricket', label: 'Cricket', icon: <BarChart2 size={18} /> },
+    { path: '/cricket', label: 'Cricket', icon: <GalleryHorizontal size={18} /> },
   ];
 
   // Check if any reports item is active
