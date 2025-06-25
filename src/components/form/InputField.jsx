@@ -1,4 +1,8 @@
 // Reusable Input Field Component
+// label : str
+// name: used for making the form
+// value: the state field
+// onChange: {()=> setInputMessage(e.target.value)}
 const InputField = ({ label, name, value, onChange, type = "text" }) => (
   <div>
     <label className="block text-sm font-medium">{label}</label>

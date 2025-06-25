@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Activity, Plus, Minus, Pin } from 'lucide-react';
 import axios from 'axios';
+import SelectField from '../components/form/SelectField';
 
 function CricketLiveDashboard() {
   const [selectedMatch, setSelectedMatch] = useState(0);
@@ -17,9 +18,21 @@ function CricketLiveDashboard() {
   const [teamRuns, setTeamRuns] = useState(0);
   const [teamWickets, setTeamWickets] = useState(0);
   const [teamOvers, setTeamOvers] = useState(0);
+  const [players, setPlayers]= useState([]);
+  const [selectedPlayer,setSelectedPlayer] = useState('');
+  const [LoadingPlayers, setLoadingPlayers] = useState(false);
 
   // Fetch matches
   useEffect(() => {
+    const fetchPlayers = async () => {
+      try{
+        setLoadingPlayers(true);
+        const response = await axios.get('http://192.168.3.35:8002/sport/api/players/');
+        console.log('Players Api response:', response.data);
+      } catch (error){
+        console.error("Error fetching players",error);
+      }
+    };
     const fetchMatches = async () => {
       try {
         setLoadingMatches(true);
@@ -50,6 +63,7 @@ function CricketLiveDashboard() {
         setLoadingMatches(false);
       }
     };
+    fetchPlayers();
     fetchMatches();
   }, []);
 
@@ -739,7 +753,9 @@ function CricketLiveDashboard() {
                 <span className="bg-blue-600 text-xs px-2 py-1 rounded">Match #1</span>
               </div>
             </div>
-
+            <div className="bg-gray-800 rounded-lg py-7 p-6">
+              <SelectField label="Players" name="name" value={selectedPlayer} onChange={(e) => setSelectedPlayer(e.target.value)} options={players} />
+            </div>
             {/* Message Input */}
             <div className="mb-4">
               <label className="block text-xs text-gray-400 mb-1">Message Content</label>
