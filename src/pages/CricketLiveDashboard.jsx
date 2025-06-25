@@ -13,6 +13,10 @@ function CricketLiveDashboard() {
   const [messageInput, setMessageInput] = useState('');
   const [generating, setGenerating] = useState(false);
   const [generateStatus, setGenerateStatus] = useState(null);
+  const [selectedTeam, setSelectedTeam] = useState(0); // 0 for home, 1 for away
+  const [teamRuns, setTeamRuns] = useState(0);
+  const [teamWickets, setTeamWickets] = useState(0);
+  const [teamOvers, setTeamOvers] = useState(0);
 
   // Fetch matches
   useEffect(() => {
@@ -76,7 +80,34 @@ function CricketLiveDashboard() {
     }
   }, [matches, selectedMatch]);
 
+  // Update team stats when selected team or match changes
+  useEffect(() => {
+    if (matches.length > 0 && matches[selectedMatch]) {
+      const currentMatch = matches[selectedMatch];
+      const team = selectedTeam === 0 ? currentMatch.teams?.home : currentMatch.teams?.away;
+      
+      if (team?.score) {
+        setTeamRuns(team.score.runs || 0);
+        setTeamWickets(team.score.wickets || 0);
+        setTeamOvers(team.score.overs || 0);
+      } else {
+        setTeamRuns(0);
+        setTeamWickets(0);
+        setTeamOvers(0);
+      }
+    }
+  }, [selectedMatch, selectedTeam, matches]);
 
+  // Update message input when team stats change
+  useEffect(() => {
+    if (matches.length > 0 && matches[selectedMatch]) {
+      const currentMatch = matches[selectedMatch];
+      const team = selectedTeam === 0 ? currentMatch.teams?.home : currentMatch.teams?.away;
+      const teamName = team?.team_short || 'Team';
+      
+      setMessageInput(`${teamName} has scored ${teamRuns} runs for ${teamWickets} wickets in ${teamOvers} overs`);
+    }
+  }, [teamRuns, teamWickets, teamOvers, selectedTeam, selectedMatch, matches]);
 
   // Handle message generation
   const handleGenerateMessage = async () => {
@@ -125,6 +156,52 @@ function CricketLiveDashboard() {
         return 'bg-gray-500';
     }
   };
+
+  // Update selected team stats
+  const updateSelectedTeamScore = (field, increment) => {
+    const value = increment ? 1 : -1;
+    
+    if (field === 'runs') {
+      const newRuns = Math.max(0, teamRuns + value);
+      setTeamRuns(newRuns);
+      updateMatchScore('runs', newRuns);
+    } else if (field === 'wickets') {
+      const newWickets = Math.max(0, teamWickets + value);
+      setTeamWickets(newWickets);
+      updateMatchScore('wickets', newWickets);
+    } else if (field === 'overs') {
+      const newOvers = Math.max(0, teamOvers + value);
+      setTeamOvers(newOvers);
+      updateMatchScore('overs', newOvers);
+    }
+  };
+
+  // Update the match data with new scores
+  const updateMatchScore = (field, newValue) => {
+    setMatches(prev => {
+      const updatedMatches = [...prev];
+      if (updatedMatches[selectedMatch] && updatedMatches[selectedMatch].teams) {
+        const teamKey = selectedTeam === 0 ? 'home' : 'away';
+        if (updatedMatches[selectedMatch].teams[teamKey]?.score) {
+          updatedMatches[selectedMatch] = {
+            ...updatedMatches[selectedMatch],
+            teams: {
+              ...updatedMatches[selectedMatch].teams,
+              [teamKey]: {
+                ...updatedMatches[selectedMatch].teams[teamKey],
+                score: {
+                  ...updatedMatches[selectedMatch].teams[teamKey].score,
+                  [field]: newValue
+                }
+              }
+            }
+          };
+        }
+      }
+      return updatedMatches;
+    });
+  };
+
   const updateHomeScore = (field, increment) => {
     setMatches(prev => {
       const updatedMatches = [...prev];
@@ -287,6 +364,148 @@ function CricketLiveDashboard() {
                   👤 {currentMatch.teams.home.captain} vs {currentMatch.teams.away.captain}
                 </span>
               )}
+            </div>
+
+            {/* Team Selection */}
+            <div className="mb-6">
+              <h4 className="text-sm font-semibold text-gray-400 mb-2">SELECT TEAM TO TRACK</h4>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => setSelectedTeam(0)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    selectedTeam === 0 
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  }`}
+                >
+                  {currentMatch.teams?.home?.team_short || 'Home Team'}
+                </button>
+                <button
+                  onClick={() => setSelectedTeam(1)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    selectedTeam === 1 
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  }`}
+                >
+                  {currentMatch.teams?.away?.team_short || 'Away Team'}
+                </button>
+              </div>
+            </div>
+
+            {/* Selected Team Stats Control */}
+            <div className="bg-gray-700 rounded-lg p-4 mb-6">
+              <h4 className="text-sm font-semibold text-gray-300 mb-3">
+                TRACKING: {selectedTeam === 0 ? currentMatch.teams?.home?.team_short : currentMatch.teams?.away?.team_short}
+              </h4>
+              
+              <div className="grid grid-cols-3 gap-4">
+                {/* Runs */}
+                <div className="text-center">
+                  <div className="text-xs text-gray-400 mb-2">Runs</div>
+                  <div className="flex items-center justify-center space-x-2">
+                    <button
+                      onClick={() => updateSelectedTeamScore('runs', false)}
+                      className="p-1 bg-red-600 hover:bg-red-700 rounded text-white"
+                    >
+                      <Minus size={12} />
+                    </button>
+                    <span className="text-2xl font-bold text-blue-400 min-w-12">
+                      {teamRuns}
+                    </span>
+                    <button
+                      onClick={() => updateSelectedTeamScore('runs', true)}
+                      className="p-1 bg-green-600 hover:bg-green-700 rounded text-white"
+                    >
+                      <Plus size={12} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Wickets */}
+                <div className="text-center">
+                  <div className="text-xs text-gray-400 mb-2">Wickets</div>
+                  <div className="flex items-center justify-center space-x-2">
+                    <button
+                      onClick={() => updateSelectedTeamScore('wickets', false)}
+                      className="p-1 bg-red-600 hover:bg-red-700 rounded text-white"
+                    >
+                      <Minus size={12} />
+                    </button>
+                    <span className="text-2xl font-bold text-red-400 min-w-12">
+                      {teamWickets}
+                    </span>
+                    <button
+                      onClick={() => updateSelectedTeamScore('wickets', true)}
+                      className="p-1 bg-green-600 hover:bg-green-700 rounded text-white"
+                    >
+                      <Plus size={12} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Overs */}
+                <div className="text-center">
+                  <div className="text-xs text-gray-400 mb-2">Overs</div>
+                  <div className="flex items-center justify-center space-x-2">
+                    <button
+                      onClick={() => updateSelectedTeamScore('overs', false)}
+                      className="p-1 bg-red-600 hover:bg-red-700 rounded text-white"
+                    >
+                      <Minus size={12} />
+                    </button>
+                    <span className="text-2xl font-bold text-yellow-400 min-w-12">
+                      {teamOvers}
+                    </span>
+                    <button
+                      onClick={() => updateSelectedTeamScore('overs', true)}
+                      className="p-1 bg-green-600 hover:bg-green-700 rounded text-white"
+                    >
+                      <Plus size={12} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Action Buttons for Selected Team */}
+              <div className="flex justify-center space-x-2 mt-4">
+                <button
+                  onClick={() => updateSelectedTeamScore('runs', true)}
+                  className="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-xs text-white"
+                >
+                  +1 Run
+                </button>
+                <button
+                  onClick={() => {
+                    setTeamRuns(prev => {
+                      const newRuns = prev + 4;
+                      updateMatchScore('runs', newRuns);
+                      return newRuns;
+                    });
+                  }}
+                  className="px-3 py-1 bg-green-600 hover:bg-green-700 rounded text-xs text-white"
+                >
+                  +4 Runs
+                </button>
+                <button
+                  onClick={() => {
+                    setTeamRuns(prev => {
+                      const newRuns = prev + 6;
+                      updateMatchScore('runs', newRuns);
+                      return newRuns;
+                    });
+                  }}
+                  className="px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded text-xs text-white"
+                >
+                  +6 Runs
+                </button>
+                <button
+                  onClick={() => updateSelectedTeamScore('wickets', true)}
+                  className="px-3 py-1 bg-red-600 hover:bg-red-700 rounded text-xs text-white"
+                >
+                  Wicket
+                </button>
+              </div>
             </div>
 
             {/* Score Display */}
