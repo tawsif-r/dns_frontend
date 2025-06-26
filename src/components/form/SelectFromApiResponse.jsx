@@ -1,3 +1,5 @@
+//Usage pattern
+//<SelectFromApiResponse label = "player select" value={selectedPlayer} onChange={(e) => setSelectedPlayer(e.target.value)} dropdownsLoading = {dropdownsLoading} options={players}/>
 const SelectFromApiResponse = ({ label, value, onChange, dropdownsLoading, options }) => {
     return (
         <div className="bg-gray-800 rounded-lg py-7 p-6">

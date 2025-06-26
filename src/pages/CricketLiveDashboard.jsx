@@ -761,7 +761,7 @@ function CricketLiveDashboard() {
             </div>
             
             {/* Select field */}
-            <SelectFromApiResponse label = "player select" value={selectedPlayer} onChange={(e) => setSelectedPlayer(e.target.value)} dropdownsLoading = {dropdownsLoading} options={players}/>
+            
             
             {/* Message Input */}
             <div className="mb-4">
