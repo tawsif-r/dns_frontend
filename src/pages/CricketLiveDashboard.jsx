@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Activity, Plus, Minus, Pin } from 'lucide-react';
 import axios from 'axios';
-import SelectFromApiResponse from '../components/form/SelectFromApiResponse';
+import InputField from '../components/form/InputField';
 
 function CricketLiveDashboard() {
   const [selectedMatch, setSelectedMatch] = useState(0);
@@ -474,7 +474,6 @@ function CricketLiveDashboard() {
               <div className="grid grid-cols-3 gap-4">
                 {/* Runs */}
                 <div className="text-center">
-                  <div className="text-xs text-gray-400 mb-2">Runs</div>
                   <div className="flex items-center justify-center space-x-2">
                     <button
                       onClick={() => updateSelectedTeamScore('runs', false)}
@@ -482,9 +481,10 @@ function CricketLiveDashboard() {
                     >
                       <Minus size={12} />
                     </button>
-                    <span className="text-2xl font-bold text-blue-400 min-w-12">
+                    {/* <span className="text-2xl font-bold text-blue-400 min-w-12">
                       {teamRuns}
-                    </span>
+                    </span> */}
+                    <InputField className="min-w-12" label="Runs" name='teamRuns' value={teamRuns} onChange={(e)=>setTeamRuns(e.target.value)}/>
                     <button
                       onClick={() => updateSelectedTeamScore('runs', true)}
                       className="p-1 bg-green-600 hover:bg-green-700 rounded text-white"
@@ -497,7 +497,6 @@ function CricketLiveDashboard() {
 
                 {/* Wickets */}
                 <div className="text-center">
-                  <div className="text-xs text-gray-400 mb-2">Wickets</div>
                   <div className="flex items-center justify-center space-x-2">
                     <button
                       onClick={() => updateSelectedTeamScore('wickets', false)}
@@ -505,9 +504,10 @@ function CricketLiveDashboard() {
                     >
                       <Minus size={12} />
                     </button>
-                    <span className="text-2xl font-bold text-red-400 min-w-12">
+                    {/* <span className="text-2xl font-bold text-red-400 min-w-12">
                       {teamWickets}
-                    </span>
+                    </span> */}
+                    <InputField label="Wicket" value={teamWickets} onChange={(e)=>setTeamWickets(e.target.value)} name="teamWicket" />
                     <button
                       onClick={() => updateSelectedTeamScore('wickets', true)}
                       className="p-1 bg-green-600 hover:bg-green-700 rounded text-white"
@@ -519,7 +519,6 @@ function CricketLiveDashboard() {
 
                 {/* Overs */}
                 <div className="text-center">
-                  <div className="text-xs text-gray-400 mb-2">Overs</div>
                   <div className="flex items-center justify-center space-x-2">
                     <button
                       onClick={() => updateSelectedTeamScore('overs', false)}
@@ -527,9 +526,8 @@ function CricketLiveDashboard() {
                     >
                       <Minus size={12} />
                     </button>
-                    <span className="text-2xl font-bold text-yellow-400 min-w-12">
-                      {teamOvers}
-                    </span>
+
+                    <InputField label="overs" value={teamOvers} onChange={(e)=>setTeamOvers(e.target.value)} name="teamOvers" />
                     <button
                       onClick={() => updateSelectedTeamScore('overs', true)}
                       className="p-1 bg-green-600 hover:bg-green-700 rounded text-white"
@@ -681,6 +679,7 @@ function CricketLiveDashboard() {
                       </button>
                     </div>
                     <span className="text-2xl font-bold text-blue-400">
+                      
                       {currentMatch.teams.away.score.runs || 0}
                     </span>
                     <span className="text-red-400">-</span>
@@ -752,17 +751,6 @@ function CricketLiveDashboard() {
 
           {/* Message Template */}
           <div className="bg-gray-800 rounded-lg p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold">Generate Message</h3>
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-400">{messages.length} Messages</span>
-                <span className="bg-blue-600 text-xs px-2 py-1 rounded">Match #1</span>
-              </div>
-            </div>
-            
-            {/* Select field */}
-            
-            
             {/* Message Input */}
             <div className="mb-4">
               <label className="block text-xs text-gray-400 mb-1">Message Content</label>
