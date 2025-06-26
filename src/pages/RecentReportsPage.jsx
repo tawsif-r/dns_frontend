@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TrashIcon, FilterIcon, SearchIcon } from 'lucide-react';
 import apiClient from '../api/axiosInstance';
+import { FixedSizeList } from 'react-window';
 import axios from 'axios';
 
 function RecentReportsPage() {
@@ -173,14 +174,36 @@ function RecentReportsPage() {
         }
     };
 
+    const Row = ({ index, style }) => {
+        const report = reports[index]
+        return (
+            <div style={style} className="grid grid-cols-9 w-full text-gray-300 py-2">
+                <div className="px-4 py-3">{report.id}</div>
+                <div className="px-4 py-3">{report.subscriber_name}</div>
+                <div className="px-4 py-3">{report.category_name}</div>
+                <div className="px-4 py-3">{report.operator}</div>
+                <div className="px-4 py-3">{report.subscription_plan_name}</div>
+                <div className="px-4 py-3">{report.subscriber_message_count}</div>
+                <div className="px-4 py-3">{report.total_charge}</div>
+                <div className="px-4 py-3">{report.created_at}</div>
+                <div className="px-4 py-3">{report.updated_at}</div>
+
+            </div>
+        )
+    }
     const columns = [
-        'subscriber name',
-        'subscription plan',
-        'category name',
+        'id',
+        'phone',
+        'category',
         'operator',
-        'created at',
-        'updated at',
-        'charge'
+        'plan',
+        'messages',
+        'total_charge',
+        'created_at',
+        'updated_at',
+        // 'subscriber',
+        // 'subscription_plan',
+        // 'category id'
     ];
 
     return (
@@ -369,7 +392,7 @@ function RecentReportsPage() {
                             <div className="font-semibold text-lg text-gray-200">
                                 Number of subscribers:{subscriber_count ? subscriber_count : "0"}
                                 <div className="flex flex-col items-start">
-                                    
+
                                     {/* Subscription Plan Statistics */}
                                     {hasSearched && Object.keys(planStats).length > 0 && (
                                         <div className="mt-4 w-full">
@@ -380,7 +403,7 @@ function RecentReportsPage() {
                                                     <div key={plan} className="flex justify-between items-center py-2 border-b border-gray-600">
                                                         <span className="text-gray-300">{plan}</span>
                                                         <span className="text-gray-300">
-                                                            Tk {individualCharge} X {count} = Tk {individualCharge*count.toFixed(2)}
+                                                            Tk {individualCharge} X {count} = Tk {individualCharge * count.toFixed(2)}
                                                         </span>
                                                     </div>
                                                 );
@@ -416,46 +439,65 @@ function RecentReportsPage() {
                     {hasSearched && !loading && viewTable && (
                         <div className="overflow-x-auto border-2 rounded-lg">
                             {reports.length > 0 ? (
-                                <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
-                                    <thead>
-                                        <tr className="bg-gray-700">
+                                <div>
+                                    <div className='overflow-x-auto border-2 rounded-lg'>
+                                        <div className="bg-gray-700 grid grid-cols-9">
                                             {columns.map((column) => (
-                                                <th key={column} className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">
-                                                    {column.charAt(0).toUpperCase() + column.slice(1).replace('_', ' ')}
-                                                </th>
+                                                <div key={column} className='px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider'>
+                                                    {column}
+                                                </div>
                                             ))}
-                                            <th className="px-4 py-3 text-right">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-gray-600">
-                                        {reports.map((report) => (
-                                            <tr key={report.id} className="hover:bg-gray-700">
-                                                <td className="px-4 py-3 text-gray-300">{report.subscriber_name || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{report.subscription_plan_name || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{report.category_name || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{report.operator}</td>
-                                                <td className="px-4 py-3 text-gray-300">
-                                                    {report.created_at ? new Date(report.created_at).toLocaleString() : 'N/A'}
-                                                </td>
-                                                <td className="px-4 py-3 text-gray-300">
-                                                    {report.updated_at ? new Date(report.updated_at).toLocaleString() : 'N/A'}
-                                                </td>
-                                                <td className="px-4 py-3 text-gray-300">
-                                                    {report.total_charge ? parseFloat(report.total_charge).toFixed(2) : '0.00'}
-                                                </td>
-                                                <td className="px-4 py-3 text-right whitespace-nowrap">
-                                                    <button
-                                                        onClick={() => handleDeleteReport(report.id)}
-                                                        className="p-1 bg-red-500 text-white rounded hover:bg-red-600"
-                                                        title="Delete Report"
-                                                    >
-                                                        <TrashIcon size={16} />
-                                                    </button>
-                                                </td>
+                                        </div>
+                                    
+                                    <FixedSizeList
+                                        height={400}
+                                        width="100%"
+                                        itemCount={reports.length}
+                                        itemSize={140}
+                                    >{Row}</FixedSizeList>
+                                    </div>
+                                    {/* <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
+                                        <thead>
+                                            <tr className="bg-gray-700">
+                                                {columns.map((column) => (
+                                                    <th key={column} className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">
+                                                        {column.charAt(0).toUpperCase() + column.slice(1).replace('_', ' ')}
+                                                    </th>
+                                                ))}
+                                                <th className="px-4 py-3 text-right">Actions</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-600">
+                                            {reports.map((report) => (
+                                                <tr key={report.id} className="hover:bg-gray-700">
+                                                    <td className="px-4 py-3 text-gray-300">{report.subscriber_name || 'N/A'}</td>
+                                                    <td className="px-4 py-3 text-gray-300">{report.subscription_plan_name || 'N/A'}</td>
+                                                    <td className="px-4 py-3 text-gray-300">{report.category_name || 'N/A'}</td>
+                                                    <td className="px-4 py-3 text-gray-300">{report.operator}</td>
+                                                    <td className="px-4 py-3 text-gray-300">
+                                                        {report.created_at ? new Date(report.created_at).toLocaleString() : 'N/A'}
+                                                    </td>
+                                                    <td className="px-4 py-3 text-gray-300">
+                                                        {report.updated_at ? new Date(report.updated_at).toLocaleString() : 'N/A'}
+                                                    </td>
+                                                    <td className="px-4 py-3 text-gray-300">
+                                                        {report.total_charge ? parseFloat(report.total_charge).toFixed(2) : '0.00'}
+                                                    </td>
+                                                    <td className="px-4 py-3 text-right whitespace-nowrap">
+                                                        <button
+                                                            onClick={() => handleDeleteReport(report.id)}
+                                                            className="p-1 bg-red-500 text-white rounded hover:bg-red-600"
+                                                            title="Delete Report"
+                                                        >
+                                                            <TrashIcon size={16} />
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table> */}
+                                </div>
                             ) : (
                                 <div className="text-center text-gray-500 py-8">
                                     No reports found matching your search criteria

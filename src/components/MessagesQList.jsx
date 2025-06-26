@@ -48,6 +48,7 @@ function MessagesQList({ messages }) {
                                 <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">Charge</th>
                             </tr>
                         </thead>
+                        
                         <tbody className="divide-y divide-gray-600">
                             {filteredMessages.map((message) => (
                                 <tr key={message.id} className="hover:bg-gray-700">
