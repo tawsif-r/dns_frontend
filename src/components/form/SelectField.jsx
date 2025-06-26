@@ -1,6 +1,6 @@
 // Select Field Component
 // options: ["job","john","cole"] array of options
-const SelectField = ({ placeholder="",label, name, value, onChange, options }) => (
+const SelectField = ({ placeholder="",label,name, value, onChange, options }) => (
   <div>
     <label className="block text-sm font-medium">{label}</label>
     <select

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Activity, Plus, Minus, Pin } from 'lucide-react';
 import axios from 'axios';
-import SelectField from '../components/form/SelectField';
+import SelectFromApiResponse from '../components/form/SelectFromApiResponse';
 
 function CricketLiveDashboard() {
   const [selectedMatch, setSelectedMatch] = useState(0);
@@ -21,16 +21,21 @@ function CricketLiveDashboard() {
   const [players, setPlayers]= useState([]);
   const [selectedPlayer,setSelectedPlayer] = useState('');
   const [LoadingPlayers, setLoadingPlayers] = useState(false);
+  const [dropdownsLoading,setDropdownsLoading] = useState(false);
 
   // Fetch matches
   useEffect(() => {
     const fetchPlayers = async () => {
+      setDropdownsLoading(true);
       try{
         setLoadingPlayers(true);
         const response = await axios.get('http://192.168.3.35:8002/sport/api/players/');
         console.log('Players Api response:', response.data);
+        setPlayers(response.data);
       } catch (error){
         console.error("Error fetching players",error);
+      }finally {
+        setDropdownsLoading(false);
       }
     };
     const fetchMatches = async () => {
@@ -118,10 +123,11 @@ function CricketLiveDashboard() {
       const currentMatch = matches[selectedMatch];
       const team = selectedTeam === 0 ? currentMatch.teams?.home : currentMatch.teams?.away;
       const teamName = team?.team_short || 'Team';
+      const selectedPlayerName = selectedPlayer;
 
-      setMessageInput(`${teamName} has scored ${teamRuns} runs for ${teamWickets} wickets in ${teamOvers} overs`);
+      setMessageInput(`${teamName}, runs: ${teamRuns} wickets: ${teamWickets} overs: ${teamOvers}. ${selectedPlayerName}`);
     }
-  }, [teamRuns, teamWickets, teamOvers, selectedTeam, selectedMatch, matches]);
+  }, [teamRuns, teamWickets, teamOvers, selectedTeam, selectedMatch, selectedPlayer, matches, selectedPlayer ]);
 
   // Handle message generation
   const handleGenerateMessage = async () => {
@@ -753,9 +759,10 @@ function CricketLiveDashboard() {
                 <span className="bg-blue-600 text-xs px-2 py-1 rounded">Match #1</span>
               </div>
             </div>
-            <div className="bg-gray-800 rounded-lg py-7 p-6">
-              <SelectField label="Players" name="name" value={selectedPlayer} onChange={(e) => setSelectedPlayer(e.target.value)} options={players} />
-            </div>
+            
+            {/* Select field */}
+            <SelectFromApiResponse label = "player select" value={selectedPlayer} onChange={(e) => setSelectedPlayer(e.target.value)} dropdownsLoading = {dropdownsLoading} options={players}/>
+            
             {/* Message Input */}
             <div className="mb-4">
               <label className="block text-xs text-gray-400 mb-1">Message Content</label>

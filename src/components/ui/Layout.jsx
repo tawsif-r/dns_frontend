@@ -29,7 +29,7 @@ const Layout = ({ children }) => {
       {/* Fixed Header */}
       <header className="sticky top-0 z-50 bg-gray-800 border-b-2 border-gray-700 shadow-md">
         <div className="flex justify-between items-center">
-          <div className="p-4 font-bold text-xl text-cyan-400">Logo</div>
+          <div className="p-4 font-bold text-xl text-cyan-400">Dns</div>
           {/* Header Navigation */}
           <div className="flex relative">
             <div
