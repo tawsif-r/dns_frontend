@@ -26,9 +26,9 @@ const Nav = () => {
 
   // Reports dropdown items
   const reportsItems = [
-    { path: '/reports', label: 'Report', icon: <ChartNoAxesCombined size={18} /> },
-    { path: '/testreports', label: 'Test Report', icon: <TestTubeDiagonal size={18} /> },
-    { path: '/recentreports', label: 'Recent Subs', icon: <HandCoins size={18} /> },
+    { path: '/quickreports', label: 'Quick filter', icon: <ChartNoAxesCombined size={18} /> },
+    { path: '/activereports', label: 'Active/Inactive', icon: <TestTubeDiagonal size={18} /> },
+    { path: '/salesreports', label: 'Sales', icon: <HandCoins size={18} /> },
   ];
 
     // Reports dropdown items

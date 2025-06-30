@@ -3,7 +3,7 @@ import { TrashIcon, FilterIcon } from 'lucide-react';
 import apiClient from '../api/axiosInstance';
 import axios from 'axios';
 
-function ReportsPage() {
+function QuickFilterReportsPage() {
     const [reports, setReports] = useState([]);
     const [filteredReports, setFilteredReports] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -287,4 +287,4 @@ function ReportsPage() {
     );
 }
 
-export default ReportsPage;
+export default QuickFilterReportsPage;

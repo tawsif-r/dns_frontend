@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { TrashIcon, FilterIcon, SearchIcon } from 'lucide-react';
 import apiClient from '../api/axiosInstance';
+import { FixedSizeList } from 'react-window';
 import axios from 'axios';
 
-function TestReportsPage() {
+function SalesReportsPage() {
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
-    const [active_subscribers, setActive_subscribers] = useState(0)
-    const [inactive_subscribers, setInActive_subscribers] = useState(0)
-    const [recent_subscribers, setRecent_subscribers] = useState(0)
+    const [subscriber_count, setSubscriberCount] = useState(0);
+    const [active_subscribers, setActive_subscribers] = useState(0);
+    const [inactive_subscribers, setInActive_subscribers] = useState(0);
+    const [recent_subscribers, setRecent_subscribers] = useState(0);
+    const [appliedFilters, setAppliedFilters] = useState({});
+    const [viewTable, setViewTable] = useState(false);
+
+    // New state for plan-based statistics
+    const [planStats, setPlanStats] = useState({});
 
     // Dropdown data states
     const [operators, setOperators] = useState([]);
@@ -46,7 +53,6 @@ function TestReportsPage() {
             console.log("Categories loaded:", categoriesResponse.data.length);
         } catch (error) {
             console.error('Error fetching dropdown data:', error);
-            // Set empty arrays on error to prevent crashes
             setOperators([]);
             setCategories([]);
         } finally {
@@ -63,7 +69,6 @@ function TestReportsPage() {
     const fetchReports = async (searchFilters = filters) => {
         setLoading(true);
         try {
-            // Build query parameters object, only including non-empty values
             const params = {};
             Object.keys(searchFilters).forEach(key => {
                 if (searchFilters[key] && searchFilters[key].trim() !== '') {
@@ -75,6 +80,8 @@ function TestReportsPage() {
 
             const response = await apiClient.get(baseUrl, { params });
             setReports(response.data.data);
+            setAppliedFilters(response.data.filters_applied);
+            setSubscriberCount(response.data.subscriber_count);
             setActive_subscribers(response.data.active_subscribers);
             setInActive_subscribers(response.data.inactive_subscribers);
             setRecent_subscribers(response.data.recent_subscribers);
@@ -82,12 +89,30 @@ function TestReportsPage() {
         } catch (error) {
             console.error('Error fetching reports:', error);
             setReports([]);
+            setSubscriberCount(0);
             setActive_subscribers(0);
             setInActive_subscribers(0);
             setRecent_subscribers(0);
         } finally {
             setLoading(false);
         }
+    };
+
+    // Calculate plan-based statistics
+    useEffect(() => {
+        const stats = reports.reduce((acc, report) => {
+            const plan = report.subscription_plan_name || 'Unknown';
+            acc[plan] = acc[plan] || { count: 0, totalCharge: 0 };
+            acc[plan].count += 1;
+            acc[plan].totalCharge += parseFloat(report.total_charge) || 0;
+            return acc;
+        }, {});
+        setPlanStats(stats);
+    }, [reports]);
+
+    // Handle table view toggle
+    const handleTableView = () => {
+        setViewTable(!viewTable);
     };
 
     // Handle filter changes
@@ -118,10 +143,12 @@ function TestReportsPage() {
         };
         setFilters(clearedFilters);
         setReports([]);
+        setSubscriberCount(0);
         setActive_subscribers(0);
         setInActive_subscribers(0);
         setRecent_subscribers(0);
         setHasSearched(false);
+        setViewTable(false);
     };
 
     // Handle Enter key press in filter inputs
@@ -140,7 +167,6 @@ function TestReportsPage() {
     const handleDeleteReport = async (id) => {
         try {
             await axios.delete(`${baseUrl}${id}/`);
-            // Refresh the reports after deletion with current filters
             fetchReports();
         } catch (error) {
             console.error('Error deleting report:', error);
@@ -148,15 +174,36 @@ function TestReportsPage() {
         }
     };
 
+    const Row = ({ index, style }) => {
+        const report = reports[index]
+        return (
+            <div style={style} className="grid grid-cols-9 w-full text-gray-300 py-2">
+                <div className="px-4 py-3">{report.id}</div>
+                <div className="px-4 py-3">{report.subscriber_name}</div>
+                <div className="px-4 py-3">{report.category_name}</div>
+                <div className="px-4 py-3">{report.operator}</div>
+                <div className="px-4 py-3">{report.subscription_plan_name}</div>
+                <div className="px-4 py-3">{report.subscriber_message_count}</div>
+                <div className="px-4 py-3">{report.total_charge}</div>
+                <div className="px-4 py-3">{report.created_at}</div>
+                <div className="px-4 py-3">{report.updated_at}</div>
+
+            </div>
+        )
+    }
     const columns = [
-        'subscriber name',
-        'message count',
-        'subscription plan',
-        'category name',
+        'id',
+        'phone',
+        'category',
         'operator',
-        'created at',
-        'updated at',
-        'charge'
+        'plan',
+        'messages',
+        'total_charge',
+        'created_at',
+        'updated_at',
+        // 'subscriber',
+        // 'subscription_plan',
+        // 'category id'
     ];
 
     return (
@@ -211,8 +258,6 @@ function TestReportsPage() {
                                 onKeyDown={handleKeyPress}
                                 className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
                             />
-
-                            {/* Operator Dropdown */}
                             <select
                                 value={filters.operator}
                                 onChange={(e) => handleFilterChange('operator', e.target.value)}
@@ -242,7 +287,7 @@ function TestReportsPage() {
                                 value={filters.keyword}
                                 onChange={(e) => handleFilterChange('keyword', e.target.value)}
                                 onKeyDown={handleKeyPress}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black border rounded px-3 py-2 text-gray-300 focus:outline-none focus:border-blue-200"
                             />
                             <input
                                 type="text"
@@ -252,8 +297,6 @@ function TestReportsPage() {
                                 onKeyDown={handleKeyPress}
                                 className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
                             />
-
-                            {/* Category Dropdown */}
                             <select
                                 value={filters.category}
                                 onChange={(e) => handleFilterChange('category', e.target.value)}
@@ -322,20 +365,67 @@ function TestReportsPage() {
                             </button>
                         </div>
                     </div>
-                    <div className='grid grid-cols-3 gap-1'>
+
+                    <div className='grid grid-cols-2 gap-1'>
                         <div className="mb-6 p-4 bg-gray-800 rounded-lg">
-                            <p className='font-semibold'>Active subscribers: {active_subscribers ? active_subscribers : "0"}</p>
-                           
+                            {/* Applied Filters Section */}
+                            {hasSearched && Object.keys(appliedFilters).length > 0 && (
+                                <div className="mb-6 p-4 bg-gray-800 rounded-lg">
+                                    <h2 className="text-lg font-semibold mb-2 text-white">Applied Filters</h2>
+                                    <div className="flex flex-wrap gap-2">
+                                        {Object.entries(appliedFilters).map(([key, value]) => {
+                                            if (!value) return null;
+                                            const formattedKey = key
+                                                .replace('_', ' ')
+                                                .split(' ')
+                                                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                                                .join(' ');
+                                            return (
+                                                <span key={key} className="px-3 py-1 bg-blue-900 text-blue-200 rounded-full text-xs">
+                                                    <strong>{formattedKey}:</strong> {value}
+                                                </span>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                            <div className="font-semibold text-lg text-gray-200">
+                                Number of subscribers:{subscriber_count ? subscriber_count : "0"}
+                                <div className="flex flex-col items-start">
+
+                                    {/* Subscription Plan Statistics */}
+                                    {hasSearched && Object.keys(planStats).length > 0 && (
+                                        <div className="mt-4 w-full">
+                                            <h3 className="text-md font-semibold text-white mb-2">Subscription Plan Breakdown:</h3>
+                                            {Object.entries(planStats).map(([plan, { count, totalCharge }]) => {
+                                                const individualCharge = count > 0 ? (totalCharge / count).toFixed(2) : '0.00';
+                                                return (
+                                                    <div key={plan} className="flex justify-between items-center py-2 border-b border-gray-600">
+                                                        <span className="text-gray-300">{plan}</span>
+                                                        <span className="text-gray-300">
+                                                            Tk {individualCharge} X {count} = Tk {individualCharge * count.toFixed(2)}
+                                                        </span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                    {hasSearched && (
+                                        <button
+                                            onClick={handleTableView}
+                                            className="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200"
+                                        >
+                                            {viewTable ? 'Hide Table' : 'View Table'}
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                         <div className="mb-6 p-4 bg-gray-800 rounded-lg">
-                            <p className='font-semibold'>Inactive subscribers: {inactive_subscribers ? inactive_subscribers : "0"}</p>
-                    
-                        </div>
-                        <div className="mb-6 p-4 bg-gray-800 rounded-lg">
-                            <p className='font-semibold'>Recent subscribers: {recent_subscribers ? recent_subscribers : "0"}</p>
+                            <p className='font-semibold'>Billing:</p>
+                            <p className='font-semibold'>Total Charge: Tk {totalCharge.toFixed(2)}</p>
                         </div>
                     </div>
-
 
                     {/* Loading Indicator */}
                     {loading && (
@@ -346,50 +436,68 @@ function TestReportsPage() {
                     )}
 
                     {/* Reports Table */}
-                    {hasSearched && !loading && (
+                    {hasSearched && !loading && viewTable && (
                         <div className="overflow-x-auto border-2 rounded-lg">
                             {reports.length > 0 ? (
-                                <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
-                                    <thead>
-                                        <tr className="bg-gray-700">
+                                <div>
+                                    <div className='overflow-x-auto border-2 rounded-lg'>
+                                        <div className="bg-gray-700 grid grid-cols-9">
                                             {columns.map((column) => (
-                                                <th key={column} className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">
-                                                    {column.charAt(0).toUpperCase() + column.slice(1).replace('_', ' ')}
-                                                </th>
+                                                <div key={column} className='px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider'>
+                                                    {column}
+                                                </div>
                                             ))}
-                                            <th className="px-4 py-3 text-right">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-gray-600">
-                                        {reports.map((report) => (
-                                            <tr key={report.id} className="hover:bg-gray-700">
-                                                <td className="px-4 py-3 text-gray-300">{report.subscriber_name || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{report.subscriber_message_count || 0}</td>
-                                                <td className="px-4 py-3 text-gray-300">{report.subscription_plan_name || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{report.category_name || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{report.operator}</td>
-                                                <td className="px-4 py-3 text-gray-300">
-                                                    {report.created_at ? new Date(report.created_at).toLocaleString() : 'N/A'}
-                                                </td>
-                                                <td className="px-4 py-3 text-gray-300">
-                                                    {report.updated_at ? new Date(report.updated_at).toLocaleString() : 'N/A'}
-                                                </td>
-                                                <td className="px-4 py-3 text-gray-300">
-                                                    {report.total_charge ? parseFloat(report.total_charge).toFixed(2) : '0.00'}
-                                                </td>
-                                                <td className="px-4 py-3 text-right whitespace-nowrap">
-                                                    <button
-                                                        onClick={() => handleDeleteReport(report.id)}
-                                                        className="p-1 bg-red-500 text-white rounded hover:bg-red-600"
-                                                        title="Delete Report"
-                                                    >
-                                                        <TrashIcon size={16} />
-                                                    </button>
-                                                </td>
+                                        </div>
+                                    
+                                    <FixedSizeList
+                                        height={400}
+                                        width="100%"
+                                        itemCount={reports.length}
+                                        itemSize={140}
+                                    >{Row}</FixedSizeList>
+                                    </div>
+                                    {/* <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
+                                        <thead>
+                                            <tr className="bg-gray-700">
+                                                {columns.map((column) => (
+                                                    <th key={column} className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">
+                                                        {column.charAt(0).toUpperCase() + column.slice(1).replace('_', ' ')}
+                                                    </th>
+                                                ))}
+                                                <th className="px-4 py-3 text-right">Actions</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-600">
+                                            {reports.map((report) => (
+                                                <tr key={report.id} className="hover:bg-gray-700">
+                                                    <td className="px-4 py-3 text-gray-300">{report.subscriber_name || 'N/A'}</td>
+                                                    <td className="px-4 py-3 text-gray-300">{report.subscription_plan_name || 'N/A'}</td>
+                                                    <td className="px-4 py-3 text-gray-300">{report.category_name || 'N/A'}</td>
+                                                    <td className="px-4 py-3 text-gray-300">{report.operator}</td>
+                                                    <td className="px-4 py-3 text-gray-300">
+                                                        {report.created_at ? new Date(report.created_at).toLocaleString() : 'N/A'}
+                                                    </td>
+                                                    <td className="px-4 py-3 text-gray-300">
+                                                        {report.updated_at ? new Date(report.updated_at).toLocaleString() : 'N/A'}
+                                                    </td>
+                                                    <td className="px-4 py-3 text-gray-300">
+                                                        {report.total_charge ? parseFloat(report.total_charge).toFixed(2) : '0.00'}
+                                                    </td>
+                                                    <td className="px-4 py-3 text-right whitespace-nowrap">
+                                                        <button
+                                                            onClick={() => handleDeleteReport(report.id)}
+                                                            className="p-1 bg-red-500 text-white rounded hover:bg-red-600"
+                                                            title="Delete Report"
+                                                        >
+                                                            <TrashIcon size={16} />
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table> */}
+                                </div>
                             ) : (
                                 <div className="text-center text-gray-500 py-8">
                                     No reports found matching your search criteria
@@ -415,4 +523,4 @@ function TestReportsPage() {
     );
 }
 
-export default TestReportsPage;
+export default SalesReportsPage;
