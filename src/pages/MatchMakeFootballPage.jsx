@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 import InputField from "../components/form/InputField";
 import SelectField from "../components/form/SelectField";
 //('scheduled', 'Scheduled'),
-        // ('live', 'Live'),
-        // ('halftime', 'Halftime'),
-        // ('finished', 'Finished'),
-        // ('postponed', 'Postponed')
+// ('live', 'Live'),
+// ('halftime', 'Halftime'),
+// ('finished', 'Finished'),
+// ('postponed', 'Postponed')
 
 function FootballMatchMakePage() {
   const [matches, setMatches] = useState([]);
@@ -194,28 +194,40 @@ function FootballMatchMakePage() {
       <h1 className="text-2xl font-bold mb-4">Create Football Match</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-8">
-        {/* Match Info */}
-        <InputField label="Match ID" name="match_id" value={newMatch.match_id} onChange={handleInputChange} />
-        <InputField label="Match Day" name="matchday" value={newMatch.matchday} onChange={handleInputChange} type="number" />
-        <InputField label="Match Date" name="match_date" value={newMatch.match_date} onChange={handleInputChange} type="datetime-local" />
-        <SelectField label="Status" name="status" value={newMatch.status} onChange={handleInputChange} options={["halftime", "live", "finished","postponed"]} />
-        <InputField label="Tournament ID" name="tournament_id" value={newMatch.tournament_id} onChange={handleInputChange} />
+        <div className="grid grid-cols-5 gap-2">
+          <div>{/* Match Info */}
+            <h2 className="text-xl font-semibold mt-4">Match</h2>
+            <InputField label="Match ID" name="match_id" value={newMatch.match_id} onChange={handleInputChange} />
+            <InputField label="Match Day" name="matchday" value={newMatch.matchday} onChange={handleInputChange} type="number" />
+            <InputField label="Match Date" name="match_date" value={newMatch.match_date} onChange={handleInputChange} type="datetime-local" />
+            <SelectField label="Status" name="status" value={newMatch.status} onChange={handleInputChange} options={["halftime", "live", "finished", "postponed"]} />
+            <InputField label="Tournament ID" name="tournament_id" value={newMatch.tournament_id} onChange={handleInputChange} />
+          </div>
+          <div>{/* Venue */}
+            <h2 className="text-xl font-semibold mt-4">Venue</h2>
+            <InputField label="Stadium" name="stadium" value={newMatch.venue.stadium} onChange={(e) => handleInputChange(e, null, null, "venue")} />
+            <InputField label="City" name="city" value={newMatch.venue.city} onChange={(e) => handleInputChange(e, null, null, "venue")} />
+            <InputField label="Country" name="country" value={newMatch.venue.country} onChange={(e) => handleInputChange(e, null, null, "venue")} />
+            <InputField label="Capacity" name="capacity" value={newMatch.venue.capacity} onChange={(e) => handleInputChange(e, null, null, "venue")} type="number" />
+            <InputField label="Weather Condition" name="condition" value={newMatch.venue.weather.condition} onChange={(e) => handleInputChange(e, null, null, "venue", "weather")} />
+            <InputField label="Temperature" name="temperature" value={newMatch.venue.weather.temperature} onChange={(e) => handleInputChange(e, null, null, "venue", "weather")} />
+            <InputField label="Humidity" name="humidity" value={newMatch.venue.weather.humidity} onChange={(e) => handleInputChange(e, null, null, "venue", "weather")} /></div>
+          <div>{/* Home Team */}
+            <TeamSection title="Home Team" teamKey="home" match={newMatch} handleInputChange={handleInputChange} />
+          </div>
+          <div>{/* Away Team */}
+            <TeamSection title="Away Team" teamKey="away" match={newMatch} handleInputChange={handleInputChange} />
+          </div>
+          <div>{/* Away Team */}
+            <TeamSection title="Away Team" teamKey="away" match={newMatch} handleInputChange={handleInputChange} /></div>
+          </div>
 
-        {/* Venue */}
-        <h2 className="text-xl font-semibold mt-4">Venue</h2>
-        <InputField label="Stadium" name="stadium" value={newMatch.venue.stadium} onChange={(e) => handleInputChange(e, null, null, "venue")} />
-        <InputField label="City" name="city" value={newMatch.venue.city} onChange={(e) => handleInputChange(e, null, null, "venue")} />
-        <InputField label="Country" name="country" value={newMatch.venue.country} onChange={(e) => handleInputChange(e, null, null, "venue")} />
-        <InputField label="Capacity" name="capacity" value={newMatch.venue.capacity} onChange={(e) => handleInputChange(e, null, null, "venue")} type="number" />
-        <InputField label="Weather Condition" name="condition" value={newMatch.venue.weather.condition} onChange={(e) => handleInputChange(e, null, null, "venue", "weather")} />
-        <InputField label="Temperature" name="temperature" value={newMatch.venue.weather.temperature} onChange={(e) => handleInputChange(e, null, null, "venue", "weather")} />
-        <InputField label="Humidity" name="humidity" value={newMatch.venue.weather.humidity} onChange={(e) => handleInputChange(e, null, null, "venue", "weather")} />
 
-        {/* Home Team */}
-        <TeamSection title="Home Team" teamKey="home" match={newMatch} handleInputChange={handleInputChange} />
 
-        {/* Away Team */}
-        <TeamSection title="Away Team" teamKey="away" match={newMatch} handleInputChange={handleInputChange} />
+
+
+
+
 
         {/* Score */}
         <InputField label="Goals (Home)" name="home" value={newMatch.score.home} onChange={(e) => handleInputChange(e, null, "home")} type="number" />

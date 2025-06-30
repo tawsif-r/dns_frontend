@@ -52,7 +52,7 @@ function MatchMakeCricketPage() {
 
 
     const statusOptions = ["upcoming", "finished", "live", "postponed"];
-    
+
     const handleInputChange = (e, team = null, score = null) => {
         const { name, value } = e.target;
         if (team && score) {
@@ -130,140 +130,150 @@ function MatchMakeCricketPage() {
     return (
         <div className="p-4">
             <h1 className="text-2xl font-bold mb-4">Create Cricket Match</h1>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="mb-8 grid grid-cols-3 gap-7">
+                    <div>
+                        <h2 className="text-xl font-semibold mt-4">Match Info</h2>
+                        <InputField
+                            label="Match ID"
+                            name="match_id"
+                            value={newMatch.match_id}
+                            onChange={handleInputChange}
+                            placeholder="e.g., IPL_2025_M45"
+                        />
+                        <InputField
+                            label="Match Day"
+                            name="matchday"
+                            type="number"
+                            value={newMatch.matchday}
+                            onChange={handleInputChange}
+                        />
+                        <InputField
+                            label="Match Date"
+                            name="match_date"
+                            type="datetime-local"
+                            value={newMatch.match_date}
+                            onChange={handleInputChange}
+                        />
+                        <SelectField
+                            label="Status"
+                            name="status"
+                            value={newMatch.status}
+                            onChange={handleInputChange}
+                            options={statusOptions}
+                        />
+                        <InputField
+                            label="Venue"
+                            name="venue"
+                            value={newMatch.venue}
+                            onChange={handleInputChange}
+                            placeholder="e.g., Eden Gardens"
+                        /></div>
+                    <div><h2 className="text-xl font-semibold mt-4">Home Team</h2>
+                        <InputField
+                            label="Team Name"
+                            name="team_name"
+                            value={newMatch.teams.home.team_name}
+                            onChange={(e) => handleInputChange(e, "home")}
+                            placeholder="e.g., Mumbai Indians"
+                        />
+                        <InputField
+                            label="Team Short Name"
+                            name="team_short"
+                            value={newMatch.teams.home.team_short}
+                            onChange={(e) => handleInputChange(e, "home")}
+                            placeholder="e.g., MI"
+                        />
+                        <InputField
+                            label="Captain"
+                            name="captain"
+                            value={newMatch.teams.home.captain}
+                            onChange={(e) => handleInputChange(e, "home")}
+                            placeholder="e.g., Rohit Sharma"
+                        />
+                        <InputField
+                            label="Runs"
+                            name="runs"
+                            type="number"
+                            value={newMatch.teams.home.score.runs}
+                            onChange={(e) => handleInputChange(e, "home", "runs")}
+                        />
+                        <InputField
+                            label="Overs"
+                            name="overs"
+                            type="number"
+                            value={newMatch.teams.home.score.overs}
+                            onChange={(e) => handleInputChange(e, "home", "overs")}
+                            step="0.1"
+                        />
+                        <InputField
+                            label="Wickets"
+                            name="wickets"
+                            type="number"
+                            value={newMatch.teams.home.score.wickets}
+                            onChange={(e) => handleInputChange(e, "home", "wickets")}
+                        /></div>
+                    <div><h2 className="text-xl font-semibold mt-4">Away Team</h2>
+                        <InputField
+                            label="Team Name"
+                            name="team_name"
+                            value={newMatch.teams.away.team_name}
+                            onChange={(e) => handleInputChange(e, "away")}
+                            placeholder="e.g., Chennai Super Kings"
+                        />
+                        <InputField
+                            label="Team Short Name"
+                            name="team_short"
+                            value={newMatch.teams.away.team_short}
+                            onChange={(e) => handleInputChange(e, "away")}
+                            placeholder="e.g., CSK"
+                        />
+                        <InputField
+                            label="Captain"
+                            name="captain"
+                            value={newMatch.teams.away.captain}
+                            onChange={(e) => handleInputChange(e, "away")}
+                            placeholder="e.g., MS Dhoni"
+                        />
+                        <InputField
+                            label="Runs"
+                            name="runs"
+                            type="number"
+                            value={newMatch.teams.away.score.runs}
+                            onChange={(e) => handleInputChange(e, "away", "runs")}
+                        />
+                        <InputField
+                            label="Overs"
+                            name="overs"
+                            type="number"
+                            value={newMatch.teams.away.score.overs}
+                            onChange={(e) => handleInputChange(e, "away", "overs")}
+                            step="0.1"
+                        />
+                        <InputField
+                            label="Wickets"
+                            name="wickets"
+                            type="number"
+                            value={newMatch.teams.away.score.wickets}
+                            onChange={(e) => handleInputChange(e, "away", "wickets")}
+                        /></div>
+                </div>
 
-            <div className="mb-8">
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <InputField
-                        label="Match ID"
-                        name="match_id"
-                        value={newMatch.match_id}
-                        onChange={handleInputChange}
-                        placeholder="e.g., IPL_2025_M45"
-                    />
-                    <InputField
-                        label="Match Day"
-                        name="matchday"
-                        type="number"
-                        value={newMatch.matchday}
-                        onChange={handleInputChange}
-                    />
-                    <InputField
-                        label="Match Date"
-                        name="match_date"
-                        type="datetime-local"
-                        value={newMatch.match_date}
-                        onChange={handleInputChange}
-                    />
-                    <SelectField
-                        label="Status"
-                        name="status"
-                        value={newMatch.status}
-                        onChange={handleInputChange}
-                        options={statusOptions}
-                    />
-                    <InputField
-                        label="Venue"
-                        name="venue"
-                        value={newMatch.venue}
-                        onChange={handleInputChange}
-                        placeholder="e.g., Eden Gardens"
-                    />
 
-                    <h2 className="text-xl font-semibold mt-4">Home Team</h2>
-                    <InputField
-                        label="Team Name"
-                        name="team_name"
-                        value={newMatch.teams.home.team_name}
-                        onChange={(e) => handleInputChange(e, "home")}
-                        placeholder="e.g., Mumbai Indians"
-                    />
-                    <InputField
-                        label="Team Short Name"
-                        name="team_short"
-                        value={newMatch.teams.home.team_short}
-                        onChange={(e) => handleInputChange(e, "home")}
-                        placeholder="e.g., MI"
-                    />
-                    <InputField
-                        label="Captain"
-                        name="captain"
-                        value={newMatch.teams.home.captain}
-                        onChange={(e) => handleInputChange(e, "home")}
-                        placeholder="e.g., Rohit Sharma"
-                    />
-                    <InputField
-                        label="Runs"
-                        name="runs"
-                        type="number"
-                        value={newMatch.teams.home.score.runs}
-                        onChange={(e) => handleInputChange(e, "home", "runs")}
-                    />
-                    <InputField
-                        label="Overs"
-                        name="overs"
-                        type="number"
-                        value={newMatch.teams.home.score.overs}
-                        onChange={(e) => handleInputChange(e, "home", "overs")}
-                        step="0.1"
-                    />
-                    <InputField
-                        label="Wickets"
-                        name="wickets"
-                        type="number"
-                        value={newMatch.teams.home.score.wickets}
-                        onChange={(e) => handleInputChange(e, "home", "wickets")}
-                    />
 
-                    <h2 className="text-xl font-semibold mt-4">Away Team</h2>
-                    <InputField
-                        label="Team Name"
-                        name="team_name"
-                        value={newMatch.teams.away.team_name}
-                        onChange={(e) => handleInputChange(e, "away")}
-                        placeholder="e.g., Chennai Super Kings"
-                    />
-                    <InputField
-                        label="Team Short Name"
-                        name="team_short"
-                        value={newMatch.teams.away.team_short}
-                        onChange={(e) => handleInputChange(e, "away")}
-                        placeholder="e.g., CSK"
-                    />
-                    <InputField
-                        label="Captain"
-                        name="captain"
-                        value={newMatch.teams.away.captain}
-                        onChange={(e) => handleInputChange(e, "away")}
-                        placeholder="e.g., MS Dhoni"
-                    />
-                    <InputField
-                        label="Runs"
-                        name="runs"
-                        type="number"
-                        value={newMatch.teams.away.score.runs}
-                        onChange={(e) => handleInputChange(e, "away", "runs")}
-                    />
-                    <InputField
-                        label="Overs"
-                        name="overs"
-                        type="number"
-                        value={newMatch.teams.away.score.overs}
-                        onChange={(e) => handleInputChange(e, "away", "overs")}
-                        step="0.1"
-                    />
-                    <InputField
-                        label="Wickets"
-                        name="wickets"
-                        type="number"
-                        value={newMatch.teams.away.score.wickets}
-                        onChange={(e) => handleInputChange(e, "away", "wickets")}
-                    />
 
-                    <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
-                        Create Match
-                    </button>
-                </form>
-            </div>
+
+
+
+
+
+
+                <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+                    Create Match
+                </button>
+            </form>
+
+
 
             <h2 className="text-xl font-semibold mt-8">Existing Matches</h2>
             <div className="border p-4 rounded">
