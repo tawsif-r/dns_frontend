@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
 import apiClient from '../api/axiosInstance';
+import ButtonCreate from '../components/ui/ButtonCreate';
 
 function CategoriesPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -116,7 +117,7 @@ function CategoriesPage() {
 
     return (
         < div className="px-4 py-8" >
-            <div className="border-2 rounded-lg shadow-lg">
+            <div className="rounded-lg bg-slate-700 shadow-lg">
                 <div className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-t-lg">
                     <div className="flex items-center">
                         <svg
@@ -136,7 +137,7 @@ function CategoriesPage() {
                         placeholder="Search Categories by Name..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="px-3 py-1 bg-slate-900 text-gray-100 rounded border focus:outline-none focus:border-gray-100"
+                        className="px-3 py-1 bg-slate-900 text-gray-100 rounded"
                         onClick={(e) => e.stopPropagation()}
                     />
                 </div>
@@ -154,76 +155,77 @@ function CategoriesPage() {
                                 placeholder="Name *"
                                 value={newCategory.name}
                                 onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             />
                             <input
                                 type="text"
                                 placeholder="Slug *"
                                 value={newCategory.slug}
                                 onChange={(e) => setNewCategory({ ...newCategory, slug: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             />
                             <input
                                 type="text"
                                 placeholder="Service"
                                 value={newCategory.service}
                                 onChange={(e) => setNewCategory({ ...newCategory, service: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             />
                             <input
                                 type="text"
                                 placeholder="Keyword"
                                 value={newCategory.keyword}
                                 onChange={(e) => setNewCategory({ ...newCategory, keyword: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             />
                             <input
                                 type="text"
                                 placeholder="FCat ID"
                                 value={newCategory.fcatid}
                                 onChange={(e) => setNewCategory({ ...newCategory, fcatid: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             />
                             <input
                                 type="text"
                                 placeholder="ICat ID"
                                 value={newCategory.icatid}
                                 onChange={(e) => setNewCategory({ ...newCategory, icatid: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             />
                             <textarea
                                 placeholder="Description"
                                 value={newCategory.description}
                                 onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200 col-span-2"
+                                className="w-full bg-black rounded px-3 py-2"
                                 rows="3"
                             />
                             <select
                                 value={newCategory.is_active}
                                 onChange={(e) => setNewCategory({ ...newCategory, is_active: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             >
                                 <option value="">Is Active? (Select)</option>
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
                             </select>
-                            <button
+                            <ButtonCreate label={'Add Category'} onClick={handleCreateCategory} />
+                            {/* <button
                                 onClick={handleCreateCategory}
-                                className="font-bold bg-black text-white px-4 py-2 rounded border-2 border-cyan-600 hover:bg-gray-300 hover:text-black transition duration-500"
+                                className="font-bold bg-black text-white px-4 py-2 rounded hover:bg-gray-300 hover:text-black transition duration-500"
                             >
                                 Add Category
-                            </button>
+                            </button> */}
                         </div>
                     </div>
 
                     {/* Categories Table */}
-                    <div className="overflow-x-auto border-2 rounded-lg">
+                    <div className="overflow-x-auto rounded-lg">
                         {filteredCategories.length > 0 ? (
                             <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
                                 <thead>
-                                    <tr className="bg-gray-700">
+                                    <tr className="bg-gray-900">
                                         {columns.map((column) => (
-                                            <th key={column} className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">
+                                            <th key={column} className="px-4 py-3 text-left text-sm font-medium text-cyan-400 uppercase tracking-wider">
                                                 {column.charAt(0).toUpperCase() + column.slice(1)}
                                             </th>
                                         ))}
@@ -240,7 +242,7 @@ function CategoriesPage() {
                                                             <textarea
                                                                 value={editingCategory[column] ?? ""}
                                                                 onChange={(e) => setEditingCategory({ ...editingCategory, [column]: e.target.value })}
-                                                                className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
+                                                                className="w-full bg-gray-800 rounded px-2 py-1 text-white"
                                                                 rows="2"
                                                             />
                                                         </td>
@@ -249,7 +251,7 @@ function CategoriesPage() {
                                                             <select
                                                                 value={editingCategory[column]}
                                                                 onChange={(e) => setEditingCategory({ ...editingCategory, [column]: e.target.value })}
-                                                                className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
+                                                                className="w-full bg-gray-800 rounded px-2 py-1 text-white"
                                                             >
                                                                 <option value="true">Yes</option>
                                                                 <option value="false">No</option>
@@ -261,7 +263,7 @@ function CategoriesPage() {
                                                                 type="text"
                                                                 value={editingCategory[column] ?? ""}
                                                                 onChange={(e) => setEditingCategory({ ...editingCategory, [column]: e.target.value })}
-                                                                className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
+                                                                className="w-full bg-gray-800 rounded px-2 py-1 text-white"
                                                             />
                                                         </td>
                                                     )

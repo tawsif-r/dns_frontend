@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
 import apiClient from '../api/axiosInstance';
+import ButtonCreate from '../components/ui/ButtonCreate';
 
 function SubscriptionPlansPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -93,7 +94,7 @@ function SubscriptionPlansPage() {
 
     return (
         <div className="px-4 py-8">
-            <div className="border-2 rounded-lg shadow-lg">
+            <div className="rounded-lg bg-slate-700 shadow-lg">
                 <div className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-t-lg">
                     <div className="flex items-center">
                         <svg
@@ -113,7 +114,7 @@ function SubscriptionPlansPage() {
                         placeholder="Search Plans by Name..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="px-3 py-1 bg-slate-900 text-gray-100 rounded border focus:outline-none focus:border-gray-100"
+                        className="px-3 py-1 bg-slate-900 text-gray-100 rounded"
                         onClick={(e) => e.stopPropagation()}
                     />
                 </div>
@@ -130,60 +131,55 @@ function SubscriptionPlansPage() {
                                 placeholder="Name *"
                                 value={newPlan.name}
                                 onChange={(e) => setNewPlan({ ...newPlan, name: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             />
                             <input
                                 type="number"
                                 placeholder="Duration Days *"
                                 value={newPlan.duration_days}
                                 onChange={(e) => setNewPlan({ ...newPlan, duration_days: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             />
                             <input
                                 type="number"
                                 placeholder="Price *"
                                 value={newPlan.price}
                                 onChange={(e) => setNewPlan({ ...newPlan, price: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             />
                             <input
                                 type="text"
                                 placeholder="Process"
                                 value={newPlan.process}
                                 onChange={(e) => setNewPlan({ ...newPlan, process: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             />
                             <input
                                 type="text"
                                 placeholder="Plan Keyword"
                                 value={newPlan.plan_keyword}
                                 onChange={(e) => setNewPlan({ ...newPlan, plan_keyword: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             />
                             <textarea
                                 placeholder="Description"
                                 value={newPlan.description}
                                 onChange={(e) => setNewPlan({ ...newPlan, description: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200 col-span-2"
+                                className="w-full bg-black rounded px-3 py-2 col-span-2"
                                 rows="3"
                             />
-                            <button
-                                onClick={handleCreatePlan}
-                                className="font-bold bg-black text-white px-4 py-2 rounded border-2 border-cyan-600 hover:bg-gray-300 hover:text-black transition duration-500"
-                            >
-                                Add Subscription Plan
-                            </button>
+                            <ButtonCreate label={'Add Subscription Plan'} onClick={handleCreatePlan} />
                         </div>
                     </div>
 
                     {/* Subscription Plans Table */}
-                    <div className="overflow-x-auto border-2 rounded-lg">
+                    <div className="overflow-x-auto rounded-lg">
                         {filteredPlans.length > 0 ? (
-                            <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
+                            <table className="min-w-full bg-slate-800 rounded-lg overflow-hidden">
                                 <thead>
-                                    <tr className="bg-gray-700">
+                                    <tr className="bg-gray-900">
                                         {columns.map((column) => (
-                                            <th key={column} className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">
+                                            <th key={column} className="px-4 py-3 text-left text-sm font-medium text-cyan-400 uppercase tracking-wider">
                                                 {column.charAt(0).toUpperCase() + column.slice(1)}
                                             </th>
                                         ))}
@@ -200,7 +196,7 @@ function SubscriptionPlansPage() {
                                                             <textarea
                                                                 value={editingPlan[column] ?? ""}
                                                                 onChange={(e) => setEditingPlan({ ...editingPlan, [column]: e.target.value })}
-                                                                className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
+                                                                className="w-full bg-gray-800 rounded px-2 py-1 text-white focus:outline-none"
                                                                 rows="2"
                                                             />
                                                         </td>
@@ -210,7 +206,7 @@ function SubscriptionPlansPage() {
                                                                 type={column === 'duration_days' || column === 'price' ? 'number' : 'text'}
                                                                 value={editingPlan[column] ?? ""}
                                                                 onChange={(e) => setEditingPlan({ ...editingPlan, [column]: e.target.value })}
-                                                                className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
+                                                                className="w-full bg-gray-800 rounded px-2 py-1 text-white focus:outline-none"
                                                             />
                                                         </td>
                                                     )

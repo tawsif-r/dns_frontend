@@ -139,7 +139,7 @@ function QuickFilterReportsPage() {
 
     return (
         <div className="px-4 py-8">
-            <div className="border-2 rounded-lg shadow-lg">
+            <div className="rounded-lg shadow-lg">
                 <div className="flex justify-between items-center p-4 rounded-t-lg">
                     <div className="flex items-center">
                         <svg
@@ -169,7 +169,7 @@ function QuickFilterReportsPage() {
                                 placeholder="Operator"
                                 value={filters.operator}
                                 onChange={(e) => handleFilterChange('operator', e.target.value)}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2 text-white focus:outline-none"
                             />
                             <input
                                 type="text"
