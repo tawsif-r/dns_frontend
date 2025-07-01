@@ -284,7 +284,7 @@ function CategoriesPage() {
                                                 </td>
                                             </tr>
                                         ) : (
-                                            <tr key={category.id} className="hover:bg-gray-700">
+                                            <tr key={category.id} className="hover:bg-gray-700 hover:border-l-2">
                                                 <td className="px-4 py-3 text-gray-300">{category.name || 'N/A'}</td>
                                                 <td className="px-4 py-3 text-gray-300">{category.slug || 'N/A'}</td>
                                                 <td className="px-4 py-3 text-gray-300">{category.service || 'N/A'}</td>

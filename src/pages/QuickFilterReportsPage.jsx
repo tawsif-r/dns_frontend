@@ -139,7 +139,7 @@ function QuickFilterReportsPage() {
 
     return (
         <div className="px-4 py-8">
-            <div className="rounded-lg shadow-lg">
+            <div className="rounded-lg bg-gray-700 shadow-lg">
                 <div className="flex justify-between items-center p-4 rounded-t-lg">
                     <div className="flex items-center">
                         <svg
@@ -176,28 +176,28 @@ function QuickFilterReportsPage() {
                                 placeholder="Subscriber"
                                 value={filters.subscriber_name}
                                 onChange={(e) => handleFilterChange('subscriber_name', e.target.value)}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2 text-white"
                             />
                             <input
                                 type="text"
                                 placeholder="Category"
                                 value={filters.category_name}
                                 onChange={(e) => handleFilterChange('category_name', e.target.value)}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2 text-white"
                             />
                             <input
                                 type="text"
                                 placeholder="Subscription Plan"
                                 value={filters.subscription_plan_name}
                                 onChange={(e) => handleFilterChange('subscription_plan_name', e.target.value)}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2 text-white"
                             />
                             <input
                                 type="datetime-local"
                                 placeholder="Date & Time"
                                 value={filters.date_time}
                                 onChange={(e) => handleFilterChange('date_time', e.target.value)}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200
+                                className="w-full bg-black rounded px-3 py-2 text-white
                                                         [&::-webkit-calendar-picker-indicator]:bg-dark 
                                                         [&::-webkit-calendar-picker-indicator]:rounded
                                                         [&::-webkit-calendar-picker-indicator]:cursor-pointer"
@@ -215,28 +215,28 @@ function QuickFilterReportsPage() {
                     {/* Loading Indicator */}
                     {loading && (
                         <div className="text-center py-4">
-                            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                            <div className="inline-block animate-spin rounded-full h-8 w-8"></div>
                             <p className="mt-2 text-gray-500">Loading reports...</p>
                         </div>
                     )}
 
                     {/* Reports Table */}
-                    <div className="overflow-x-auto border-2 rounded-lg">
+                    <div className="overflow-x-auto rounded-lg">
                         {filteredReports.length > 0 ? (
                             <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
                                 <thead>
-                                    <tr className="bg-gray-700">
+                                    <tr className="bg-gray-900">
                                         {columns.map((column) => (
-                                            <th key={column} className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">
+                                            <th key={column} className="px-4 py-3 text-left text-sm font-medium text-cyan-400 uppercase tracking-wider">
                                                 {column.charAt(0).toUpperCase() + column.slice(1).replace('_', ' ')}
                                             </th>
                                         ))}
-                                        <th className="px-4 py-3 text-right">Actions</th>
+                                        <th className="px-4 py-3 text-cyan-400 text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-600">
                                     {filteredReports.map((report) => (
-                                        <tr key={report.id} className="hover:bg-gray-700">
+                                        <tr key={report.id} className="hover:bg-gray-700 hover:border-l-4">
                                             <td className="px-4 py-3 text-gray-300">{report.subscriber_name || 'N/A'}</td>
                                             <td className="px-4 py-3 text-gray-300">{report.subscriber_message_count || 0}</td>
                                             <td className="px-4 py-3 text-gray-300">{report.subscription_plan_name || 'N/A'}</td>
