@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import InputField from "../components/form/InputField";
 import SelectField from "../components/form/SelectField";
+import ButtonCreate from "../components/ui/ButtonCreate";
 //('scheduled', 'Scheduled'),
 // ('live', 'Live'),
 // ('halftime', 'Halftime'),
@@ -38,11 +39,7 @@ function FootballMatchMakePage() {
       city: "",
       country: "",
       stadium: "",
-      weather: {
-        humidity: "",
-        condition: "",
-        temperature: ""
-      },
+      weather: "",
       capacity: 0
     },
     score: {
@@ -81,11 +78,7 @@ function FootballMatchMakePage() {
 
     if (team && score) {
       setNewMatchFootball({
-        ...newMatch,
-        score: {
-          ...newMatch.score,
-          [score]: parseInt(value) || 0
-        }
+        ...newMatch, score: { ...newMatch.score, [score]: parseInt(value) || 0 }
       });
     } else if (team) {
       setNewMatchFootball({
@@ -98,17 +91,9 @@ function FootballMatchMakePage() {
           }
         }
       });
+      //&& weather was here
     } else if (venue && weather) {
-      setNewMatchFootball({
-        ...newMatch,
-        venue: {
-          ...newMatch.venue,
-          weather: {
-            ...newMatch.venue.weather,
-            [weather]: value
-          }
-        }
-      });
+      setNewMatchFootball({ ...newMatch, venue: { ...newMatch.venue, weather: { ...newMatch.venue.weather, [weather]: value } } });
     } else if (venue) {
       setNewMatchFootball({
         ...newMatch,
@@ -117,6 +102,7 @@ function FootballMatchMakePage() {
           [name]: name === "capacity" ? parseInt(value) || 0 : value
         }
       });
+
     } else {
       setNewMatchFootball({
         ...newMatch,
@@ -169,11 +155,7 @@ function FootballMatchMakePage() {
         city: "",
         country: "",
         stadium: "",
-        weather: {
-          humidity: "",
-          condition: "",
-          temperature: ""
-        },
+        weather: "",
         capacity: 0
       },
       score: {
@@ -193,71 +175,86 @@ function FootballMatchMakePage() {
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Create Football Match</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-4 mb-8">
-        <div className="grid grid-cols-5 gap-2">
+      <form onSubmit={handleSubmit} className="space-y-4 rounded-md p-6 m-3 bg-gray-800">
+        <div className="grid grid-cols-5 gap-6">
           <div>{/* Match Info */}
             <h2 className="text-xl font-semibold mt-4">Match</h2>
-            <InputField label="Match ID" name="match_id" value={newMatch.match_id} onChange={handleInputChange} />
-            <InputField label="Match Day" name="matchday" value={newMatch.matchday} onChange={handleInputChange} type="number" />
-            <InputField label="Match Date" name="match_date" value={newMatch.match_date} onChange={handleInputChange} type="datetime-local" />
+            <InputField label="Match ID" name="match_id" value={newMatch.match_id} onChange={handleInputChange} placeholder="e.g ESL_01" />
+            <InputField label="Match Day" name="matchday" value={newMatch.matchday} onChange={handleInputChange} type="number" placeholder="e.g ESL_01" />
+            <InputField label="Match Date" name="match_date" value={newMatch.match_date} onChange={handleInputChange} type="datetime-local" placeholder="e.g ESL_01" />
             <SelectField label="Status" name="status" value={newMatch.status} onChange={handleInputChange} options={["halftime", "live", "finished", "postponed"]} />
-            <InputField label="Tournament ID" name="tournament_id" value={newMatch.tournament_id} onChange={handleInputChange} />
+            <InputField label="Tournament ID" name="tournament_id" value={newMatch.tournament_id} onChange={handleInputChange} placeholder="e.g 1" />
           </div>
           <div>{/* Venue */}
             <h2 className="text-xl font-semibold mt-4">Venue</h2>
-            <InputField label="Stadium" name="stadium" value={newMatch.venue.stadium} onChange={(e) => handleInputChange(e, null, null, "venue")} />
-            <InputField label="City" name="city" value={newMatch.venue.city} onChange={(e) => handleInputChange(e, null, null, "venue")} />
-            <InputField label="Country" name="country" value={newMatch.venue.country} onChange={(e) => handleInputChange(e, null, null, "venue")} />
-            <InputField label="Capacity" name="capacity" value={newMatch.venue.capacity} onChange={(e) => handleInputChange(e, null, null, "venue")} type="number" />
-            <InputField label="Weather Condition" name="condition" value={newMatch.venue.weather.condition} onChange={(e) => handleInputChange(e, null, null, "venue", "weather")} />
-            <InputField label="Temperature" name="temperature" value={newMatch.venue.weather.temperature} onChange={(e) => handleInputChange(e, null, null, "venue", "weather")} />
-            <InputField label="Humidity" name="humidity" value={newMatch.venue.weather.humidity} onChange={(e) => handleInputChange(e, null, null, "venue", "weather")} /></div>
+            <InputField label="Stadium" name="stadium" value={newMatch.venue.stadium} onChange={(e) => handleInputChange(e, null, null, "venue")} placeholder="e.g anfield" />
+            <InputField label="City" name="city" value={newMatch.venue.city} onChange={(e) => handleInputChange(e, null, null, "venue")} placeholder="e.g Liverpool" />
+            <InputField label="Country" name="country" value={newMatch.venue.country} onChange={(e) => handleInputChange(e, null, null, "venue")} placeholder="e.g QATAR" />
+            <InputField label="Capacity" name="capacity" value={newMatch.venue.capacity} onChange={(e) => handleInputChange(e, null, null, "venue")} type="number" placeholder="e.g 10000" />
+            <InputField label="Weather Condition" name="condition" value={newMatch.venue.weather} onChange={(e) => handleInputChange(e, null, null, "venue", "weather")} placeholder="e.g Sunny" />
+          </div>
           <div>{/* Home Team */}
             <TeamSection title="Home Team" teamKey="home" match={newMatch} handleInputChange={handleInputChange} />
           </div>
           <div>{/* Away Team */}
             <TeamSection title="Away Team" teamKey="away" match={newMatch} handleInputChange={handleInputChange} />
           </div>
-          <div>{/* Away Team */}
-            <TeamSection title="Away Team" teamKey="away" match={newMatch} handleInputChange={handleInputChange} /></div>
+
+          {/* Score */}
+          <div>
+            <h2 className="text-xl font-semibold mt-4">GOALS</h2>
+            <InputField label="Goals (Home)" name="home" value={newMatch.score.home} onChange={(e) => handleInputChange(e, null, "home")} type="number" />
+            <InputField label="Goals (Away)" name="away" value={newMatch.score.away} onChange={(e) => handleInputChange(e, null, "away")} type="number" />
           </div>
-
-
-
-
-
-
-
-
-        {/* Score */}
-        <InputField label="Goals (Home)" name="home" value={newMatch.score.home} onChange={(e) => handleInputChange(e, null, "home")} type="number" />
-        <InputField label="Goals (Away)" name="away" value={newMatch.score.away} onChange={(e) => handleInputChange(e, null, "away")} type="number" />
-
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
-          Create Match
-        </button>
+        </div>
+        <ButtonCreate label={'Create Match'} />
       </form>
 
       {/* Existing Matches List */}
-      <h2 className="text-xl font-semibold mt-8">Existing Matches</h2>
-      <div className="border p-4 rounded">
+      {/* Existing Matches List */}
+      <h2 className="text-xl font-semibold mt-8 text-white">Existing Matches</h2>
+      <div className="space-y-4 mt-4">
         {loadingPage ? (
-          <p>Loading matches...</p>
+          <p className="text-gray-400">Loading matches...</p>
         ) : (
           matches.map((match) => (
-            <div key={match.id} className="border-b py-2">
-              <p><strong>{match.teams?.home?.team_short ?? 'N/A'} vs {match.teams?.away?.team_short ?? 'N/A'}</strong></p>
-              <p>Venue: {match.venue?.stadium ?? 'N/A'}, {match.venue?.city ?? 'N/A'}, {match.venue?.country ?? 'N/A'}</p>
-              <p>Date: {new Date(match.match_date).toLocaleString()}</p>
-              <p>Status: {match.status}</p>
-              <p>Score: {match.teams?.home?.team_short ?? 'N/A'} {match.score?.home ?? 0} - {match.score?.away ?? 0} {match.teams?.away?.team_short ?? 'N/A'}</p>
-              <p>Halftime: {match.score?.halftime?.home ?? 'N/A'} - {match.score?.halftime?.away ?? 'N/A'}</p>
-              <p>Fulltime: {match.score?.fulltime?.home ?? 'N/A'} - {match.score?.fulltime?.away ?? 'N/A'}</p>
-              <p>Weather: {match.venue?.weather?.condition ?? 'N/A'}, {match.venue?.weather?.temperature ?? 'N/A'}, {match.venue?.weather?.humidity ?? 'N/A'}</p>
+            <div
+              key={match.id}
+              className="bg-gray-800 border border-gray-700 rounded-lg shadow-md p-4 hover:bg-gray-700 transition duration-300"
+            >
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-lg font-semibold text-white">
+                  {match.teams?.home?.team_short ?? 'N/A'} vs {match.teams?.away?.team_short ?? 'N/A'}
+                </h3>
+                <span className="text-sm text-gray-400">
+                  {new Date(match.match_date).toLocaleString()}
+                </span>
+              </div>
+              <div className="text-gray-300 text-sm space-y-1">
+                <p>
+                  <span className="font-medium text-white">Venue:</span> {match.venue?.stadium ?? 'N/A'}, {match.venue?.city ?? 'N/A'}, {match.venue?.country ?? 'N/A'}
+                </p>
+                <p>
+                  <span className="font-medium text-white">Status:</span> {match.status}
+                </p>
+                <p>
+                  <span className="font-medium text-white">Score:</span> {match.teams?.home?.team_short ?? 'N/A'} {match.score?.home ?? 0} - {match.score?.away ?? 0} {match.teams?.away?.team_short ?? 'N/A'}
+                </p>
+                <p>
+                  <span className="font-medium text-white">Halftime:</span> {match.score?.halftime?.home ?? 'N/A'} - {match.score?.halftime?.away ?? 'N/A'}
+                </p>
+                <p>
+                  <span className="font-medium text-white">Fulltime:</span> {match.score?.fulltime?.home ?? 'N/A'} - {match.score?.fulltime?.away ?? 'N/A'}
+                </p>
+                <p>
+                  <span className="font-medium text-white">Weather:</span> {match.venue?.weather?.condition ?? 'N/A'}, Temp: {match.venue?.weather?.temperature ?? 'N/A'}°C, Humidity: {match.venue?.weather?.humidity ?? 'N/A'}%
+                </p>
+              </div>
             </div>
           ))
         )}
       </div>
+
     </div>
   );
 }
@@ -270,11 +267,11 @@ const TeamSection = ({ title, teamKey, match, handleInputChange }) => {
   return (
     <>
       <h2 className="text-xl font-semibold mt-4">{title}</h2>
-      <InputField label="Team Name" name="team_name" value={team.team_name} onChange={(e) => handleInputChange(e, teamKey)} />
-      <InputField label="Team Short Name" name="team_short" value={team.team_short} onChange={(e) => handleInputChange(e, teamKey)} />
-      <InputField label="Team ID" name="team_id" value={team.team_id} onChange={(e) => handleInputChange(e, teamKey)} />
-      <InputField label="Manager" name="manager" value={team.manager} onChange={(e) => handleInputChange(e, teamKey)} />
-      <InputField label="Formation" name="formation" value={team.formation} onChange={(e) => handleInputChange(e, teamKey)} />
+      <InputField label="Team Name" name="team_name" value={team.team_name} onChange={(e) => handleInputChange(e, teamKey)} placeholder="e.g Manchester United" />
+      <InputField label="Team Short Name" name="team_short" value={team.team_short} onChange={(e) => handleInputChange(e, teamKey)} placeholder="e.g MUN" />
+      <InputField label="Team ID" name="team_id" value={team.team_id} onChange={(e) => handleInputChange(e, teamKey)} placeholder="e.g 2" />
+      <InputField label="Manager" name="manager" value={team.manager} onChange={(e) => handleInputChange(e, teamKey)} placeholder="e.g pepe" />
+      <InputField label="Formation" name="formation" value={team.formation} onChange={(e) => handleInputChange(e, teamKey)} placeholder="e.g 4-3-3" />
     </>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, ChevronLeft, LampDesk, Phone, Home, FileText,ScrollText,TestTubeDiagonal,GalleryHorizontal,ChartNoAxesCombined,HandCoins, Users, Volleyball,CreditCard, Dumbbell,Tag, MessageSquare, BarChart2, TestTube, ChevronDown, ChevronRight } from 'lucide-react';
+import { Menu, ChevronLeft, LampDesk, Phone, Home, ChartColumnIncreasing, FileText,ScrollText,TestTubeDiagonal,GalleryHorizontal,ChartNoAxesCombined,HandCoins, Users, Volleyball,CreditCard, Dumbbell,Tag, MessageSquare, BarChart2, TestTube, ChevronDown, ChevronRight } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleMenu,openMenu } from '../../redux/Nav';
 import { Link, useLocation } from 'react-router-dom';
@@ -27,7 +27,7 @@ const Nav = () => {
   // Reports dropdown items
   const reportsItems = [
     { path: '/quickreports', label: 'Quick filter', icon: <ChartNoAxesCombined size={18} /> },
-    { path: '/activereports', label: 'Active/Inactive', icon: <TestTubeDiagonal size={18} /> },
+    { path: '/activereports', label: 'Active/Inactive', icon: <ChartColumnIncreasing size={18} /> },
     { path: '/salesreports', label: 'Sales', icon: <HandCoins size={18} /> },
   ];
 

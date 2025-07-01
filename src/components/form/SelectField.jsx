@@ -8,7 +8,7 @@ const SelectField = ({ placeholder="",label,name, value, onChange, options }) =>
       name={name}
       value={value}
       onChange={onChange}
-      className="border rounded p-2 w-full bg-slate-950 text-gray-100"
+      className="rounded p-2 w-full bg-slate-950 text-gray-100"
     >
       {options.map((opt) => (
         <option key={opt} value={opt}>

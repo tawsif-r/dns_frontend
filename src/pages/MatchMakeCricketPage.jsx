@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import InputField from "../components/form/InputField";
 import SelectField from "../components/form/SelectField";
+import ButtonCreate from "../components/ui/ButtonCreate";
 
 function MatchMakeCricketPage() {
     const [matches, setMatches] = useState([]);
@@ -51,7 +52,7 @@ function MatchMakeCricketPage() {
     }, []);
 
 
-    const statusOptions = ["upcoming", "finished", "live", "postponed"];
+    const statusOptions = ["scheduled", "finished", "live", "postponed"];
 
     const handleInputChange = (e, team = null, score = null) => {
         const { name, value } = e.target;
@@ -130,7 +131,7 @@ function MatchMakeCricketPage() {
     return (
         <div className="p-4">
             <h1 className="text-2xl font-bold mb-4">Create Cricket Match</h1>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4 rounded-md p-6 m-3 bg-gray-800">
                 <div className="mb-8 grid grid-cols-3 gap-7">
                     <div>
                         <h2 className="text-xl font-semibold mt-4">Match Info</h2>
@@ -258,40 +259,52 @@ function MatchMakeCricketPage() {
                             onChange={(e) => handleInputChange(e, "away", "wickets")}
                         /></div>
                 </div>
-
-
-
-
-
-
-
-
-
-
-                <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
-                    Create Match
-                </button>
+                <ButtonCreate label={'Create Match'} />
             </form>
 
 
 
             <h2 className="text-xl font-semibold mt-8">Existing Matches</h2>
-            <div className="border p-4 rounded">
+            <div className="space-y-4 p-4">
                 {loadingPage ? (
-                    <p>Loading matches...</p>
+                    <div className="text-center text-gray-300">Loading matches...</div>
                 ) : (
                     matches.map((match) => (
-                        <div key={match.id} className="border-b py-2">
-                            <p><strong>{match.teams.home.team_short} vs {match.teams.away.team_short}</strong></p>
-                            <p>Venue: {match.venue}</p>
-                            <p>Date: {new Date(match.match_date).toLocaleString()}</p>
-                            <p>Status: {match.status}</p>
-                            <p>Home: {match.teams.home.score.runs}/{match.teams.home.score.wickets} ({match.teams.home.score.overs} overs)</p>
-                            <p>Away: {match.teams.away.score.runs}/{match.teams.away.score.wickets} ({match.teams.away.score.overs} overs)</p>
+                        <div
+                            key={match.id}
+                            className="bg-gray-800 border border-gray-700 rounded-xl shadow-md p-4 hover:bg-gray-700 transition duration-300"
+                        >
+                            <div className="flex justify-between items-center mb-2">
+                                <h2 className="text-lg font-semibold text-white">
+                                    {match.teams.home.team_short} vs {match.teams.away.team_short}
+                                </h2>
+                                <span className="text-sm text-gray-400">{new Date(match.match_date).toLocaleString()}</span>
+                            </div>
+                            <div className="text-gray-300 space-y-1 text-sm">
+                                <p><span className="font-medium">Venue:</span> {match.venue}</p>
+                                <p><span className="font-medium">Status:</span> {match.status}</p>
+                                <div className="grid grid-cols-2 gap-4 mt-2">
+                                    <div>
+                                        <p className="text-white font-medium">Home</p>
+                                        <p>
+                                            {match.teams.home.score.runs}/{match.teams.home.score.wickets} (
+                                            {match.teams.home.score.overs} overs)
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p className="text-white font-medium">Away</p>
+                                        <p>
+                                            {match.teams.away.score.runs}/{match.teams.away.score.wickets} (
+                                            {match.teams.away.score.overs} overs)
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     ))
                 )}
             </div>
+
         </div>
     );
 }

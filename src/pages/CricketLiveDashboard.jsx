@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Activity, Plus, Minus, Pin } from 'lucide-react';
 import axios from 'axios';
 import InputField from '../components/form/InputField';
+import ButtonCreate from '../components/ui/ButtonCreate';
 
 function CricketLiveDashboard() {
   const [selectedMatch, setSelectedMatch] = useState(0);
@@ -168,10 +169,12 @@ function CricketLiveDashboard() {
     switch (status) {
       case 'live':
         return 'bg-red-500';
-      case 'upcoming':
+      case 'scheduled':
         return 'bg-blue-500';
       case 'finished':
         return 'bg-green-500';
+      case 'postponed':
+        return 'bg-indigo-500';
       default:
         return 'bg-gray-500';
     }
@@ -742,9 +745,10 @@ function CricketLiveDashboard() {
             )}
 
             <div>
-              <button className='rounded-sm px-4 py-2 bg-indigo-400 animate-pulse shadow-lg shadow-indigo-500/50 hover:bg-indigo-500'
+              <ButtonCreate label={"Save"} onClick={() => saveScore()}/>
+              {/* <button className='rounded-sm px-4 py-2 bg-indigo-400 animate-pulse shadow-lg shadow-indigo-500/50 hover:bg-indigo-500'
                 onClick={() => saveScore()}
-              >Save</button>
+              >Save</button> */}
             </div>
 
           </div>
