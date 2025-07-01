@@ -175,22 +175,21 @@ function SalesReportsPage() {
     };
 
     const Row = ({ index, style }) => {
-        const report = reports[index]
+        const report = reports[index];
         return (
-            <div style={style} className="grid grid-cols-9 w-full text-gray-300 py-2">
-                <div className="px-4 py-3">{report.id}</div>
-                <div className="px-4 py-3">{report.subscriber_name}</div>
-                <div className="px-4 py-3">{report.category_name}</div>
-                <div className="px-4 py-3">{report.operator}</div>
-                <div className="px-4 py-3">{report.subscription_plan_name}</div>
-                <div className="px-4 py-3">{report.subscriber_message_count}</div>
-                <div className="px-4 py-3">{report.total_charge}</div>
-                <div className="px-4 py-3">{report.created_at}</div>
-                <div className="px-4 py-3">{report.updated_at}</div>
-
+            <div style={style} className="grid grid-cols-9 w-full text-gray-300 py-2 border-b border-gray-600 hover:bg-gray-700">
+                <div className="px-4 py-3 text-center">{report.id}</div>
+                <div className="px-4 py-3 text-center">{report.subscriber_name}</div>
+                <div className="px-4 py-3 text-center">{report.category_name}</div>
+                <div className="px-4 py-3 text-center">{report.operator}</div>
+                <div className="px-4 py-3 text-center">{report.subscription_plan_name}</div>
+                <div className="px-4 py-3 text-center">{report.subscriber_message_count}</div>
+                <div className="px-4 py-3 text-center">{report.total_charge}</div>
+                <div className="px-4 py-3 text-center">{new Date(report.created_at).toLocaleDateString()}</div>
+                <div className="px-4 py-3 text-center">{new Date(report.updated_at).toLocaleDateString()}</div>
             </div>
-        )
-    }
+        );
+    };
     const columns = [
         'id',
         'phone',
@@ -208,7 +207,7 @@ function SalesReportsPage() {
 
     return (
         <div className="px-4 py-8">
-            <div className="border-2 rounded-lg shadow-lg">
+            <div className="bg-slate-700 rounded-lg shadow-lg">
                 <div className="flex justify-between items-center p-4 rounded-t-lg">
                     <div className="flex items-center">
                         <svg
@@ -228,8 +227,8 @@ function SalesReportsPage() {
                 <div className="p-6">
                     {/* Search Instructions */}
                     {!hasSearched && (
-                        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                            <p className="text-blue-700 text-sm">
+                        <div className="mb-6 p-4 bg-cyan-50 rounded-lg">
+                            <p className="text-cyan-700 text-sm">
                                 Enter your search criteria in the filters below and click "Search Reports" to fetch data from the server.
                             </p>
                         </div>
@@ -248,7 +247,7 @@ function SalesReportsPage() {
                                 value={filters.subscriber}
                                 onChange={(e) => handleFilterChange('subscriber', e.target.value)}
                                 onKeyDown={handleKeyPress}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2 text-white"
                             />
                             <input
                                 type="text"
@@ -256,13 +255,13 @@ function SalesReportsPage() {
                                 value={filters.shortcode}
                                 onChange={(e) => handleFilterChange('shortcode', e.target.value)}
                                 onKeyDown={handleKeyPress}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2 text-white"
                             />
                             <select
                                 value={filters.operator}
                                 onChange={(e) => handleFilterChange('operator', e.target.value)}
                                 disabled={dropdownsLoading}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200 cursor-pointer"
+                                className="w-full bg-black rounded px-3 py-2 text-white"
                             >
                                 <option value="">
                                     {dropdownsLoading ? 'Loading operators...' : 'Select Operator'}
@@ -279,7 +278,7 @@ function SalesReportsPage() {
                                 value={filters.service}
                                 onChange={(e) => handleFilterChange('service', e.target.value)}
                                 onKeyDown={handleKeyPress}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2 text-white"
                             />
                             <input
                                 type="text"
@@ -287,7 +286,7 @@ function SalesReportsPage() {
                                 value={filters.keyword}
                                 onChange={(e) => handleFilterChange('keyword', e.target.value)}
                                 onKeyDown={handleKeyPress}
-                                className="w-full bg-black border rounded px-3 py-2 text-gray-300 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2 text-gray-300"
                             />
                             <input
                                 type="text"
@@ -295,13 +294,13 @@ function SalesReportsPage() {
                                 value={filters.subscription_plan}
                                 onChange={(e) => handleFilterChange('subscription_plan', e.target.value)}
                                 onKeyDown={handleKeyPress}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2 text-white"
                             />
                             <select
                                 value={filters.category}
                                 onChange={(e) => handleFilterChange('category', e.target.value)}
                                 disabled={dropdownsLoading}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200 cursor-pointer"
+                                className="w-full bg-black rounded px-3 py-2 text-white "
                             >
                                 <option value="">
                                     {dropdownsLoading ? 'Loading categories...' : 'Select Category'}
@@ -324,7 +323,7 @@ function SalesReportsPage() {
                                         type="datetime-local"
                                         value={filters.date_from}
                                         onChange={(e) => handleFilterChange('date_from', e.target.value)}
-                                        className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200
+                                        className="w-full bg-black rounded px-3 py-2 text-white
                                                    [&::-webkit-calendar-picker-indicator]:bg-dark 
                                                    [&::-webkit-calendar-picker-indicator]:rounded
                                                    [&::-webkit-calendar-picker-indicator]:cursor-pointer"
@@ -337,7 +336,7 @@ function SalesReportsPage() {
                                         type="datetime-local"
                                         value={filters.date_to}
                                         onChange={(e) => handleFilterChange('date_to', e.target.value)}
-                                        className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200
+                                        className="w-full bg-black rounded px-3 py-2 text-white
                                                    [&::-webkit-calendar-picker-indicator]:bg-dark 
                                                    [&::-webkit-calendar-picker-indicator]:rounded
                                                    [&::-webkit-calendar-picker-indicator]:cursor-pointer"
@@ -351,7 +350,7 @@ function SalesReportsPage() {
                             <button
                                 onClick={handleSearch}
                                 disabled={loading || dropdownsLoading}
-                                className="flex items-center bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200 disabled:opacity-50"
+                                className="flex items-center bg-cyan-600 text-white px-6 py-2 rounded hover:bg-cyan-700 transition duration-200 disabled:opacity-50"
                             >
                                 <SearchIcon className="mr-2" size={16} />
                                 {loading ? 'Searching...' : 'Search Reports'}
@@ -381,7 +380,7 @@ function SalesReportsPage() {
                                                 .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                                                 .join(' ');
                                             return (
-                                                <span key={key} className="px-3 py-1 bg-blue-900 text-blue-200 rounded-full text-xs">
+                                                <span key={key} className="px-3 py-1 bg-cyan-900 text-cyan-200 rounded-full text-xs">
                                                     <strong>{formattedKey}:</strong> {value}
                                                 </span>
                                             );
@@ -413,7 +412,7 @@ function SalesReportsPage() {
                                     {hasSearched && (
                                         <button
                                             onClick={handleTableView}
-                                            className="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200"
+                                            className="mt-2 bg-cyan-600 text-white px-4 py-2 rounded hover:bg-cyan-700 transition duration-200"
                                         >
                                             {viewTable ? 'Hide Table' : 'View Table'}
                                         </button>
@@ -430,7 +429,7 @@ function SalesReportsPage() {
                     {/* Loading Indicator */}
                     {loading && (
                         <div className="text-center py-8">
-                            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-500"></div>
                             <p className="mt-2 text-gray-500">Searching reports...</p>
                         </div>
                     )}
@@ -439,64 +438,28 @@ function SalesReportsPage() {
                     {hasSearched && !loading && viewTable && (
                         <div className="overflow-x-auto border-2 rounded-lg">
                             {reports.length > 0 ? (
-                                <div>
-                                    <div className='overflow-x-auto border-2 rounded-lg'>
-                                        <div className="bg-gray-700 grid grid-cols-9">
-                                            {columns.map((column) => (
-                                                <div key={column} className='px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider'>
-                                                    {column}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    
-                                    <FixedSizeList
-                                        height={400}
-                                        width="100%"
-                                        itemCount={reports.length}
-                                        itemSize={140}
-                                    >{Row}</FixedSizeList>
+                                <div className="min-w-full">
+                                    {/* Table Header */}
+                                    <div className="bg-gray-800 grid grid-cols-9 sticky top-0 z-10 border-b-2 border-gray-600">
+                                        {columns.map((column) => (
+                                            <div key={column} className='px-4 py-3 text-center text-sm font-medium text-cyan-200 uppercase tracking-wider'>
+                                                {column}
+                                            </div>
+                                        ))}
                                     </div>
-                                    {/* <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
-                                        <thead>
-                                            <tr className="bg-gray-700">
-                                                {columns.map((column) => (
-                                                    <th key={column} className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">
-                                                        {column.charAt(0).toUpperCase() + column.slice(1).replace('_', ' ')}
-                                                    </th>
-                                                ))}
-                                                <th className="px-4 py-3 text-right">Actions</th>
-                                            </tr>
 
-                                        </thead>
-                                        <tbody className="divide-y divide-gray-600">
-                                            {reports.map((report) => (
-                                                <tr key={report.id} className="hover:bg-gray-700">
-                                                    <td className="px-4 py-3 text-gray-300">{report.subscriber_name || 'N/A'}</td>
-                                                    <td className="px-4 py-3 text-gray-300">{report.subscription_plan_name || 'N/A'}</td>
-                                                    <td className="px-4 py-3 text-gray-300">{report.category_name || 'N/A'}</td>
-                                                    <td className="px-4 py-3 text-gray-300">{report.operator}</td>
-                                                    <td className="px-4 py-3 text-gray-300">
-                                                        {report.created_at ? new Date(report.created_at).toLocaleString() : 'N/A'}
-                                                    </td>
-                                                    <td className="px-4 py-3 text-gray-300">
-                                                        {report.updated_at ? new Date(report.updated_at).toLocaleString() : 'N/A'}
-                                                    </td>
-                                                    <td className="px-4 py-3 text-gray-300">
-                                                        {report.total_charge ? parseFloat(report.total_charge).toFixed(2) : '0.00'}
-                                                    </td>
-                                                    <td className="px-4 py-3 text-right whitespace-nowrap">
-                                                        <button
-                                                            onClick={() => handleDeleteReport(report.id)}
-                                                            className="p-1 bg-red-500 text-white rounded hover:bg-red-600"
-                                                            title="Delete Report"
-                                                        >
-                                                            <TrashIcon size={16} />
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table> */}
+                                    {/* Virtualized Table Body */}
+                                    <div className="bg-gray-900">
+                                        <FixedSizeList
+                                            height={400}
+                                            width="100%"
+                                            itemCount={reports.length}
+                                            itemSize={100}
+                                            className="scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
+                                        >
+                                            {Row}
+                                        </FixedSizeList>
+                                    </div>
                                 </div>
                             ) : (
                                 <div className="text-center text-gray-500 py-8">

@@ -161,7 +161,7 @@ function ActiveReportsPage() {
 
     return (
         <div className="px-4 py-8">
-            <div className="border-2 rounded-lg shadow-lg">
+            <div className="rounded-lg shadow-lg">
                 <div className="flex justify-between items-center p-4 rounded-t-lg">
                     <div className="flex items-center">
                         <svg
@@ -181,8 +181,8 @@ function ActiveReportsPage() {
                 <div className="p-6">
                     {/* Search Instructions */}
                     {!hasSearched && (
-                        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                            <p className="text-blue-700 text-sm">
+                        <div className="mb-6 p-4 bg-cyan-50 rounded-lg">
+                            <p className="text-cyan-700 text-sm">
                                 Enter your search criteria in the filters below and click "Search Reports" to fetch data from the server.
                             </p>
                         </div>
@@ -201,7 +201,7 @@ function ActiveReportsPage() {
                                 value={filters.subscriber}
                                 onChange={(e) => handleFilterChange('subscriber', e.target.value)}
                                 onKeyDown={handleKeyPress}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2 text-white"
                             />
                             <input
                                 type="text"
@@ -209,7 +209,7 @@ function ActiveReportsPage() {
                                 value={filters.shortcode}
                                 onChange={(e) => handleFilterChange('shortcode', e.target.value)}
                                 onKeyDown={handleKeyPress}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2 text-white"
                             />
 
                             {/* Operator Dropdown */}
@@ -217,7 +217,7 @@ function ActiveReportsPage() {
                                 value={filters.operator}
                                 onChange={(e) => handleFilterChange('operator', e.target.value)}
                                 disabled={dropdownsLoading}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200 cursor-pointer"
+                                className="w-full bg-black rounded px-3 py-2 text-white cursor-pointer"
                             >
                                 <option value="">
                                     {dropdownsLoading ? 'Loading operators...' : 'Select Operator'}
@@ -234,7 +234,7 @@ function ActiveReportsPage() {
                                 value={filters.service}
                                 onChange={(e) => handleFilterChange('service', e.target.value)}
                                 onKeyDown={handleKeyPress}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2 text-white"
                             />
                             <input
                                 type="text"
@@ -242,7 +242,7 @@ function ActiveReportsPage() {
                                 value={filters.keyword}
                                 onChange={(e) => handleFilterChange('keyword', e.target.value)}
                                 onKeyDown={handleKeyPress}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2 text-white"
                             />
                             <input
                                 type="text"
@@ -250,7 +250,7 @@ function ActiveReportsPage() {
                                 value={filters.subscription_plan}
                                 onChange={(e) => handleFilterChange('subscription_plan', e.target.value)}
                                 onKeyDown={handleKeyPress}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2 text-white"
                             />
 
                             {/* Category Dropdown */}
@@ -258,7 +258,7 @@ function ActiveReportsPage() {
                                 value={filters.category}
                                 onChange={(e) => handleFilterChange('category', e.target.value)}
                                 disabled={dropdownsLoading}
-                                className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200 cursor-pointer"
+                                className="w-full bg-black rounded px-3 py-2 text-white cursor-pointer"
                             >
                                 <option value="">
                                     {dropdownsLoading ? 'Loading categories...' : 'Select Category'}
@@ -281,7 +281,7 @@ function ActiveReportsPage() {
                                         type="datetime-local"
                                         value={filters.date_from}
                                         onChange={(e) => handleFilterChange('date_from', e.target.value)}
-                                        className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200
+                                        className="w-full bg-black rounded px-3 py-2 text-white
                                                    [&::-webkit-calendar-picker-indicator]:bg-dark 
                                                    [&::-webkit-calendar-picker-indicator]:rounded
                                                    [&::-webkit-calendar-picker-indicator]:cursor-pointer"
@@ -294,7 +294,7 @@ function ActiveReportsPage() {
                                         type="datetime-local"
                                         value={filters.date_to}
                                         onChange={(e) => handleFilterChange('date_to', e.target.value)}
-                                        className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200
+                                        className="w-full bg-black rounded px-3 py-2 text-white
                                                    [&::-webkit-calendar-picker-indicator]:bg-dark 
                                                    [&::-webkit-calendar-picker-indicator]:rounded
                                                    [&::-webkit-calendar-picker-indicator]:cursor-pointer"
@@ -308,7 +308,7 @@ function ActiveReportsPage() {
                             <button
                                 onClick={handleSearch}
                                 disabled={loading || dropdownsLoading}
-                                className="flex items-center bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200 disabled:opacity-50"
+                                className="flex items-center bg-cyan-600 text-white px-6 py-2 rounded hover:bg-cyan-700 transition duration-200 disabled:opacity-50"
                             >
                                 <SearchIcon className="mr-2" size={16} />
                                 {loading ? 'Searching...' : 'Search Reports'}
@@ -340,20 +340,20 @@ function ActiveReportsPage() {
                     {/* Loading Indicator */}
                     {loading && (
                         <div className="text-center py-8">
-                            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                            <div className="inline-block animate-spin rounded-full h-8 w-8"></div>
                             <p className="mt-2 text-gray-500">Searching reports...</p>
                         </div>
                     )}
 
                     {/* Reports Table */}
                     {hasSearched && !loading && (
-                        <div className="overflow-x-auto border-2 rounded-lg">
+                        <div className="overflow-x-auto rounded-lg">
                             {reports.length > 0 ? (
                                 <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
                                     <thead>
                                         <tr className="bg-gray-700">
                                             {columns.map((column) => (
-                                                <th key={column} className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">
+                                                <th key={column} className="px-4 py-3 text-left text-sm font-medium text-cyan-200 uppercase tracking-wider">
                                                     {column.charAt(0).toUpperCase() + column.slice(1).replace('_', ' ')}
                                                 </th>
                                             ))}
