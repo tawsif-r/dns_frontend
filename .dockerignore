@@ -1,0 +1,37 @@
+# Node.js dependencies
+node_modules
+
+# Environment files
+env
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build artifacts and temporary files
+dist
+build
+coverage
+*.log
+*.tmp
+*.pid
+*.css.map
+
+# Editor and IDE files
+.vscode
+.idea
+
+# Docker-related files
+Dockerfile
+docker-compose.yml
+docker-compose.override.yml
+.dockerignore
+
+# Git-related files
+.git
+.gitignore
+
+# OS-specific files
+.DS_Store
+Thumbs.db

@@ -9,11 +9,10 @@ function CategoriesPage() {
     const [editingCategory, setEditingCategory] = useState(null);
     const [newCategory, setNewCategory] = useState({
         name: '',
+        cat_id: '',
         slug: '',
         service: '',
         keyword: '',
-        fcatid: '',
-        icatid: '',
         description: '',
         is_active: 'true'
     });
@@ -40,21 +39,9 @@ function CategoriesPage() {
     // --- Data Preprocessing ---
     const payload = {
         ...newCategory,
-        fcatid: newCategory.fcatid === '' ? null : parseInt(newCategory.fcatid, 10),
-        icatid: newCategory.icatid === '' ? null : parseInt(newCategory.icatid, 10),
         is_active: newCategory.is_active === 'true' ? true : (newCategory.is_active === 'false' ? false : null),
 
     };
-    // --- Handle potential NaN from parseInt if input is not a number ---
-    if (isNaN(payload.fcatid) && newCategory.fcatid !== '') {
-        alert('FCat ID must be a number.');
-        return;
-    }
-    if (isNaN(payload.icatid) && newCategory.icatid !== '') {
-        alert('ICat ID must be a number.');
-        return;
-    }
-    // console.log("Sending payload:", payload);
 
 
     const handleCreateCategory = async () => {
@@ -68,11 +55,10 @@ function CategoriesPage() {
             setCategories([...categories, response.data]);
             setNewCategory({
                 name: '',
+                cat_id: '',
                 slug: '',
                 service: '',
                 keyword: '',
-                fcatid: '',
-                icatid: '',
                 description: '',
                 is_active: 'true'
             });
@@ -178,20 +164,6 @@ function CategoriesPage() {
                                 onChange={(e) => setNewCategory({ ...newCategory, keyword: e.target.value })}
                                 className="w-full bg-black rounded px-3 py-2"
                             />
-                            <input
-                                type="text"
-                                placeholder="FCat ID"
-                                value={newCategory.fcatid}
-                                onChange={(e) => setNewCategory({ ...newCategory, fcatid: e.target.value })}
-                                className="w-full bg-black rounded px-3 py-2"
-                            />
-                            <input
-                                type="text"
-                                placeholder="ICat ID"
-                                value={newCategory.icatid}
-                                onChange={(e) => setNewCategory({ ...newCategory, icatid: e.target.value })}
-                                className="w-full bg-black rounded px-3 py-2"
-                            />
                             <textarea
                                 placeholder="Description"
                                 value={newCategory.description}
@@ -286,11 +258,10 @@ function CategoriesPage() {
                                         ) : (
                                             <tr key={category.id} className="hover:bg-gray-700 hover:border-l-2">
                                                 <td className="px-4 py-3 text-gray-300">{category.name || 'N/A'}</td>
+                                                <td className="px-4 py-3 text-gray-300">{category.cat_id || 'N/A'}</td>
                                                 <td className="px-4 py-3 text-gray-300">{category.slug || 'N/A'}</td>
                                                 <td className="px-4 py-3 text-gray-300">{category.service || 'N/A'}</td>
                                                 <td className="px-4 py-3 text-gray-300">{category.keyword || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{category.fcatid || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{category.icatid || 'N/A'}</td>
                                                 <td className="px-4 py-3 text-gray-300">{category.description || 'N/A'}</td>
                                                 <td className="px-4 py-3 text-gray-300">{category.is_active ? 'Yes' : 'No'}</td>
                                                 <td className="px-4 py-3 text-right whitespace-nowrap">
