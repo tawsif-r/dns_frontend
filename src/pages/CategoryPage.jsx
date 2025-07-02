@@ -193,33 +193,34 @@ function CategoriesPage() {
                     {/* Categories Table */}
                     <div className="overflow-x-auto rounded-lg">
                         {filteredCategories.length > 0 ? (
-                            <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
-                                <thead>
-                                    <tr className="bg-gray-900">
-                                        {columns.map((column) => (
-                                            <th key={column} className="px-4 py-3 text-left text-sm font-medium text-cyan-400 uppercase tracking-wider">
-                                                {column.charAt(0).toUpperCase() + column.slice(1)}
-                                            </th>
-                                        ))}
-                                        <th className="px-4 py-3 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-600">
+                            <div className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
+                                {/* Header */}
+                                <div className="grid grid-cols-[repeat(7,1fr),auto] bg-gray-900">
+                                    {columns.map((column) => (
+                                        <div key={column} className="px-4 py-3 text-left text-sm font-medium text-cyan-400 uppercase tracking-wider">
+                                            {column.charAt(0).toUpperCase() + column.slice(1)}
+                                        </div>
+                                    ))}
+                                    <div className="px-4 py-3 text-right">Actions</div>
+                                </div>
+
+                                {/* Body */}
+                                <div className="divide-y divide-gray-600">
                                     {filteredCategories.map((category) => (
                                         editingCategory?.id === category.id ? (
-                                            <tr key={category.id} className="bg-gray-700">
+                                            <div key={category.id} className="grid grid-cols-[repeat(7,1fr),auto] bg-gray-700">
                                                 {columns.map((column) => (
                                                     column === 'description' ? (
-                                                        <td key={column} className="px-4 py-2">
+                                                        <div key={column} className="px-4 py-2">
                                                             <textarea
                                                                 value={editingCategory[column] ?? ""}
                                                                 onChange={(e) => setEditingCategory({ ...editingCategory, [column]: e.target.value })}
                                                                 className="w-full bg-gray-800 rounded px-2 py-1 text-white"
                                                                 rows="2"
                                                             />
-                                                        </td>
+                                                        </div>
                                                     ) : column === 'is_active' ? (
-                                                        <td key={column} className="px-4 py-2">
+                                                        <div key={column} className="px-4 py-2">
                                                             <select
                                                                 value={editingCategory[column]}
                                                                 onChange={(e) => setEditingCategory({ ...editingCategory, [column]: e.target.value })}
@@ -228,19 +229,19 @@ function CategoriesPage() {
                                                                 <option value="true">Yes</option>
                                                                 <option value="false">No</option>
                                                             </select>
-                                                        </td>
+                                                        </div>
                                                     ) : (
-                                                        <td key={column} className="px-4 py-2">
+                                                        <div key={column} className="px-4 py-2">
                                                             <input
                                                                 type="text"
                                                                 value={editingCategory[column] ?? ""}
                                                                 onChange={(e) => setEditingCategory({ ...editingCategory, [column]: e.target.value })}
                                                                 className="w-full bg-gray-800 rounded px-2 py-1 text-white"
                                                             />
-                                                        </td>
+                                                        </div>
                                                     )
                                                 ))}
-                                                <td className="px-4 py-2 text-right whitespace-nowrap">
+                                                <div className="px-4 py-2 text-right whitespace-nowrap">
                                                     <button
                                                         onClick={handleUpdateCategory}
                                                         className="inline-flex items-center justify-center px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 mr-2"
@@ -253,18 +254,18 @@ function CategoriesPage() {
                                                     >
                                                         <XIcon size={16} className="mr-1" /> Cancel
                                                     </button>
-                                                </td>
-                                            </tr>
+                                                </div>
+                                            </div>
                                         ) : (
-                                            <tr key={category.id} className="hover:bg-gray-700 hover:border-l-2">
-                                                <td className="px-4 py-3 text-gray-300">{category.name || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{category.cat_id || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{category.slug || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{category.service || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{category.keyword || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{category.description || 'N/A'}</td>
-                                                <td className="px-4 py-3 text-gray-300">{category.is_active ? 'Yes' : 'No'}</td>
-                                                <td className="px-4 py-3 text-right whitespace-nowrap">
+                                            <div key={category.id} className="grid grid-cols-[repeat(7,1fr),auto] hover:bg-gray-700 hover:border-l-4 hover:border-gray-600">
+                                                <div className="px-4 py-3 text-gray-300">{category.name || 'N/A'}</div>
+                                                <div className="px-4 py-3 text-gray-300">{category.cat_id || 'N/A'}</div>
+                                                <div className="px-4 py-3 text-gray-300">{category.slug || 'N/A'}</div>
+                                                <div className="px-4 py-3 text-gray-300">{category.service || 'N/A'}</div>
+                                                <div className="px-4 py-3 text-gray-300">{category.keyword || 'N/A'}</div>
+                                                <div className="px-4 py-3 text-gray-300">{category.description || 'N/A'}</div>
+                                                <div className="px-4 py-3 text-gray-300">{category.is_active ? 'Yes' : 'No'}</div>
+                                                <div className="px-4 py-3 text-right whitespace-nowrap">
                                                     <button
                                                         onClick={() => setEditingCategory(category)}
                                                         className="p-1 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
@@ -277,12 +278,12 @@ function CategoriesPage() {
                                                     >
                                                         <TrashIcon size={16} />
                                                     </button>
-                                                </td>
-                                            </tr>
+                                                </div>
+                                            </div>
                                         )
                                     ))}
-                                </tbody>
-                            </table>
+                                </div>
+                            </div>
                         ) : (
                             <p className="text-center text-gray-500">No categories found</p>
                         )}
