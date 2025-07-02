@@ -436,7 +436,7 @@ function SalesReportsPage() {
 
                     {/* Reports Table */}
                     {hasSearched && !loading && viewTable && (
-                        <div className="overflow-x-auto rounded-lg">
+                        <div className="overflow-x-auto custom-scrollbar rounded-lg">
                             {reports.length > 0 ? (
                                 <div className="min-w-full">
                                     {/* Table Header */}

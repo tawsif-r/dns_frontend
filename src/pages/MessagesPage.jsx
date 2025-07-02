@@ -3,6 +3,7 @@ import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
 import { FixedSizeList } from 'react-window'; // Import react-window
 import apiClient from '../api/axiosInstance';
 import MessagesQList from '../components/MessagesQList';
+import ButtonCreate from '../components/ui/ButtonCreate';
 
 function MessagesPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -96,7 +97,7 @@ function MessagesPage() {
     const RowMessageQueue = ({ index, style }) => {
         const queueMessage = queueMessages[index]
         return (
-            <div style={style} className='grid grid-cols-8 w-full text-gray-300 py-2'>
+            <div style={style} className='grid grid-cols-8 hover:border-l-4 w-full text-gray-300 py-2'>
                 <div className='px-4 py-3'>{queueMessage.id}</div>
                 <div className='px-4 py-3'>{queueMessage.scheduled_time}</div>
                 <div className='px-4 py-3'>{queueMessage.sent ? "true":"false"}</div>
@@ -117,7 +118,7 @@ function MessagesPage() {
         return (
             <div
                 style={style}
-                className={`grid grid-cols-4 w-full text-gray-300 ${isEditing ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
+                className={`grid grid-cols-4 w-full hover:border-l-4 text-gray-300 ${isEditing ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
             >
                 <div className="mx-auto">
                     {isEditing ? (
@@ -125,7 +126,7 @@ function MessagesPage() {
                             type="text"
                             value={editingMessage.to}
                             onChange={(e) => setEditingMessage({ ...editingMessage, to: e.target.value })}
-                            className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
+                            className="w-full bg-gray-800 rounded px-2 py-1 text-white"
                         />
                     ) : (
                         message.to || 'N/A'
@@ -137,7 +138,7 @@ function MessagesPage() {
                             type="text"
                             value={editingMessage.body}
                             onChange={(e) => setEditingMessage({ ...editingMessage, body: e.target.value })}
-                            className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
+                            className="w-full bg-gray-800 rounded px-2 py-1 text-white"
                         />
                     ) : (
                         message.body || 'N/A'
@@ -149,7 +150,7 @@ function MessagesPage() {
                             type="text"
                             value={editingMessage.sender}
                             onChange={(e) => setEditingMessage({ ...editingMessage, sender: e.target.value })}
-                            className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
+                            className="w-full bg-gray-800 rounded px-2 py-1 text-white"
                         />
                     ) : (
                         message.sender || 'N/A'
@@ -194,7 +195,7 @@ function MessagesPage() {
 
     return (
         <div className="px-4 py-8">
-            <div className="border-2 rounded-lg shadow-lg">
+            <div className="rounded-lg bg-slate-700 shadow-lg">
                 <div className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-t-lg">
                     <div className="flex items-center">
                         <svg
@@ -214,7 +215,7 @@ function MessagesPage() {
                         placeholder="Search Messages by Recipient..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="px-3 py-1 bg-slate-900 text-gray-100 rounded border focus:outline-none focus:border-gray-100"
+                        className="px-3 py-1 bg-slate-900 text-gray-100 rounded"
                         onClick={(e) => e.stopPropagation()}
                     />
                 </div>
@@ -232,50 +233,52 @@ function MessagesPage() {
                                 placeholder="To"
                                 value={newMessage.to}
                                 onChange={(e) => setNewMessage({ ...newMessage, to: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             />
                             <input
                                 type="text"
                                 placeholder="Sender"
                                 value={newMessage.sender}
                                 onChange={(e) => setNewMessage({ ...newMessage, sender: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             />
                             <textarea
                                 placeholder="Message Body"
                                 value={newMessage.body}
                                 onChange={(e) => setNewMessage({ ...newMessage, body: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                                 rows="4"
                             />
-                            <button
+                            <ButtonCreate label='Add Message' onClick={handleCreateMessage} />
+                            {/* <button
                                 onClick={handleCreateMessage}
-                                className="font-bold bg-black text-white px-4 py-2 rounded border-2 border-cyan-600 hover:bg-gray-300 hover:text-black transition duration-500"
+                                className="font-bold bg-black text-white px-4 py-2 rounded hover:bg-gray-300 hover:text-black transition duration-500"
                             >
                                 Add Message
-                            </button>
+                            </button> */}
                         </div>
                     </div>
 
                     {/* Virtualized Messages List */}
                     <div className="flex-col">
-                        <div className="overflow-x-auto border-2 rounded-lg">
+                        <div className="overflow-x-auto custom-scrollbar rounded-lg">
                             {filteredMessages.length > 0 ? (
                                 <>
                                     {/* Table Header */}
-                                    <div className="bg-gray-700 grid grid-cols-4">
+                                    <div className="bg-gray-900 grid grid-cols-4">
                                         {columns.map((column) => (
                                             <div
                                                 key={column}
-                                                className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider"
+                                                className="px-4 py-3 text-left text-sm font-medium text-cyan-400 uppercase tracking-wider"
                                             >
                                                 {column.charAt(0).toUpperCase() + column.slice(1)}
                                             </div>
                                         ))}
-                                        <div className="px-4 py-3 text-right">Actions</div>
+                                        <div className="px-4 py-3 text-right text-cyan-400">Actions</div>
                                     </div>
                                     {/* Virtualized List */}
                                     <FixedSizeList
+                                        className='bg-gray-800'
                                         height={400} // Adjust height based on your needs
                                         width="100%"
                                         itemCount={filteredMessages.length}
@@ -290,10 +293,10 @@ function MessagesPage() {
                         </div>
                         <div className="flex-col py-6">
                             <div>Message queue</div>
-                            <div className="overflow-x-auto border-2 rounded-lg">
+                            <div className="overflow-x-auto custom-scrollbar rounded-lg">
                                 <div className='bg-gray-700 grid grid-cols-8'>
                                     {queueColumns.map((column) => (
-                                        <div key={column} className='px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider'>
+                                        <div key={column} className='px-4 py-3 text-left text-sm bg-slate-900 font-medium text-cyan-400 uppercase tracking-wider'>
                                             {column}
                                         </div>
                                     ))}
@@ -303,6 +306,7 @@ function MessagesPage() {
                                     width="100%"
                                     itemCount={queueMessages.length}
                                     itemSize={140}
+                                    className='bg-gray-800'
                                 >{RowMessageQueue}</FixedSizeList>
                             </div>
                         </div>

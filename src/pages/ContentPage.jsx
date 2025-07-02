@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
 import apiClient from '../api/axiosInstance';
+import ButtonCreate from '../components/ui/ButtonCreate';
+import InputField from '../components/form/InputField';
+import { FixedSizeList } from 'react-window';
 
 function ContentsPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -100,12 +103,26 @@ function ContentsPage() {
     };
 
     // Define table columns
-    const columns = Object.keys(newContent);
+    // const columns = Object.keys(newContent);
+    const columns = ["id", "external_id","title","category","deadline"]
 
+    const Row = ({ style, index }) => {
+        const content = contents[index]
+        return (
+            <div style={style} className="grid grid-cols-5 w-full text-gray-300 py-2 border-b border-gray-600 hover:bg-gray-700">
+                <div className="px-4 py-3 text-center">{content.id}</div>
+                <div className="px-4 py-3 text-center">{content.external_id}</div>
+                <div className="px-4 py-3 text-center">{content.title}</div>
+                <div className="px-4 py-3 text-center">{content.category}</div>
+                <div className="px-4 py-3 text-center">{new Date(content.deadline).toLocaleDateString()}</div>
+
+            </div>
+        )
+    }
     return (
 
         <div className="px-4 py-8">
-            <div className="border-2 rounded-lg shadow-lg">
+            <div className="rounded-lg bg-slate-700 shadow-lg">
                 <div
                     className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-t-lg"
                 >
@@ -122,12 +139,12 @@ function ContentsPage() {
                         </svg>
                         <h1 className="text-xl font-bold">Contents Management</h1>
                     </div>
-                    <input
+                    <InputField
                         type="text"
                         placeholder="Search Contents by Region..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="px-3 py-1 bg-slate-900 text-gray-100 rounded border focus:outline-none focus:border-gray-100"
+                        className="px-3 py-1 bg-slate-900 text-gray-100 rounded"
                         onClick={(e) => e.stopPropagation()}
                     />
                 </div>
@@ -147,108 +164,48 @@ function ContentsPage() {
                                     placeholder={key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                                     value={value}
                                     onChange={(e) => setNewContent({ ...newContent, [key]: e.target.value })}
-                                    className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200
+                                    className="w-full bg-black rounded px-3 py-2
                                         [&::-webkit-calendar-picker-indicator]:bg-dark 
                                                         [&::-webkit-calendar-picker-indicator]:rounded
                                                         [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                                     style={{ colorScheme: 'dark' }}
                                 />
                             ))}
-                            <button
+                            <ButtonCreate
                                 onClick={handleCreateContent}
-                                className="md:col-span-2 font-bold bg-black text-white px-4 py-2 rounded border-2 border-cyan-600 hover:bg-gray-300 hover:text-black transition duration-500"
-                            >
-                                Add Content
-                            </button>
+                                label='Add Content'
+                            />
                         </div>
                     </div>
 
                     {/* Contents Table */}
-                    <div className="overflow-x-auto">
+                    <div className="overflow-x-auto custom-scrollbar">
                         {filteredContents.length > 0 ? (
-                            <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
-                                <thead>
-                                    <tr className="bg-gray-700">
-                                        {columns.slice(0, 5).map((column) => (
-                                            <th key={column} className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">
-                                                {column.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                                            </th>
-                                        ))}
-                                        <th className="px-4 py-3 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-600">
-                                    {filteredContents.map((content) => (
-                                        editingContent?.id === content.id ? (
-                                            <tr key={content.id} className="bg-gray-700">
-                                                {columns.slice(0, 5).map((column) => (
-                                                    <td key={column} className="px-4 py-2">
-                                                        <input
-                                                            type={column === 'published' || column === 'deadline' ? 'datetime-local' : 'text'}
-                                                            value={editingContent[column] || ''}
-                                                            onChange={(e) => setEditingContent({
-                                                                ...editingContent,
-                                                                [column]: e.target.value
-                                                            })}
-                                                            className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500 [&::-webkit-calendar-picker-indicator]:bg-dark 
-                                                        [&::-webkit-calendar-picker-indicator]:rounded
-                                                        [&::-webkit-calendar-picker-indicator]:cursor-pointer"
-                                                            style={{ colorScheme: 'dark' }}
-                                                        />
-                                                    </td>
-                                                ))}
-                                                <td className="px-4 py-2 text-right whitespace-nowrap">
-                                                    <button
-                                                        onClick={handleUpdateContent}
-                                                        className="inline-flex items-center justify-center px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 mr-2"
-                                                    >
-                                                        <SaveIcon size={16} className="mr-1" /> Save
-                                                    </button>
-                                                    <button
-                                                        onClick={() => setEditingContent(null)}
-                                                        className="inline-flex items-center justify-center px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                                                    >
-                                                        <XIcon size={16} className="mr-1" /> Cancel
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ) : (
-                                            <tr key={content.id} className="hover:bg-gray-700">
-                                                {columns.slice(0, 5).map((column) => (
-                                                    <td key={column} className="px-4 py-3 text-gray-300">
-                                                        {column === 'url' ? (
-                                                            <a
-                                                                href={content[column]}
-                                                                className="text-blue-400 hover:text-blue-300"
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                            >
-                                                                {content[column] || 'N/A'}
-                                                            </a>
-                                                        ) : (
-                                                            content[column] || 'N/A'
-                                                        )}
-                                                    </td>
-                                                ))}
-                                                <td className="px-4 py-3 text-right whitespace-nowrap">
-                                                    <button
-                                                        onClick={() => setEditingContent(content)}
-                                                        className="p-1 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
-                                                    >
-                                                        <EditIcon size={16} />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDeleteContent(content.id)}
-                                                        className="p-1 bg-red-500 text-white rounded hover:bg-red-600"
-                                                    >
-                                                        <TrashIcon size={16} />
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        )
+
+                            <div className="min-w-full">
+                                {/* Table Header */}
+                                <div className="bg-gray-800 grid grid-cols-5 sticky top-0 z-10 border-b-2 border-gray-600">
+                                    {columns.map((column) => (
+                                        <div key={column} className='px-4 py-3 text-center text-sm font-medium text-cyan-200 uppercase tracking-wider'>
+                                            {column}
+                                        </div>
                                     ))}
-                                </tbody>
-                            </table>
+                                </div>
+
+                                {/* Virtualized Table Body */}
+                                <div className="bg-gray-900">
+                                    <FixedSizeList
+                                        height={400}
+                                        width="100%"
+                                        itemCount={contents.length}
+                                        itemSize={100}
+                                        className="scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
+                                    >
+                                        {Row}
+                                    </FixedSizeList>
+                                </div>
+                            </div>
+
                         ) : (
                             <p className="text-center text-gray-500">No Contents found</p>
                         )}

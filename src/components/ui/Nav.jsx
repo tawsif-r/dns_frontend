@@ -62,7 +62,7 @@ const Nav = () => {
         className={`
           ${menu ? 'w-64' : 'w-16'} 
           transition-all duration-300 ease-in-out 
-          flex-grow overflow-y-auto
+          flex-grow overflow-y-auto custom-scrollbar
           py-4 px-2
         `}
       >

@@ -11,7 +11,7 @@ function HomePage() {
   const [messagesQData, setMessagesQData] = useState([]);
   const [subscriptionsData, setSubscriptionsData] = useState([]);
   const [reportsData, setReportsData] = useState([]);
-  const [messagesData, setMessagesData] = useState([]);
+
 
 
   const base = "/admin/api";
@@ -85,20 +85,19 @@ function HomePage() {
 
 
   return (
-    <div className='border-2 grid grid-cols-3 p-4'>
-      <div className='border-2 max-h-96 overflow-x-auto relative m-2'>
+    <div className='grid grid-cols-3 p-4'>
+      <div className='max-h-96 overflow-x-auto custom-scrollbar relative m-2'>
         {categoriesData ?
           (<>
-            <p className='sticky top-0 bg-gray-700 p-2 border-b font-semibold'>Total Categories: {categoriesData.length}</p>
+            <p className='sticky top-0 bg-gray-700 p-2 rounded-md font-semibold text-cyan-400'>Total Categories: {categoriesData.length}</p>
             <ul>
               {categoriesData.slice(0, 5).map((category) => (
-                <li key={category.id} className="border-2 m-2 p-3 rounded-md hover:bg-gray-800 ">
+                <li key={category.id} className="bg-slate-700 m-2 p-3 rounded-md hover:bg-gray-800 ">
                   <p className='bold'>Name: {category.name}</p>
+                  <p className='bold'>Category id: {category.cat_id}</p>
                   <p className='bold'>Slug:{category.slug}</p>
                   <p className='bold'>Service: {category.service}</p>
                   <p className='bold'>Keyword: {category.keyword}</p>
-                  <p className='bold'>Fcatid: {category.fcatid ? category.fcatid : "Not Functional"}</p>
-                  <p className='bold'>icatid: {category.icatid ? category.icatid : "Not industrial"}</p>
                   <p className='bold'>Desc: {category.description}</p>
                   <p className='bold'>is active: {category.is_active ? "yes" : "No"}</p>
                 </li>
@@ -113,13 +112,13 @@ function HomePage() {
 
       </div>
 
-      <div className='border-2 max-h-96 overflow-x-auto relative m-2'>
+      <div className='max-h-96 overflow-x-auto custom-scrollbar relative m-2'>
         {subscribersData ? (
           <>
-            <p className='sticky top-0 bg-gray-700 p-2 border-b font-semibold'>Total subscribers: {subscribersData.length}</p>
+            <p className='sticky top-0 bg-gray-700 p-2 font-semibold rounded-md text-cyan-400'>Total subscribers: {subscribersData.length}</p>
             <ul>
               {subscribersData.slice(0, 5).map((subscriber) => (
-                <li key={subscriber.id} className='border-2 m-2 p-3 rounded-md hover:bg-gray-800'>
+                <li key={subscriber.id} className='bg-slate-700 m-2 p-3 rounded-md hover:bg-gray-800'>
                   <p className='bold'>Name: {subscriber.name}</p>
                   <p className='bold'>Phone Number:{subscriber.phone_number}</p>
                   <p className='bold'>Subscription End: {subscriber.subscription_end}</p>
@@ -131,13 +130,13 @@ function HomePage() {
       </div>
 
 
-      <div className='border-2 max-h-96 overflow-x-auto relative m-2'>
+      <div className='max-h-96 overflow-x-auto custom-scrollbar relative m-2'>
         {reportsData ? (
           <>
-            <p className='sticky top-0 bg-gray-700 p-2 border-b font-semibold'>Reports: {reportsData.length}</p>
+            <p className='sticky top-0 bg-gray-700 p-2 font-semibold text-cyan-400 rounded-md'>Reports: {reportsData.length}</p>
             <ul>
               {reportsData.slice(0, 5).map((report) => (
-                <li key={report.id} className='border-2 m-2 p-3 rounded-md hover:bg-gray-800'>
+                <li key={report.id} className='bg-slate-700 m-2 p-3 rounded-md hover:bg-gray-800'>
                   <p className='bold'>Subscriber: {report.subscriber}</p>
                   <p className='bold'>Send Messages: {report.sent_messages}</p>
                   <p className='bold'>Total Charge: {report.total_charge}</p>
@@ -148,9 +147,9 @@ function HomePage() {
           </>) : (<p>No data</p>)}
       </div>
 
-      <div className='border-2 m-2 p-4 col-span-3'>
+      <div className='bg-gray-800 m-4 p-4 col-span-3 rounded-lg'>
         <div style={{ padding: '20px' }}>
-          <h1>Subscriber per category</h1>
+          <h1 className='text-cyan-400'>Subscriber per category</h1>
           <LineChart
             data={sampleData}
             title="Subscribers for Different categories"

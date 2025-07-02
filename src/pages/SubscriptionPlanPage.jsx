@@ -173,7 +173,7 @@ function SubscriptionPlansPage() {
                     </div>
 
                     {/* Subscription Plans Table */}
-                    <div className="overflow-x-auto rounded-lg">
+                    <div className="overflow-x-auto custom-scrollbar rounded-lg">
                         {filteredPlans.length > 0 ? (
                             <table className="min-w-full bg-slate-800 rounded-lg overflow-hidden">
                                 <thead>

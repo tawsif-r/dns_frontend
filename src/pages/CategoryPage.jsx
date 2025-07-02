@@ -190,17 +190,11 @@ function CategoriesPage() {
                                 <option value="false">No</option>
                             </select>
                             <ButtonCreate label={'Add Category'} onClick={handleCreateCategory} />
-                            {/* <button
-                                onClick={handleCreateCategory}
-                                className="font-bold bg-black text-white px-4 py-2 rounded hover:bg-gray-300 hover:text-black transition duration-500"
-                            >
-                                Add Category
-                            </button> */}
                         </div>
                     </div>
 
                     {/* Categories Table */}
-                    <div className="overflow-x-auto rounded-lg">
+                    <div className="overflow-x-auto custom-scrollbar rounded-lg">
                         {filteredCategories.length > 0 ? (
                             <div className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
                                 {/* Header */}
@@ -210,7 +204,7 @@ function CategoriesPage() {
                                             {column.charAt(0).toUpperCase() + column.slice(1)}
                                         </div>
                                     ))}
-                                    <div className="px-4 py-3 text-right">Actions</div>
+                                    <div className="px-4 py-3 text-right text-cyan-400">Actions</div>
                                 </div>
 
                                 {/* Body */}

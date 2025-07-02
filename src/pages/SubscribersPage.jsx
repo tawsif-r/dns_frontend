@@ -40,7 +40,7 @@ function SubscribersPage() {
 
     return (
         <div className="px-4 py-8">
-            <div className="border-2 rounded-lg shadow-lg">
+            <div className=" rounded-lg bg-slate-700 shadow-lg">
                 <div className="flex justify-between items-center p-4 rounded-t-lg">
                     <div className="flex items-center">
                         <svg
@@ -53,7 +53,7 @@ function SubscribersPage() {
                         >
                             <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v2h20v-2c0-3.3-6.7-5-10-5z" />
                         </svg>
-                        <h1 className="text-xl font-bold">Subscribers Management</h1>
+                        <h1 className="text-xl font-bold">Active Subscribers</h1>
                     </div>
                     <div className="flex space-x-4">
                         <input
@@ -61,7 +61,7 @@ function SubscribersPage() {
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
                             placeholder="Filter by Subscription Start"
-                            className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200
+                            className="w-full bg-black rounded px-3 py-2
                                                    [&::-webkit-calendar-picker-indicator]:bg-dark 
                                                    [&::-webkit-calendar-picker-indicator]:rounded
                                                    [&::-webkit-calendar-picker-indicator]:cursor-pointer"
@@ -72,7 +72,7 @@ function SubscribersPage() {
                             value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
                             placeholder="Filter by Subscription End"
-                            className="w-full bg-black border rounded px-3 py-2 text-white focus:outline-none focus:border-blue-200
+                            className="w-full bg-black rounded px-3 py-2 text-white
                                                    [&::-webkit-calendar-picker-indicator]:bg-dark 
                                                    [&::-webkit-calendar-picker-indicator]:rounded
                                                    [&::-webkit-calendar-picker-indicator]:cursor-pointer"
@@ -83,17 +83,17 @@ function SubscribersPage() {
 
                 <div className="p-6">
                     {/* Subscribers Table */}
-                    <div className="border-2 rounded-lg overflow-scroll">
+                    <div className="rounded-lg overflow-x-auto custom-scrollbar">
                         {filteredSubscribers.length > 0 ? (
-                            <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
+                            <table className="min-w-full bg-gray-800 rounded-lg">
                                 <thead>
-                                    <tr className="bg-gray-700">
+                                    <tr className="bg-slate-900">
                                         {columns.map((column) => (
-                                            <th key={column} className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">
+                                            <th key={column} className="px-4 py-3 text-left text-sm font-medium text-cyan-400 uppercase tracking-wider">
                                                 {column.charAt(0).toUpperCase() + column.slice(1).replace('_', ' ')}
                                             </th>
                                         ))}
-                                        <th className="px-4 py-3 text-right">Actions</th>
+                                        <th className="px-4 py-3 text-cyan-400 text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-600">

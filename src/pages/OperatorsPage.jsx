@@ -122,7 +122,7 @@ function OperatorsPage() {
 
     return (
         <div className="px-4 py-8">
-            <div className="border-2 rounded-lg shadow-lg">
+            <div className="rounded-lg bg-slate-700 shadow-lg">
                 <div className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-t-lg">
                     <div className="flex items-center">
                         <svg
@@ -142,7 +142,7 @@ function OperatorsPage() {
                         placeholder="Search Operators by Name..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="px-3 py-1 bg-slate-900 text-gray-100 rounded border focus:outline-none focus:border-gray-100"
+                        className="px-3 py-1 bg-slate-900 text-gray-100 rounded"
                         onClick={(e) => e.stopPropagation()}
                     />
                 </div>
@@ -160,14 +160,14 @@ function OperatorsPage() {
                                 placeholder="Name *"
                                 value={newOperator.name}
                                 onChange={(e) => setNewOperator({ ...newOperator, name: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             />
                             <input
                                 type="text"
                                 placeholder="Short Code *"
                                 value={newOperator.short_code}
                                 onChange={(e) => setNewOperator({ ...newOperator, short_code: e.target.value })}
-                                className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                className="w-full bg-black rounded px-3 py-2"
                             />
                             <div className="col-span-2">
                                 <label className="block mb-2 text-gray-300">Supported Channels:</label>
@@ -176,7 +176,7 @@ function OperatorsPage() {
                             <div className="col-span-2">
                                 <button
                                     onClick={handleCreateOperator}
-                                    className="font-bold bg-black text-white px-4 py-2 rounded border-2 border-cyan-600 hover:bg-gray-300 hover:text-black transition duration-500"
+                                    className="font-bold bg-black text-white px-4 py-2 rounded hover:bg-gray-300 hover:text-black transition duration-500"
                                 >
                                     Add Operator
                                 </button>
@@ -185,14 +185,14 @@ function OperatorsPage() {
                     </div>
 
                     {/* Operators Table */}
-                    <div className="overflow-x-auto border-2 rounded-lg">
+                    <div className="overflow-x-auto custom-scrollbar rounded-lg">
                         {filteredOperators.length > 0 ? (
                             <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
                                 <thead>
-                                    <tr className="bg-gray-700">
-                                        <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">Name</th>
-                                        <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">Short Code</th>
-                                        <th className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">Supported Channels</th>
+                                    <tr className="bg-slate-900">
+                                        <th className="px-4 py-3 text-left text-sm font-medium text-cyan-400 uppercase tracking-wider">Name</th>
+                                        <th className="px-4 py-3 text-left text-sm font-medium text-cyan-400 uppercase tracking-wider">Short Code</th>
+                                        <th className="px-4 py-3 text-left text-sm font-medium text-cyan-400 uppercase tracking-wider">Supported Channels</th>
                                         <th className="px-4 py-3 text-right">Actions</th>
                                     </tr>
                                 </thead>
@@ -205,7 +205,7 @@ function OperatorsPage() {
                                                         type="text"
                                                         value={editingOperator.name}
                                                         onChange={(e) => setEditingOperator({ ...editingOperator, name: e.target.value })}
-                                                        className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
+                                                        className="w-full bg-gray-800 rounded px-2 py-1 text-white"
                                                     />
                                                 </td>
                                                 <td className="px-4 py-2">
@@ -213,7 +213,7 @@ function OperatorsPage() {
                                                         type="text"
                                                         value={editingOperator.short_code}
                                                         onChange={(e) => setEditingOperator({ ...editingOperator, short_code: e.target.value })}
-                                                        className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
+                                                        className="w-full bg-gray-800 rounded px-2 py-1 text-white"
                                                     />
                                                 </td>
                                                 <td className="px-4 py-2">
