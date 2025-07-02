@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react';
 import apiClient from '../api/axiosInstance';
 import ButtonCreate from '../components/ui/ButtonCreate';
+import InputField from '../components/form/InputField';
 
 function CategoriesPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -141,6 +142,14 @@ function CategoriesPage() {
                                 placeholder="Name *"
                                 value={newCategory.name}
                                 onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+                                className="w-full bg-black rounded px-3 py-2"
+                            />
+                            {/* <InputField type='number' placeholder='cat id' value={newCategory.cat_id} onChange={(e) => setNewCategory({ ...newCategory, cat_id: e.target.value })} /> */}
+                            <input
+                                type="number"
+                                placeholder="cat id *"
+                                value={newCategory.cat_id}
+                                onChange={(e) => setNewCategory({ ...newCategory, cat_id: e.target.value })}
                                 className="w-full bg-black rounded px-3 py-2"
                             />
                             <input
