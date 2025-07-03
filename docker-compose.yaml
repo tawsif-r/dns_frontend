@@ -4,11 +4,18 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "5173:5173"
     volumes:
       - .:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
+    networks:
+      - dnsapp_network
     command: npm run dev
     working_dir: /app
+
+networks:
+  dnsapp_network:
+    name: dnsapp_network
+    external: true
