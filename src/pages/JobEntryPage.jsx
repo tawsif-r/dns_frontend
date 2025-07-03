@@ -328,7 +328,7 @@ function JobEntryPage() {
 
     return (
         <div className="grid grid-cols-3 gap-1 px-4 py-8">
-            <div className="border-2 col-span-2 rounded-lg shadow-lg">
+            <div className="col-span-2 rounded-lg shadow-lg">
                 <div className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-t-lg">
                     <div className="flex items-center">
                         <svg
@@ -348,7 +348,7 @@ function JobEntryPage() {
                         placeholder="Search Contents by Region..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="px-3 py-1 bg-slate-900 text-gray-100 rounded border focus:outline-none focus:border-gray-100"
+                        className="px-3 py-1 bg-slate-900 text-gray-100 rounded"
                         onClick={(e) => e.stopPropagation()}
                     />
                 </div>
@@ -361,7 +361,7 @@ function JobEntryPage() {
                             Add New Job Listings
                         </h2>
                         {jobs.map((job, index) => (
-                            <div key={index} className="mb-6 p-4 border border-gray-600 rounded-lg">
+                            <div key={index} className="mb-6 p-4 rounded-lg">
                                 <div className="flex justify-between items-center mb-4">
                                     <h3 className="text-md font-semibold">Job Listing {index + 1}</h3>
                                     {index > 0 && (
@@ -379,7 +379,7 @@ function JobEntryPage() {
                                         <select
                                             value={job.category}
                                             onChange={(e) => handleJobChange(index, 'category', e.target.value)}
-                                            className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                            className="w-full bg-black rounded px-3 py-2"
                                             required
                                         >
                                             <option value="">Select Category</option>
@@ -396,7 +396,7 @@ function JobEntryPage() {
                                             type="text"
                                             value={job.company_name}
                                             onChange={(e) => handleJobChange(index, 'company_name', e.target.value)}
-                                            className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                            className="w-full bg-black rounded px-3 py-2"
                                             required
                                         />
                                     </div>
@@ -406,7 +406,7 @@ function JobEntryPage() {
                                             type="text"
                                             value={job.job_title}
                                             onChange={(e) => handleJobChange(index, 'job_title', e.target.value)}
-                                            className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                            className="w-full bg-black rounded px-3 py-2 focus:outline-none"
                                             required
                                         />
                                     </div>
@@ -416,7 +416,7 @@ function JobEntryPage() {
                                             <input
                                                 type="text"
                                                 value={job.job_id}
-                                                className="flex-1 bg-gray-700 border rounded px-3 py-2 text-gray-300"
+                                                className="flex-1 bg-gray-700 rounded px-3 py-2 text-gray-300"
                                                 readOnly
                                                 disabled
                                             />
@@ -438,8 +438,7 @@ function JobEntryPage() {
                                             type="datetime-local"
                                             value={job.deadline}
                                             onChange={(e) => handleJobChange(index, 'deadline', e.target.value)}
-                                            className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white 
-                                                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                                            className="w-full bg-gray-800 rounded-lg px-4 py-3 text-white 
                                                         [&::-webkit-calendar-picker-indicator]:bg-dark 
                                                         [&::-webkit-calendar-picker-indicator]:rounded
                                                         [&::-webkit-calendar-picker-indicator]:cursor-pointer"
@@ -457,7 +456,7 @@ function JobEntryPage() {
                                                     type="url"
                                                     value={job.job_details.jobUrl}
                                                     onChange={(e) => handleJobChange(index, null, e.target.value, 'jobUrl')}
-                                                    className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                                    className="w-full bg-black rounded px-3 py-2"
                                                     required
                                                 />
                                             </div>
@@ -467,7 +466,7 @@ function JobEntryPage() {
                                                 <textarea
                                                     value={job.job_details.skillRequired.educational}
                                                     onChange={(e) => handleJobChange(index, null, e.target.value, 'skillRequired', 'educational')}
-                                                    className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                                    className="w-full bg-black rounded px-3 py-2"
                                                     rows="4"
                                                 />
                                             </div>
@@ -477,7 +476,7 @@ function JobEntryPage() {
                                                     type="text"
                                                     value={job.job_details.experienceRequired.year}
                                                     onChange={(e) => handleJobChange(index, null, e.target.value, 'experienceRequired', 'year')}
-                                                    className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                                    className="w-full bg-black rounded px-3 py-2"
                                                 />
                                             </div>
                                             <div>
@@ -486,7 +485,7 @@ function JobEntryPage() {
                                                     type="text"
                                                     value={job.source}
                                                     onChange={(e) => handleJobChange(index, 'source', e.target.value)}
-                                                    className="w-full bg-black border rounded px-3 py-2 focus:outline-none focus:border-blue-200"
+                                                    className="w-full bg-black rounded px-3 py-2"
                                                 />
                                             </div>
 
@@ -499,7 +498,7 @@ function JobEntryPage() {
                                                     Character Count: {getOutputCharCountWithSpaces(job)}
                                                 </span>
                                             </div>
-                                            <div className="bg-emerald-900 border-2 p-5 rounded overflow-auto whitespace-normal">
+                                            <div className="bg-emerald-900 p-5 rounded overflow-auto custom-scroll whitespace-normal">
                                                 {job.company_name}
                                                 {job.job_title}
                                                 {job.category}
@@ -520,14 +519,14 @@ function JobEntryPage() {
                             <button
                                 type="button"
                                 onClick={addJob}
-                                className="font-bold bg-black text-white px-4 py-2 rounded border-2 border-cyan-600 hover:bg-gray-300 hover:text-black transition duration-500"
+                                className="font-bold bg-black text-white px-4 py-2 rounded hover:bg-gray-300 hover:text-black transition duration-500"
                             >
                                 Add Another Job
                             </button>
                             <button
                                 type="button"
                                 onClick={handleBulkCreate}
-                                className="font-bold bg-black text-white px-4 py-2 rounded border-2 border-cyan-600 hover:bg-gray-300 hover:text-black transition duration-500"
+                                className="font-bold bg-black text-white px-4 py-2 rounded hover:bg-gray-300 hover:text-black transition duration-500"
                             >
                                 Submit Jobs
                             </button>
@@ -561,7 +560,7 @@ function JobEntryPage() {
                                                                 ...editingContent,
                                                                 [column]: e.target.value
                                                             })}
-                                                            className="w-full bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white focus:outline-none focus:border-blue-500"
+                                                            className="w-full bg-gray-800 rounded px-2 py-1 text-white"
                                                         />
                                                     </td>
                                                 ))}
@@ -625,7 +624,7 @@ function JobEntryPage() {
 
 
             </div>
-            <div className="border-2 rounded-lg shadow-lg">
+            <div className="rounded-lg shadow-lg">
                 <div className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-t-lg">
                     <div className="flex items-center">
                         <Wrench />
