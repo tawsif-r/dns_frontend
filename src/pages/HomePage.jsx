@@ -74,7 +74,7 @@ function HomePage() {
         setMessagesQData(messagesQResponse.data);
         setSubscriptionsData(subscriptionsResponse.data);
         setReportsData(reportsResponse.data.data);
-        setMessagesData(messagesResponse.data);
+        //setMessagesData(messagesResponse.data);
 
       } catch (error) {
         console.error('Error fetching data:', error);

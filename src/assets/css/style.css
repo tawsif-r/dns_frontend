@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-radial-custom {
+  background: linear-gradient(68deg, rgba(112,122,133,1) 0%, rgba(15,44,74,1) 98%);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-gray-900 rounded;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-cyan-400 rounded hover:bg-cyan-500;
+}
+
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #22d3ee #000000; /* Cyan thumb, gray track for Firefox */
+}
