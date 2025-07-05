@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon, Wrench } from 'lucide-react';
 import apiClient from '../api/axiosInstance';
 import axios from 'axios';
+import { FixedSizeList } from 'react-window';
 import ButtonCreate from '../components/ui/ButtonCreate';
 function JobEntryPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -325,6 +326,17 @@ function JobEntryPage() {
     };
 
     const columns = ['title', 'external_id', 'category', 'description', 'deadline'];
+    const Row = ({ index, style }) => {
+        const content = contents[index]
+        return (
+            <div style={style} className="grid grid-cols-5 w-full text-gray-300 py-2 border-b border-gray-600 hover:bg-gray-700">
+                <div className="px-4 py-3 text-center">{content.id}</div>
+                <div className="px-4 py-3 text-center">{content.external_id}</div>
+                <div className="px-4 py-3 text-center">{content.title}</div>
+                <div className="px-4 py-3 text-center">{new Date(content.deadline).toLocaleDateString()}</div>
+            </div>
+        )
+    }
 
     return (
         <div className="grid grid-cols-3 gap-1 px-4 py-8">
@@ -523,105 +535,40 @@ function JobEntryPage() {
                     </div>
 
                     {/* Contents Table */}
-                    <div className="overflow-x-auto">
+                    {/* Contents Table */}
+                    <div className="overflow-x-auto custom-scrollbar">
                         {filteredContents.length > 0 ? (
-                            <table className="min-w-full bg-gray-800 rounded-lg overflow-hidden">
-                                <thead>
-                                    <tr className="bg-gray-700">
-                                        {columns.map((column) => (
-                                            <th key={column} className="px-4 py-3 text-left text-sm font-medium text-blue-200 uppercase tracking-wider">
-                                                {column.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                                            </th>
-                                        ))}
-                                        <th className="px-4 py-3 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-600">
-                                    {filteredContents.map((content) => (
-                                        editingContent?.id === content.id ? (
-                                            <tr key={content.id} className="bg-gray-700">
-                                                {columns.map((column) => (
-                                                    <td key={column} className="px-4 py-2">
-                                                        <input
-                                                            type={column === 'published' || column === 'deadline' ? 'datetime-local' : 'text'}
-                                                            value={editingContent[column] || ''}
-                                                            onChange={(e) => setEditingContent({
-                                                                ...editingContent,
-                                                                [column]: e.target.value
-                                                            })}
-                                                            className="w-full bg-gray-800 rounded px-2 py-1 text-white"
-                                                        />
-                                                    </td>
-                                                ))}
-                                                <td className="px-4 py-2 text-right whitespace-nowrap">
-                                                    <button
-                                                        onClick={handleUpdateContent}
-                                                        className="inline-flex items-center justify-center px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 mr-2"
-                                                    >
-                                                        <SaveIcon size={16} className="mr-1" /> Save
-                                                    </button>
-                                                    <button
-                                                        onClick={() => setEditingContent(null)}
-                                                        className="inline-flex items-center justify-center px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                                                    >
-                                                        <XIcon size={16} className="mr-1" /> Cancel
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ) : (
-                                            <tr key={content.id} className="hover:bg-gray-700">
-                                                {columns.map((column) => (
-                                                    <td key={column} className="px-4 py-3 text-gray-300">
-                                                        {column === 'url' ? (
-                                                            <a
-                                                                href={content[column]}
-                                                                className="text-blue-400 hover:text-blue-300"
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                            >
-                                                                {content[column] || 'N/A'}
-                                                            </a>
-                                                        ) : (
-                                                            content[column] || 'N/A'
-                                                        )}
-                                                    </td>
-                                                ))}
-                                                <td className="px-4 py-3 text-right whitespace-nowrap">
-                                                    <button
-                                                        onClick={() => setEditingContent(content)}
-                                                        className="p-1 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
-                                                    >
-                                                        <EditIcon size={16} />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDeleteContent(content.id)}
-                                                        className="p-1 bg-red-500 text-white rounded hover:bg-red-600"
-                                                    >
-                                                        <TrashIcon size={16} />
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        )
+
+                            <div className="min-w-full">
+                                {/* Table Header */}
+                                <div className="bg-gray-800 grid grid-cols-5 sticky top-0 z-10 border-b-2 border-gray-600">
+                                    {columns.map((column) => (
+                                        <div key={column} className='px-4 py-3 text-center text-sm font-medium text-cyan-200 uppercase tracking-wider'>
+                                            {column}
+                                        </div>
                                     ))}
-                                </tbody>
-                            </table>
+                                </div>
+
+                                {/* Virtualized Table Body */}
+                                <div className="bg-gray-900">
+                                    <FixedSizeList
+                                        height={700}
+                                        width="100%"
+                                        itemCount={contents.length}
+                                        itemSize={100}
+                                        className="scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
+                                    >
+                                        {Row}
+                                    </FixedSizeList>
+                                </div>
+                            </div>
+
                         ) : (
                             <p className="text-center text-gray-500">No Contents found</p>
                         )}
                     </div>
                 </div>
-
-
             </div>
-            {/* <div className="rounded-lg shadow-lg">
-                <div className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-t-lg">
-                    <div className="flex items-center">
-                        <Wrench />
-                        <h1 className="text-xl font-bold">Approval</h1>
-                    </div>
-
-                </div>
-            </div> */}
 
         </div>
     );

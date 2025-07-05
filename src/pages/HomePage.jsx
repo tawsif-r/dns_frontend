@@ -150,14 +150,14 @@ function HomePage() {
           </div>
 
           <div className='bg-gray-800 m-4 p-4 col-span-3 rounded-lg'>
-            <div style={{ padding: '20px' }}>
+            <div>
               <h1 className='text-cyan-400'>Subscriber per category</h1>
               <LineChart
+                className="w-full h-full"
                 data={categoryData}
                 title="Subscribers for Different categories"
                 xAxisLabel="Categories"
                 yAxisLabel="Subscribers"
-                height="650px"
               />
             </div>
 

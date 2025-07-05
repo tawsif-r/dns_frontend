@@ -35,9 +35,10 @@ const LineChart = ({
   borderWidth = 2,
   pointRadius = 4,
   pointHoverRadius = 6,
-  maintainAspectRatio = true,
-  width = '100%',
-  height = '400px',
+  maintainAspectRatio = false,
+  // width = '',
+  // height = '',
+  className='',
 }) => {
   // Default options
   const options = {
@@ -84,7 +85,7 @@ const LineChart = ({
   };
 
   return (
-    <div style={{ width, height }}>
+    <div className={className}>
       <Line options={options} data={chartData} />
     </div>
   );
