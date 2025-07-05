@@ -153,7 +153,7 @@ function HomePage() {
             <div>
               <h1 className='text-cyan-400'>Subscriber per category</h1>
               <LineChart
-                className="w-full h-full"
+                className="w-full h-96"
                 data={categoryData}
                 title="Subscribers for Different categories"
                 xAxisLabel="Categories"

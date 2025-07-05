@@ -329,7 +329,7 @@ function JobEntryPage() {
     const Row = ({ index, style }) => {
         const content = contents[index]
         return (
-            <div style={style} className="grid grid-cols-5 w-full text-gray-300 py-2 border-b border-gray-600 hover:bg-gray-700">
+            <div style={style} className="grid grid-cols-5 w-full text-gray-300 py-2 border-b border-gray-600 hover:bg-gray-700 hover:border-gray-100 hover:border-l-4 ">
                 <div className="px-4 py-3 text-center">{content.id}</div>
                 <div className="px-4 py-3 text-center">{content.external_id}</div>
                 <div className="px-4 py-3 text-center">{content.title}</div>
