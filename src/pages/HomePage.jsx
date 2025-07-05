@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import LineChart from '../components/LineChart'
 import apiClient from '../api/axiosInstance';
-
+import { Link } from 'react-router-dom';
 
 function HomePage() {
   const [categoriesData, setCategoriesData] = useState([])
@@ -89,6 +89,7 @@ function HomePage() {
       {isLoading ? (<div>loading...</div>) : (
         <div className='grid grid-cols-3 p-4'>
           <div className='max-h-96 overflow-x-auto custom-scrollbar relative m-2'>
+            <Link to={'/categories'}>
             {categoriesData ?
               (<>
                 <p className='sticky top-0 bg-gray-700 p-2 rounded-md font-semibold text-cyan-400'>Total Categories: {categoriesData.length}</p>
@@ -105,16 +106,20 @@ function HomePage() {
                     </li>
                   ))}
                 </ul> */}
+              
               </>
+              
               ) : (
                 <>
                   <p>No data found</p>
                 </>
               )}
+              </Link>
 
           </div>
 
           <div className='max-h-96 overflow-x-auto custom-scrollbar relative m-2'>
+            <Link to={'/subscribers'}>
             {subscribersData ? (
               <>
                 <p className='sticky top-0 bg-gray-700 p-2 font-semibold rounded-md text-cyan-400'>Total subscribers: {subscribersData.length}</p>
@@ -129,10 +134,12 @@ function HomePage() {
                   ))}
                 </ul> */}
               </>) : (<p>No data</p>)}
+            </Link>
           </div>
 
 
           <div className='max-h-96 overflow-x-auto custom-scrollbar relative m-2'>
+            <Link to={'/salesreports'}>
             {reportsData ? (
               <>
                 <p className='sticky top-0 bg-gray-700 p-2 font-semibold text-cyan-400 rounded-md'>Reports: {reportsData.count}</p>
@@ -147,6 +154,7 @@ function HomePage() {
                   ))}
                 </ul> */}
               </>) : (<p>No data</p>)}
+            </Link>
           </div>
 
           <div className='bg-gray-800 m-4 p-4 col-span-3 rounded-lg'>
