@@ -161,7 +161,7 @@ function ActiveReportsPage() {
 
     return (
         <div className="px-4 py-8">
-            <div className="rounded-lg shadow-lg">
+            <div className="rounded-lg bg-slate-700 shadow-lg">
                 <div className="flex justify-between items-center p-4 rounded-t-lg">
                     <div className="flex items-center">
                         <svg

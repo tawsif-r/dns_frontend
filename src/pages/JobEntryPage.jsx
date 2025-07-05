@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon, Wrench } from 'lucide-react';
 import apiClient from '../api/axiosInstance';
 import axios from 'axios';
-
+import ButtonCreate from '../components/ui/ButtonCreate';
 function JobEntryPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [contents, setContents] = useState([]);
@@ -328,7 +328,7 @@ function JobEntryPage() {
 
     return (
         <div className="grid grid-cols-3 gap-1 px-4 py-8">
-            <div className="col-span-2 rounded-lg shadow-lg">
+            <div className="col-span-3 bg-slate-700 rounded-lg shadow-lg">
                 <div className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-t-lg">
                     <div className="flex items-center">
                         <svg
@@ -416,7 +416,7 @@ function JobEntryPage() {
                                             <input
                                                 type="text"
                                                 value={job.job_id}
-                                                className="flex-1 bg-gray-700 rounded px-3 py-2 text-gray-300"
+                                                className="flex-1 bg-gray-900 rounded px-3 py-2 text-gray-300"
                                                 readOnly
                                                 disabled
                                             />
@@ -498,7 +498,7 @@ function JobEntryPage() {
                                                     Character Count: {getOutputCharCountWithSpaces(job)}
                                                 </span>
                                             </div>
-                                            <div className="bg-emerald-900 p-5 rounded overflow-auto custom-scroll whitespace-normal">
+                                            <div className="bg-slate-950 p-5 rounded overflow-auto custom-scroll whitespace-normal">
                                                 {job.company_name}
                                                 {job.job_title}
                                                 {job.category}
@@ -516,20 +516,9 @@ function JobEntryPage() {
                             </div>
                         ))}
                         <div className="flex gap-4">
-                            <button
-                                type="button"
-                                onClick={addJob}
-                                className="font-bold bg-black text-white px-4 py-2 rounded hover:bg-gray-300 hover:text-black transition duration-500"
-                            >
-                                Add Another Job
-                            </button>
-                            <button
-                                type="button"
-                                onClick={handleBulkCreate}
-                                className="font-bold bg-black text-white px-4 py-2 rounded hover:bg-gray-300 hover:text-black transition duration-500"
-                            >
-                                Submit Jobs
-                            </button>
+                            <ButtonCreate label="Add Another Job" onClick={addJob} />
+                            <ButtonCreate label="Submit Job" onClick={handleBulkCreate} />
+
                         </div>
                     </div>
 
@@ -624,7 +613,7 @@ function JobEntryPage() {
 
 
             </div>
-            <div className="rounded-lg shadow-lg">
+            {/* <div className="rounded-lg shadow-lg">
                 <div className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-t-lg">
                     <div className="flex items-center">
                         <Wrench />
@@ -632,11 +621,7 @@ function JobEntryPage() {
                     </div>
 
                 </div>
-                <div>
-                    {/* <h1>Final output</h1> */}
-                    {/* TODO: Output the text in this carousel */}
-                </div>
-            </div>
+            </div> */}
 
         </div>
     );
