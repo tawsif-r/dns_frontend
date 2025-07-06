@@ -1,7 +1,16 @@
-# Dns App Frontend
-* Admin Dashboard for the Dns App. Dns App is a middle man between a telecommunication agent and another service provider
-like bdjobs
-* Subscribers, Subscriptions, Jobs, Messages are displayed in an orderly manner.
+# Table of contents:
+- [Overview](#overview)
+- [Docker](#docker-up)
+- [React with vite](#react-with-vite)
+- [Issues](#issue-with-npm)
+- [Future Plans](#future-plans)
+
+## Overview
+A frontend for showcasing various aspects of the dns app and informations broker app. Job entry and sports message generation are included.
+Docker is used to containerize the react app. Node 22 Alpine is used as image.
+## Docker up
+Use `docker compose up` to activate the docker container. The environment for the docker container is set with the .env file, which contains the api for the dns app and the information broker app.
+
 
 ## React with vite.
 * Install react with vite.
@@ -45,9 +54,9 @@ npm error A complete log of this run can be found in: /home/tawsif/.npm/_logs/20
 - ``` npm install ``` will install the node_modules accourding to your lock files.
 - ``` npm cache clean --force``` will clear the cache of node_modules. 
 
-
-# TODO List
-- [x] make a component for navigation bar
-- [x] integrate the states with store in redux for nav
-- [x] add animations to the navbar.
-- [ ] make a subscriber page that you can link from the nav.
+## Future plans
+- [ ] Add approval for the message generation
+- [ ] Add the user role in order to separate the view for the respective user
+- [ ] Save the entry along with the user name for accountibility.
+- [ ] Add colors primary, secondary variable.
+- [ ] End the match and remove from the dashboard when a match has ended.
