@@ -126,7 +126,7 @@ function CricketLiveDashboard() {
       const teamName = team?.team_short || 'Team';
       const selectedPlayerName = selectedPlayer;
 
-      setMessageInput(`${teamName}, runs: ${teamRuns} wickets: ${teamWickets} overs: ${teamOvers}. ${selectedPlayerName}`);
+      setMessageInput(`${teamName}: ${teamRuns}/${teamWickets} (${teamOvers} overs) ${selectedPlayerName}`);
     }
   }, [teamRuns, teamWickets, teamOvers, selectedTeam, selectedMatch, selectedPlayer, matches, selectedPlayer ]);
 
