@@ -92,7 +92,7 @@ function HomePage() {
             <Link to={'/categories'}>
             {categoriesData ?
               (<>
-                <p className='sticky top-0 bg-gray-700 p-2 rounded-md font-semibold text-cyan-400'>Total Categories: {categoriesData.length}</p>
+                <p className='sticky top-0 bg-gray-700 p-2 hover:bg-gray-600 rounded-md font-semibold text-cyan-400'>Total Categories: {categoriesData.length}</p>
                 {/* <ul>
                   {categoriesData.slice(0, 5).map((category) => (
                     <li key={category.id} className="bg-slate-700 m-2 p-3 rounded-md hover:bg-gray-800 ">
@@ -122,7 +122,7 @@ function HomePage() {
             <Link to={'/subscribers'}>
             {subscribersData ? (
               <>
-                <p className='sticky top-0 bg-gray-700 p-2 font-semibold rounded-md text-cyan-400'>Total subscribers: {subscribersData.length}</p>
+                <p className='sticky top-0 bg-gray-700 p-2 font-semibold rounded-md text-cyan-400 hover:bg-gray-600'>Total subscribers: {subscribersData.length}</p>
                 {/* <ul>
                   {subscribersData.slice(0, 5).map((subscriber) => (
                     <li key={subscriber.id} className='bg-slate-700 m-2 p-3 rounded-md hover:bg-gray-800'>
@@ -142,7 +142,7 @@ function HomePage() {
             <Link to={'/salesreports'}>
             {reportsData ? (
               <>
-                <p className='sticky top-0 bg-gray-700 p-2 font-semibold text-cyan-400 rounded-md'>Reports: {reportsData.count}</p>
+                <p className='sticky top-0 bg-gray-700 p-2 font-semibold text-cyan-400 rounded-md hover:bg-gray-600'>Reports: {reportsData.count}</p>
                 {/* <ul>
                   {reportsData.slice(0, 5).map((report) => (
                     <li key={report.id} className='bg-slate-700 m-2 p-3 rounded-md hover:bg-gray-800'>
